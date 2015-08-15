@@ -22,6 +22,12 @@ create table standard_all_drug_outcome_count as select * from faers.standard_all
 drop table if exists standard_all_drug_outcome_contingency_table;
 create table standard_all_drug_outcome_contingency_table as select * from faers.standard_all_drug_outcome_contingency_table;
 
+drop table if exists standard_drug_outcome_statistics;
+create table standard_drug_outcome_statistics as select * from faers.standard_drug_outcome_statistics;
+
+drop table if exists standard_drug_legacy_outcome_statistics;
+create table standard_drug_legacy_outcome_statistics as select * from faers.standard_drug_legacy_outcome_statistics;
+
 drop table if exists standard_all_drug_outcome_statistics;
 create table standard_all_drug_outcome_statistics as select * from faers.standard_all_drug_outcome_statistics;
 
@@ -69,6 +75,3 @@ create table ther as select * from faers.ther;
 
 drop table if exists ther_legacy;
 create table ther_legacy as select * from faers.ther_legacy;
-
-
-
