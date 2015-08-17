@@ -14,18 +14,15 @@ drop index if exists ix_reac_3;
 create index ix_reac_1 on reac (pt);
 create index ix_reac_2 on reac (primaryid);
 create index ix_reac_3 on standard_drug (primaryid);
+analyze verbose reac;
+analyze verbose standard_drug;
 
 drop table if exists standard_drug_outcome;
 create table standard_drug_outcome as
-(
-	with cte1 as (
-	select distinct a.primaryid, b.pt, c.concept_id as outcome_concept_id
-	from unique_case a
-	left outer join reac b
-	on a.primaryid = b.primaryid
-	left outer join cdmv5.concept c
-	on upper(b.pt) = upper(c.concept_name)
-	and c.vocabulary_id = 'MedDRA'
-	)
-select * from cte1
-)
+select distinct a.primaryid, b.pt, c.concept_id as outcome_concept_id
+from unique_case a
+inner join reac b
+on a.primaryid = b.primaryid
+inner join cdmv5.concept c
+on upper(b.pt) = upper(c.concept_name)
+and c.vocabulary_id = 'MedDRA'
