@@ -1,6 +1,6 @@
 ------------------------------
 --
--- This SQL script derives the SNOMED-CT concept codes for the FAERS outcome (categories) legacy data in a new table called standard_drug_legacy_outcome_category
+-- This SQL script derives the SNOMED-CT concept codes for the FAERS outcome (categories) legacy data in a new table called standard_legacy_case_outcome_category, limited to just the unique legacy cases
 --
 -- Map the outcome categories to the following SNOMED codes:
 --
@@ -19,12 +19,12 @@
 
 set search_path = faers;
 
-drop table if exists standard_drug_legacy_outcome_category;
-create table standard_drug_legacy_outcome_category as
+drop table if exists standard_legacy_case_outcome_category;
+create table standard_legacy_case_outcome_category as
 (
 	with cte1 as (
 	select distinct a.isr, b.outc_cod
-	from standard_drug_legacy a
+	from unique_case_legacy a
 	left outer join outc_legacy b
 	on a.isr = b.isr
 	),

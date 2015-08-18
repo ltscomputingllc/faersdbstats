@@ -12,10 +12,10 @@ create table standard_drug_outcome_count as select * from faers.standard_drug_ou
 drop table if exists standard_drug_outcome_contingency_table;
 create table standard_drug_outcome_contingency_table as select * from faers.standard_drug_outcome_contingency_table;
 
-drop table if exists standard_drug_legacy_outcome_count;
-create table standard_drug_legacy_outcome_count as select * from faers.standard_drug_legacy_outcome_count;
-drop table if exists standard_drug_legacy_outcome_contingency_table;
-create table standard_drug_legacy_outcome_contingency_table as select * from faers.standard_drug_legacy_outcome_contingency_table;
+drop table if exists standard_legacy_drug_outcome_count;
+create table standard_legacy_drug_outcome_count as select * from faers.standard_legacy_drug_outcome_count;
+drop table if exists standard_legacy_drug_outcome_contingency_table;
+create table standard_legacy_drug_outcome_contingency_table as select * from faers.standard_legacy_drug_outcome_contingency_table;
 
 drop table if exists standard_all_drug_outcome_count;
 create table standard_all_drug_outcome_count as select * from faers.standard_all_drug_outcome_count;
@@ -25,11 +25,29 @@ create table standard_all_drug_outcome_contingency_table as select * from faers.
 drop table if exists standard_drug_outcome_statistics;
 create table standard_drug_outcome_statistics as select * from faers.standard_drug_outcome_statistics;
 
-drop table if exists standard_drug_legacy_outcome_statistics;
-create table standard_drug_legacy_outcome_statistics as select * from faers.standard_drug_legacy_outcome_statistics;
+drop table if exists standard_legacy_drug_outcome_statistics;
+create table standard_legacy_drug_outcome_statistics as select * from faers.standard_legacy_drug_outcome_statistics;
 
 drop table if exists standard_all_drug_outcome_statistics;
 create table standard_all_drug_outcome_statistics as select * from faers.standard_all_drug_outcome_statistics;
+
+drop table if exists standard_case_indication;
+create table standard_case_indication as select * from faers.standard_case_indication;
+
+drop table if exists standard_legacy_case_indication;
+create table standard_legacy_case_indication as select * from faers.standard_legacy_case_indication;
+
+drop table if exists standard_case_outcome;
+create table standard_case_outcome as select * from faers.standard_case_outcome;
+
+drop table if exists standard_legacy_case_outcome;
+create table standard_legacy_case_outcome as select * from faers.standard_legacy_caseoutcome;
+
+drop table if exists standard_case_outcome_category;
+create table standard_case_outcome_category as select * from faers.standard_case_outcome_category;
+
+drop table if exists standard_legacy_case_outcome_category;
+create table standard_legacy_case_outcome_category as select * from faers.standard_legacy_case_outcome_category;
 
 -----------------------------------------
 set search_path = source;

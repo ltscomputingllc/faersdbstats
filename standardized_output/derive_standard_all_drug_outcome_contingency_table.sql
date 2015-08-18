@@ -13,7 +13,7 @@ create table standard_all_drug_outcome_count as
 select concept_id, outcome_concept_id, sum(drug_outcome_pair_count) as drug_outcome_pair_count 
 from
 (
-select * from standard_drug_legacy_outcome_count
+select * from standard_legacy_drug_outcome_count
 union all
 select * from standard_drug_outcome_count
 ) allcounts

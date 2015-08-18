@@ -1,6 +1,7 @@
 ------------------------------
 --
--- This SQL script derives the SNOMED-CT concept codes for the FAERS outcome (categories) in a new table called standard_drug_outcome_category
+-- This SQL script derives the SNOMED-CT concept codes for the FAERS outcome (categories) in a new table called standard_case_outcome_category
+-- limited to just the unique cases.
 --
 -- Map the outcome categories to the following SNOMED codes:
 --
@@ -19,12 +20,12 @@
 
 set search_path = faers;
 
-drop table if exists standard_drug_outcome_category;
-create table standard_drug_outcome_category as
+drop table if exists standard_case_outcome_category;
+create table standard_case_outcome_category as
 (
 	with cte1 as (
 	select distinct a.primaryid, b.outc_code
-	from standard_drug a
+	from unique_case a
 	left outer join outc b
 	on a.primaryid = b.primaryid
 	),

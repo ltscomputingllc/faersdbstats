@@ -13,7 +13,7 @@ create table standard_drug_outcome_count as
 	with cte1 as (
 	select a.concept_id, b.outcome_concept_id, count(*) as drug_outcome_pair_count
 	from standard_drug a
-	inner join standard_drug_outcome b
+	inner join standard_case_outcome b
 	on a.primaryid = b.primaryid
 	group by a.concept_id, b.outcome_concept_id
 	)

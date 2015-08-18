@@ -1,6 +1,6 @@
 ------------------------------
 --
--- This SQL script creates a statistics table called standard_drug_legacy_outcome_stats with the following statistics
+-- This SQL script creates a statistics table called standard_legacy_drug_outcome_stats with the following statistics
 -- for each current drug/outcome pair using the previously calculated counts in the 2x2 contingency table:
 --
 -- 1) case_count
@@ -25,8 +25,8 @@
 
 set search_path = faers;
 
-drop table if exists standard_drug_legacy_outcome_statistics;
-create table standard_drug_legacy_outcome_statistics as
+drop table if exists standard_legacy_drug_outcome_statistics;
+create table standard_legacy_drug_outcome_statistics as
 select 
 concept_id, outcome_concept_id, 
 count_a as case_count,
@@ -36,4 +36,4 @@ count_a as case_count,
 ((count_a / count_c) / (count_b / count_d)) as ror,
 (ln((count_a / count_c) / (count_b / count_d))+1.96)*sqrt((1/count_a)+(1/count_b)+(1/count_c)+(1/count_d)) as ror_95_percent_upper_confidence_limit,
 (ln((count_a / count_c) / (count_b / count_d))-1.96)*sqrt((1/count_a)+(1/count_b)+(1/count_c)+(1/count_d)) as ror_95_percent_lower_confidence_limit
-from standard_drug_legacy_outcome_contingency_table;
+from standard_legacy_drug_outcome_contingency_table;

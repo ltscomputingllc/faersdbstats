@@ -1,6 +1,6 @@
 ------------------------------
 --
--- This SQL script converts the FAERS reactions (adverse event outcomes) MedDRA preferred terms into MedDRA concept ids (limited to the cases in the unique_case table) in a new table called standard_drug_outcome 
+-- This SQL script converts the FAERS reactions (adverse event outcomes) MedDRA preferred terms into MedDRA concept ids (limited to the cases in the unique_case table) in a new table called standard_case_outcome 
 --
 -- LTS COMPUTING LLC
 ------------------------------
@@ -17,8 +17,8 @@ create index ix_reac_3 on standard_drug (primaryid);
 analyze verbose reac;
 analyze verbose standard_drug;
 
-drop table if exists standard_drug_outcome;
-create table standard_drug_outcome as
+drop table if exists standard_case_outcome;
+create table standard_case_outcome as
 select distinct a.primaryid, b.pt, c.concept_id as outcome_concept_id
 from unique_case a
 inner join reac b
