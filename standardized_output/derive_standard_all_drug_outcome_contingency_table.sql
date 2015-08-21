@@ -30,7 +30,7 @@ create index ix_standard_all_drug_outcome_count_4  on faers.standard_all_drug_ou
 
 analyze verbose standard_all_drug_outcome_count;
 
--- get count_d1 -- 1 second  
+-- get count_d1   
 drop table if exists standard_all_drug_outcome_count_d1;
 create table standard_all_drug_outcome_count_d1 as
 with cte as (
@@ -41,7 +41,7 @@ from standard_all_drug_outcome_count a,  cte -- we need the same total for all r
 
 --============= On a 4+ CPU postgresql server, run the following 3 queries in 3 different postgresql sessions so they run concurrently!
 
--- get count_a and count_b -- 90 minutes
+-- get count_a and count_b 
 set search_path = faers;
 drop table if exists standard_all_drug_outcome_count_a_count_b;
 create table standard_all_drug_outcome_count_a_count_b as
@@ -54,7 +54,7 @@ drug_outcome_pair_count as count_a, -- count of drug P and outcome R
 ) as count_b -- count of drug P and not(outcome R)
 from standard_all_drug_outcome_count a;
 
--- get count_c -- 54.85 minutes
+-- get count_c 
 set search_path = faers;
 drop table if exists standard_all_drug_outcome_count_c;
 create table standard_all_drug_outcome_count_c as
@@ -66,7 +66,7 @@ select drug_concept_id, outcome_concept_id,
 ) as count_c -- count of not(drug P) and outcome R
 from standard_all_drug_outcome_count a; 
 
--- get count d2 -- 123 minutes (around 2 hours)
+-- get count d2 
 set search_path = faers;
 drop table if exists standard_all_drug_outcome_count_d2;
 create table standard_all_drug_outcome_count_d2 as
@@ -83,7 +83,7 @@ from standard_all_drug_outcome_count a;
 -- Only run the below query when ALL OF THE ABOVE 3 QUERIES HAVE COMPLETED!
 -- combine all the counts into a single contingency table
 drop table if exists standard_all_drug_outcome_contingency_table;
-create table standard_all_drug_outcome_contingency_table as		-- 6 seconds
+create table standard_all_drug_outcome_contingency_table as		
 select ab.drug_concept_id, ab.outcome_concept_id, count_a, count_b, count_c, (count_d1 - count_d2) as count_d
 from standard_all_drug_outcome_count_a_count_b ab
 inner join standard_all_drug_outcome_count_c c
