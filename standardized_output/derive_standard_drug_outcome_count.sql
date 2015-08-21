@@ -9,13 +9,8 @@ set search_path = faers;
 
 drop table if exists standard_drug_outcome_count;
 create table standard_drug_outcome_count as
-(
-	with cte1 as (
-	select a.concept_id, b.outcome_concept_id, count(*) as drug_outcome_pair_count
-	from standard_drug a
-	inner join standard_case_outcome b
-	on a.primaryid = b.primaryid
-	group by a.concept_id, b.outcome_concept_id
-	)
-select * from cte1
-)
+select a.standard_concept_id as drug_concept_id, b.outcome_concept_id, count(*) as drug_outcome_pair_count
+from standard_drug a
+inner join standard_case_outcome b
+on a.primaryid = b.primaryid
+group by a.standard_concept_id, b.outcome_concept_id

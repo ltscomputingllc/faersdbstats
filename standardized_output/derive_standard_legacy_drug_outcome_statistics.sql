@@ -28,7 +28,7 @@ set search_path = faers;
 drop table if exists standard_legacy_drug_outcome_statistics;
 create table standard_legacy_drug_outcome_statistics as
 select 
-concept_id, outcome_concept_id, 
+drug_concept_id, outcome_concept_id, 
 count_a as case_count,
 (count_a / (count_a + count_b)) / (count_c / (count_c + count_d)) as prr,
 (ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))+1.96)*sqrt((1/count_a)+(1/count_b)+(1/count_c)+(1/count_d)) as prr_95_percent_upper_confidence_limit,

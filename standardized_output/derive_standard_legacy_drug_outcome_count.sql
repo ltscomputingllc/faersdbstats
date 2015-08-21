@@ -9,9 +9,9 @@ set search_path = faers;
 
 drop table if exists standard_legacy_drug_outcome_count;
 create table standard_legacy_drug_outcome_count as
-select a.concept_id, b.outcome_concept_id, count(*) as drug_outcome_pair_count
+select a.standard_concept_id as drug_concept_id, b.outcome_concept_id, count(*) as drug_outcome_pair_count
 from standard_drug_legacy a
-inner join standard_legacy_drug_outcome b
+inner join standard_legacy_case_outcome b
 on a.isr = b.isr
-group by a.concept_id, b.outcome_concept_id
+group by a.standard_concept_id, b.outcome_concept_id
 	
