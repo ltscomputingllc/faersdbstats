@@ -41,7 +41,7 @@ drop table if exists standard_case_outcome;
 create table standard_case_outcome as select * from faers.standard_case_outcome;
 
 drop table if exists standard_legacy_case_outcome;
-create table standard_legacy_case_outcome as select * from faers.standard_legacy_caseoutcome;
+create table standard_legacy_case_outcome as select * from faers.standard_legacy_case_outcome;
 
 drop table if exists standard_case_outcome_category;
 create table standard_case_outcome_category as select * from faers.standard_case_outcome_category;
