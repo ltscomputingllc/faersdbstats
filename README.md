@@ -1,4 +1,5 @@
 # faersdbstats
-Generate safety signal statistics from FDA FAERS data
+Standardize FDA LAERS database and FAERS database drugs, indications, reactions and outcomes to OMOP Common Data Model V5 concepts
+and generate unique case report counts and safety signal statistics 
 
-See the processing instructions document in the documetation folder.
+See the documentation folder for more information.
