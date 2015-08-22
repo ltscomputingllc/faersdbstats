@@ -24,7 +24,7 @@ create table standard_legacy_case_outcome_category as
 (
 	with cte1 as (
 	select distinct a.isr, b.outc_cod
-	from unique_case_legacy a
+	from unique_legacy_case a
 	left outer join outc_legacy b
 	on a.isr = b.isr
 	),

@@ -10,7 +10,7 @@ set search_path = faers;
 drop table if exists standard_legacy_case_outcome;
 create table standard_legacy_case_outcome as
 select distinct a.isr, b.pt, c.concept_id as outcome_concept_id
-from unique_case_legacy a
+from unique_legacy_case a
 inner join reac_legacy b
 on a.isr = b.isr
 inner join cdmv5.concept c

@@ -34,7 +34,7 @@ drop table if exists drug_legacy_regex_mapping;
 create table drug_legacy_regex_mapping as
 select distinct drugname as drug_name_original, upper(drugname) as drug_name_clean, cast(null as integer) as concept_id, null as update_method
 from drug_legacy a
-inner join unique_case_legacy b on a.isr = b.isr
+inner join unique_legacy_case b on a.isr = b.isr
 where role_cod <> 'C'; -- ignore concomitant drugs
 
 -- create an index on the mapping table to improve performance
@@ -193,7 +193,7 @@ drop table if exists combined_drug_legacy_mapping;
 create table combined_drug_legacy_mapping as
 select a.isr, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
 from drug_legacy a
-inner join unique_case_legacy b on a.isr = b.isr
+inner join unique_legacy_case b on a.isr = b.isr
 WHERE a.role_cod <> 'C'; -- ignore concomitant drugs
 
 -- update combined legacy drug mapping table with the drug mapping data in the drug_legacy_regex_mapping 
@@ -218,7 +218,7 @@ drop table if exists drug_legacy_nda_mapping;
 create table drug_legacy_nda_mapping as
 select distinct drugname as drug_name_original, nda_num, null as nda_ingredient, cast(null as integer) as concept_id, null as update_method
 from drug_legacy a
-inner join unique_case_legacy b on a.isr = b.isr
+inner join unique_legacy_case b on a.isr = b.isr
 where role_cod <> 'C' -- ignore concomitant drugs
 and nda_num is not null; -- where nda_num is populated
 
