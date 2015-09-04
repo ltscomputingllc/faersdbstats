@@ -10,7 +10,6 @@
 --
 -- Note. After single imputation, it then removes any demographic case rows from the new table demo_with_imputed_keys 
 -- where one or more of the key demo fields are still not populated.
--- i.e. we will only process cases which have fully populated key demographic fields in downstream processing!
 -- 
 -- We will only impute single missing case demo key values for a case where there is at least one case record
 -- with a fully populated set of demo keys 
@@ -62,6 +61,4 @@ from default_demo_keys ddk
 where a.caseid = ddk.caseid
 and a.event_dt is not null and a.age is not null and a.sex is not null and a.reporter_country is null;
 
--- remove any cases which still do not have fully populated demo key fields 
-delete from demo_with_imputed_keys where event_dt is null or age is null or sex is null or reporter_country is null;
 
