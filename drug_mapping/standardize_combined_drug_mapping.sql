@@ -2,7 +2,7 @@
 --
 -- This SQL script performs two tasks:
 --
--- 1) Find active OMOP CDM vocabulary standard RxNorm codes for the current drugs we have mapped
+-- 1) Find active OMOP CDM vocabulary standard RxNorm codes for all unique legacy LAERS and current FAERS case drugs we have mapped
 -- 2) Map from the standard codes to standard codes with concept_class of 'Ingredient' or 'Clinical Drug Form' because We need to roll-up the safety signal stats that we generate to these two concept classes.
 --
 -- LTS COMPUTING LLC
