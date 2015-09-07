@@ -20,7 +20,8 @@
 -- we will then drop it at the end of this script
 set search_path = cdmv5;
 drop index if exists vocab_concept_name_ix;
-create index vocab_concept_name_ix on cdmv5.concept(vocabulary_id, standard_concept, concept_name, concept_id);
+create index vocab_concept_name_ix on cdmv5.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
+analyze verbose cdmv5.concept;
 
 set search_path = faers;
 

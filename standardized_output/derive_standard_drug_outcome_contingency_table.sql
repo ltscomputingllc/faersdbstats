@@ -1,6 +1,6 @@
 ------------------------------
 --
--- This SQL script computes the 2x2 contingency table for each current drug/outcome pair in a table called standard_drug_current_outcome_contingency_table
+-- This SQL script computes the 2x2 contingency table for all unique legacy and current case drug/outcome pairs in a table called standard_drug_current_outcome_contingency_table
 --
 --
 -- LTS COMPUTING LLC
@@ -8,15 +8,14 @@
 
 set search_path = faers;
 
-drop index if exists ix_standard_drug_outcome_count;
-create index ix_standard_drug_outcome_count on standard_drug_outcome_count(drug_concept_id, outcome_concept_id);
-drop index if exists ix_standard_drug_outcome_count_2;
-create index ix_standard_drug_outcome_count_2  on faers.standard_drug_outcome_count  using btree  (drug_concept_id);
-drop index if exists ix_standard_drug_outcome_count_3;
-create index ix_standard_drug_outcome_count_3  on faers.standard_drug_outcome_count  using btree  (outcome_concept_id);
-drop index if exists ix_standard_drug_outcome_count_4;
-create index ix_standard_drug_outcome_count_4  on faers.standard_drug_outcome_count  using btree  (drug_outcome_pair_count);
-
+drop index if exists standard_drug_outcome_count_ix;
+create index standard_drug_outcome_count_ix on standard_drug_outcome_count(drug_concept_id, outcome_concept_id);
+drop index if exists standard_drug_outcome_count_2_ix;
+create index standard_drug_outcome_count_2_ix on standard_drug_outcome_count(drug_concept_id);
+drop index if exists standard_drug_outcome_count_3_ix;
+create index standard_drug_outcome_count_3_ix on standard_drug_outcome_count(outcome_concept_id);
+drop index if exists standard_drug_outcome_count_4_ix;
+create index standard_drug_outcome_count_4_ix on standard_drug_outcome_count(drug_outcome_pair_count);
 analyze verbose standard_drug_outcome_count;
 
 -- get count_d1 

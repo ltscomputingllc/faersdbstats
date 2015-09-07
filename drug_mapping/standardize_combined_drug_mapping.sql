@@ -12,7 +12,7 @@ set search_path = faers;
 
 -- ====================== find active OMOP CDM vocabulary standard RxNorm codes ==============================
 
--- create combined drug mapping table which will have OHDSI vocabulary standard codes assigned to it
+-- create a combined drug mapping table which will have OHDSI vocabulary standard concept codes assigned to it
 
 drop table if exists standard_combined_drug_mapping;
 
@@ -20,6 +20,7 @@ create table standard_combined_drug_mapping as
 select a.*, cast (concept_id as integer) as standard_concept_id from combined_drug_mapping a;
 
 ------------------------------------------------------
+-- directly lookup the standard concept associated with the drug concepts we derived from drug name
 
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
@@ -284,7 +285,7 @@ update standard_combined_drug_mapping set standard_concept_id = 40129571 where s
 drop table if exists standard_drug;
 
 create table standard_drug as
-select a.primaryid, a.standard_concept_id, c.concept_name, c.standard_concept, c.concept_class_id, c.valid_start_date, c.valid_end_date, c.invalid_reason
+select a.primaryid, a.isr, a.standard_concept_id, c.concept_name, c.standard_concept, c.concept_class_id, c.valid_start_date, c.valid_end_date, c.invalid_reason
 from standard_combined_drug_mapping a
 inner join cdmv5.concept c
 on a.standard_concept_id = c.concept_id
