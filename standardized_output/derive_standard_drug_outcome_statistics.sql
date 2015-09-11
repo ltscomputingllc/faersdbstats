@@ -31,9 +31,9 @@ select
 drug_concept_id, outcome_concept_id, 
 count_a as case_count,
 (count_a / (count_a + count_b)) / (count_c / (count_c + count_d)) as prr,
-(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))+1.96)*sqrt((1/count_a)+(1/count_b)+(1/count_c)+(1/count_d)) as prr_95_percent_upper_confidence_limit,
-(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))-1.96)*sqrt((1/count_a)+(1/count_b)+(1/count_c)+(1/count_d)) as prr_95_percent_lower_confidence_limit,
+exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))+1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)+(1.0/(count_c+count_d)))) as prr_95_percent_upper_confidence_limit,
+exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))-1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)+(1.0/(count_c+count_d)))) as prr_95_percent_lower_confidence_limit,
 ((count_a / count_c) / (count_b / count_d)) as ror,
-(ln((count_a / count_c) / (count_b / count_d))+1.96)*sqrt((1/count_a)+(1/count_b)+(1/count_c)+(1/count_d)) as ror_95_percent_upper_confidence_limit,
-(ln((count_a / count_c) / (count_b / count_d))-1.96)*sqrt((1/count_a)+(1/count_b)+(1/count_c)+(1/count_d)) as ror_95_percent_lower_confidence_limit
+exp((ln((count_a / count_c) / (count_b / count_d))+1.96)*sqrt((1.0/count_a)+(1.0/count_b)+(1.0/count_c)+(1.0/count_d))) as ror_95_percent_upper_confidence_limit,
+exp((ln((count_a / count_c) / (count_b / count_d))-1.96)*sqrt((1.0/count_a)+(1.0/count_b)+(1.0/count_c)+(1.0/count_d))) as ror_95_percent_lower_confidence_limit
 from standard_drug_outcome_contingency_table;
