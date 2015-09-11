@@ -10,6 +10,9 @@ set search_path = standard;
 drop table if exists standard_case_indication;
 create table standard_case_indication as select * from faers.standard_case_indication;
 
+drop table if exists standard_case_drug;
+create table standard_case_drug as select * from faers.standard_drug;
+
 drop table if exists standard_case_outcome;
 create table standard_case_outcome as select * from faers.standard_case_outcome;
 
