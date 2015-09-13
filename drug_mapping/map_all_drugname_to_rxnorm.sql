@@ -45,6 +45,30 @@ from (
 	where b.isr is not null
 ) aa
 
+-- remove the word tablet or "(tablet)" or the plural forms from drug name
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '(.*)(\W|^)\(TABLETS?\)|TABLETS?(\W|$)', '\1\2', 'gi') 
+where concept_id is null
+and drug_name_clean ~*  '.*TABLET.*'
+
+-- remove the word capsule or (capsule) or the plural forms from drug name
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '(.*)(\W|^)\(CAPSULES?\)|CAPSULES?(\W|$)', '\1\2', 'gi')
+where concept_id is null
+and drug_name_clean ~*  '.*CAPSULE.*'
+
+-- remove the drug strength in MG or MG/MG or MG\MG or MG / MG and their plural forms
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '\(*(\y\d*\.*\d*\ *MG\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|ML)*\ *\,*\+*\ *\y)\)*', '\3', 'gi')
+where concept_id is null
+and drug_name_clean ~*  '\(*(\y\d*\.*\d*\ *MG\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|ML)*\ *\,*\+*\ *\y)\)*'
+
+-- remove the drug strength in MILLIGRAMS or MILLIGRAMS/MILLILITERS or MILLIGRAMS\MILLIGRAM and their plural forms
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '\(*(\y\d*\.*\d*\ *MILLIGRAMS?\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|MILLILITERS?)*\ *\,*\+*\ *\y)\)*', '\3', 'gi')
+where concept_id is null
+and drug_name_clean ~*  '\(*(\y\d*\.*\d*\ *MILLIGRAMS?\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|MILLILITERS?)*\ *\,*\+*\ *\y)\)*'
+
 -- create an index on the mapping table to improve performance
 drop index if exists drug_name_clean_ix;
 create index drug_name_clean_ix on drug_regex_mapping(drug_name_clean);
