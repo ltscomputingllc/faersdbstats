@@ -45,6 +45,10 @@ from (
 	where b.isr is not null
 ) aa
 
+-- create an index on the mapping table to improve performance
+drop index if exists drug_name_clean_ix;
+create index drug_name_clean_ix on drug_regex_mapping(drug_name_clean);
+
 -- remove the word tablet or "(tablet)" or the plural forms from drug name
 update drug_regex_mapping
 set drug_name_clean = regexp_replace(drug_name_clean, '(.*)(\W|^)\(TABLETS?\)|TABLETS?(\W|$)', '\1\2', 'gi') 
@@ -69,9 +73,26 @@ set drug_name_clean = regexp_replace(drug_name_clean, '\(*(\y\d*\.*\d*\ *MILLIGR
 where concept_id is null
 and drug_name_clean ~*  '\(*(\y\d*\.*\d*\ *MILLIGRAMS?\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|MILLILITERS?)*\ *\,*\+*\ *\y)\)*'
 
--- create an index on the mapping table to improve performance
-drop index if exists drug_name_clean_ix;
-create index drug_name_clean_ix on drug_regex_mapping(drug_name_clean);
+-- remove HYDROCHLORIDE and HCL
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '(\y\ *(HCL|HYDROCHLORIDE)\y)', '\3', 'gi') 
+where concept_id is null
+and drug_name_clean ~*  '\(*(\y\ *(HCL|HYDROCHLORIDE)\ *\y)\)*'
+
+-- remove FORMULATION, GENERIC, NOS
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '\(\y(FORMULATION|GENERIC|NOS)\y\)|\y(FORMULATION|GENERIC|NOS)\y', '\3', 'gi')  
+where concept_id is null
+and drug_name_clean ~*  '\y(FORMULATION|GENERIC|NOS)\y'
+
+-- lookup RxNorm concept name using words from last set of parentheses in the drug name (typically this is the ingredient name(s) for a branded drug
+UPDATE drug_regex_mapping a
+SET update_method = 'regex ingredient name in parentheses' , concept_id = b.concept_id, drug_name_clean = upper(b.concept_name)
+FROM cdmv5.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = regexp_replace(a.drug_name_clean, '.* \((.*)\)', '\1', 'gi')
+AND a.concept_id is null
+and drug_name_clean ~*  '.* \((.*)\)';
 
 -- find exact mapping
 UPDATE drug_regex_mapping a
@@ -80,9 +101,9 @@ FROM cdmv5.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean;
 
--- remove trailing spaces or period characters
+-- remove trailing spaces or period or , characters
 update drug_regex_mapping
-set drug_name_clean = regexp_replace(drug_name_clean, '[ \.]$', '', 'gi')
+set drug_name_clean = regexp_replace(drug_name_clean, '[ \.\,]$', '', 'gi')
 where concept_id is null;
 
 -- find exact mapping
@@ -184,10 +205,11 @@ WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
 
--- remove (UNKNOWN)
+-- remove UNKNOWN or UNK 
 update drug_regex_mapping
-set drug_name_clean = regexp_replace(drug_name_clean, '( *unknown *)', '', 'gi')
-where concept_id is null;
+set drug_name_clean = regexp_replace(drug_name_clean, '\(\y(UNKNOWN|UNK)\y\)|\y(UNKNOWN|UNK)\y', '', 'gi')  
+where concept_id is null
+and drug_name_clean ~*  '\y(UNKNOWN|UNK)\y'
 
 -- find exact mapping
 UPDATE drug_regex_mapping a
