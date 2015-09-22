@@ -9,9 +9,9 @@
 
 set search_path = faers;
 
-drop table if exists standard_case_indication;
+drop table if exists standard_case_indication; -- 5637439 
 create table standard_case_indication as
-select distinct a.primaryid, a.isr, b.indi_pt, c.concept_id as indication_concept_id
+select distinct a.primaryid, a.isr, indi_drug_seq, b.indi_pt, c.concept_id as indication_concept_id
 from unique_all_case a
 inner join indi b
 on a.primaryid = b.primaryid
@@ -19,8 +19,8 @@ inner join cdmv5.concept c
 on upper(regexp_replace(b.indi_pt,'^ +','','gi')) = upper(c.concept_name) 
 and c.vocabulary_id = 'MedDRA'
 where a.isr is null
-union all
-select distinct a.primaryid, a.isr, b.indi_pt, c.concept_id as indication_concept_id
+union
+select distinct a.primaryid, a.isr, drug_seq, b.indi_pt, c.concept_id as indication_concept_id
 from unique_all_case a
 inner join indi_legacy b
 on a.isr = b.isr
