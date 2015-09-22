@@ -687,14 +687,14 @@ AND nda_ingredient.appl_no = a.nda_num;
 
 drop table if exists combined_drug_mapping;
 create table combined_drug_mapping as
-select distinct primaryid, isr, role_cod, drug_name_original, lookup_value, concept_id, update_method
+select distinct primaryid, isr, drug_seq, role_cod, drug_name_original, lookup_value, concept_id, update_method
 from (
-	select distinct b.primaryid, b.isr, role_cod, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
+	select distinct b.primaryid, b.isr, drug_seq, role_cod, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
 	from drug a
 	inner join unique_all_case b on a.primaryid = b.primaryid
 	where b.isr is null
 	union
-	select distinct b.primaryid, b.isr, role_cod, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
+	select distinct b.primaryid, b.isr, drug_seq, role_cod, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
 	from drug_legacy a
 	inner join unique_all_case b on a.isr = b.isr
 	where b.isr is not null
