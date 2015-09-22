@@ -282,10 +282,10 @@ update standard_combined_drug_mapping set standard_concept_id = 40129571 where s
 -------------------------------------------------------
 -- create final table with just the standard ingredient and clinical drug form of the drugs
 
-drop table if exists standard_drug;
+drop table if exists standard_case_drug;
 
-create table standard_drug as
-select a.primaryid, a.isr, a.standard_concept_id, c.concept_name, c.standard_concept, c.concept_class_id, c.valid_start_date, c.valid_end_date, c.invalid_reason
+create table standard_case_drug as
+select a.primaryid, a.isr, a.rol_cod, a.standard_concept_id, c.concept_name, c.standard_concept, c.concept_class_id, c.valid_start_date, c.valid_end_date, c.invalid_reason
 from standard_combined_drug_mapping a
 inner join cdmv5.concept c
 on a.standard_concept_id = c.concept_id
