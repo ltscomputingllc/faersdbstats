@@ -144,4 +144,11 @@ from unique_all_casedemo
 order by primaryid desc, database desc, upper(filename) desc, i_f_code, isr desc
 ) a where a.row_num = 1
 
+-- remove the 'fake' primaryid suffixed with a '0' that we introduced earlier in this de-dup logic
+-- we need the output table to contain either an isr or a primaryid but not both
+update unique_all_case
+set primaryid = null
+where isr is not null;
+
+
 
