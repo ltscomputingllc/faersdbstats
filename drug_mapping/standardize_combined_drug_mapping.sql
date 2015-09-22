@@ -25,8 +25,9 @@ select a.*, cast (concept_id as integer) as standard_concept_id from combined_dr
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
-INNER JOIN cdmv5.concept c 
-on scdm.standard_concept_id = c.concept_id 
+inner join cdmv5.concept c 
+on scdm.standard_concept_id = c.concept_id
+and scdm.concept_id is not null 
 and c.standard_concept is null 
 ),
 cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
@@ -56,6 +57,7 @@ select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
 INNER JOIN cdmv5.concept c 
 on scdm.standard_concept_id = c.concept_id 
+and scdm.concept_id is not null 
 and c.concept_class_id  = 'Branded Drug Form' 
 ),
 cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
@@ -85,6 +87,7 @@ select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
 INNER JOIN cdmv5.concept c 
 on scdm.standard_concept_id = c.concept_id 
+and scdm.concept_id is not null 
 and c.concept_class_id  = 'Brand Name' 
 and c.invalid_reason is null
 ),
@@ -115,6 +118,7 @@ select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
 INNER JOIN cdmv5.concept c 
 on scdm.standard_concept_id = c.concept_id 
+and scdm.concept_id is not null 
 and c.concept_class_id  = 'Brand Name' 
 and c.invalid_reason = 'U'
 ),
@@ -164,6 +168,7 @@ select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
 INNER JOIN cdmv5.concept c 
 on scdm.standard_concept_id = c.concept_id 
+and scdm.concept_id is not null 
 and c.concept_class_id  = 'Brand Name' 
 and c.invalid_reason = 'D'
 ),
@@ -198,6 +203,7 @@ select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
 INNER JOIN cdmv5.concept c 
 on scdm.standard_concept_id = c.concept_id 
+and scdm.concept_id is not null 
 and c.invalid_reason in ('U','D')
 ),
 cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
@@ -227,6 +233,7 @@ select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
 INNER JOIN cdmv5.concept c 
 on scdm.standard_concept_id = c.concept_id 
+and scdm.concept_id is not null 
 and c.concept_class_id  = 'Clinical Drug Form' 
 and c.concept_name not like '%/%'
 ),
@@ -285,9 +292,10 @@ update standard_combined_drug_mapping set standard_concept_id = 40129571 where s
 drop table if exists standard_case_drug;
 
 create table standard_case_drug as
-select a.primaryid, a.isr, a.rol_cod, a.standard_concept_id, c.concept_name, c.standard_concept, c.concept_class_id, c.valid_start_date, c.valid_end_date, c.invalid_reason
+select distinct a.primaryid, a.isr, a.role_cod, a.standard_concept_id, c.concept_name, c.standard_concept, c.concept_class_id, c.valid_start_date, c.valid_end_date, c.invalid_reason
 from standard_combined_drug_mapping a
 inner join cdmv5.concept c
 on a.standard_concept_id = c.concept_id
 and c.concept_class_id in ('Ingredient','Clinical Drug Form')
 and c.standard_concept = 'S';
+
