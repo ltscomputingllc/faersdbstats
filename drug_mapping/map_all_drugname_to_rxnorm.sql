@@ -277,6 +277,11 @@ SET drug_name_clean = regexp_replace(drug_name_clean, '\/\d+\/\ *', '', 'gi')
 where concept_id is null and 
 drug_name_original ~* '.*\/\d+\/.*';
 
+-- remove trailing spaces
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, ' +$', '', 'gi')
+where concept_id is null;
+
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove /nnnnn/' , concept_id = b.concept_id
