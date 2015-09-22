@@ -38,12 +38,12 @@ from (
 	from drug a
 	inner join unique_all_case b on a.primaryid = b.primaryid
 	where b.isr is null
-	union all
+	union
 	select distinct drugname as drug_name_original, upper(drugname) as drug_name_clean, cast(null as integer) as concept_id, null as update_method
 	from drug_legacy a
 	inner join unique_all_case b on a.isr = b.isr
 	where b.isr is not null
-) aa
+) aa;
 
 -- create an index on the mapping table to improve performance
 drop index if exists drug_name_clean_ix;
@@ -53,44 +53,52 @@ create index drug_name_clean_ix on drug_regex_mapping(drug_name_clean);
 update drug_regex_mapping
 set drug_name_clean = regexp_replace(drug_name_clean, '(.*)(\W|^)\(TABLETS?\)|TABLETS?(\W|$)', '\1\2', 'gi') 
 where concept_id is null
-and drug_name_clean ~*  '.*TABLET.*'
+and drug_name_clean ~*  '.*TABLET.*';
 
 -- remove the word capsule or (capsule) or the plural forms from drug name
 update drug_regex_mapping
 set drug_name_clean = regexp_replace(drug_name_clean, '(.*)(\W|^)\(CAPSULES?\)|CAPSULES?(\W|$)', '\1\2', 'gi')
 where concept_id is null
-and drug_name_clean ~*  '.*CAPSULE.*'
+and drug_name_clean ~*  '.*CAPSULE.*';
 
 -- remove the drug strength in MG or MG/MG or MG\MG or MG / MG and their plural forms
 update drug_regex_mapping
 set drug_name_clean = regexp_replace(drug_name_clean, '\(*(\y\d*\.*\d*\ *MG\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|ML)*\ *\,*\+*\ *\y)\)*', '\3', 'gi')
 where concept_id is null
-and drug_name_clean ~*  '\(*(\y\d*\.*\d*\ *MG\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|ML)*\ *\,*\+*\ *\y)\)*'
+and drug_name_clean ~*  '\(*(\y\d*\.*\d*\ *MG\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|ML)*\ *\,*\+*\ *\y)\)*';
 
 -- remove the drug strength in MILLIGRAMS or MILLIGRAMS/MILLILITERS or MILLIGRAMS\MILLIGRAM and their plural forms
 update drug_regex_mapping
 set drug_name_clean = regexp_replace(drug_name_clean, '\(*(\y\d*\.*\d*\ *MILLIGRAMS?\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|MILLILITERS?)*\ *\,*\+*\ *\y)\)*', '\3', 'gi')
 where concept_id is null
-and drug_name_clean ~*  '\(*(\y\d*\.*\d*\ *MILLIGRAMS?\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|MILLILITERS?)*\ *\,*\+*\ *\y)\)*'
+and drug_name_clean ~*  '\(*(\y\d*\.*\d*\ *MILLIGRAMS?\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|MILLILITERS?)*\ *\,*\+*\ *\y)\)*';
 
 -- remove HYDROCHLORIDE and HCL
 update drug_regex_mapping
 set drug_name_clean = regexp_replace(drug_name_clean, '(\y\ *(HCL|HYDROCHLORIDE)\y)', '\3', 'gi') 
 where concept_id is null
-and drug_name_clean ~*  '\(*(\y\ *(HCL|HYDROCHLORIDE)\ *\y)\)*'
+and drug_name_clean ~*  '\(*(\y\ *(HCL|HYDROCHLORIDE)\ *\y)\)*';
+
+-- find exact mapping for drug name after we have removed the above keywords
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove keywords' , concept_id = b.concept_id
+FROM cdmv5.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
 
 -- remove FORMULATION, GENERIC, NOS
 update drug_regex_mapping
 set drug_name_clean = regexp_replace(drug_name_clean, '\(\y(FORMULATION|GENERIC|NOS)\y\)|\y(FORMULATION|GENERIC|NOS)\y', '\3', 'gi')  
 where concept_id is null
-and drug_name_clean ~*  '\y(FORMULATION|GENERIC|NOS)\y'
+and drug_name_clean ~*  '\y(FORMULATION|GENERIC|NOS)\y';
 
 -- lookup active ingredient from EU drug name
 UPDATE drug_regex_mapping a
 SET update_method = 'regex EU drug name to active ingredient', drug_name_clean = upper(b.active_substance)
 FROM eu_drug_name_active_ingredient_mapping b
 WHERE upper(a.drug_name_clean) = upper(b.brand_name)
-AND a.concept_id is null
+AND a.concept_id is null;
 
 -- find exact mapping for active ingredient
 UPDATE drug_regex_mapping a
@@ -106,7 +114,7 @@ set update_method = 'regex EU drug name in parentheses to active ingredient', dr
 from eu_drug_name_active_ingredient_mapping b
 where upper(regexp_replace(a.drug_name_clean, '.* \((.*)\)', '\1', 'gi')) = upper(b.brand_name)
 and a.concept_id is null
-and a.drug_name_clean ~*  '.* \((.*)\)'
+and a.drug_name_clean ~*  '.* \((.*)\)';
 
 -- find exact mapping for active ingredient
 UPDATE drug_regex_mapping a
@@ -122,17 +130,6 @@ SET update_method = 'regex ingredient name in parentheses' , concept_id = b.conc
 FROM cdmv5.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = regexp_replace(a.drug_name_clean, '.* \((.*)\)', '\1', 'gi')
-AND a.concept_id is null
-and drug_name_clean ~*  '.* \((.*)\)';
-
--- lookup RxNorm concept name using words from last set of parentheses in the drug name for EU drug names (typically this is the ingredient name(s) for a branded drug
-UPDATE drug_regex_mapping a
-SET update_method = 'regex EU drug name ingredient name in parentheses' , concept_id = b.concept_id, drug_name_clean = upper(b.concept_name)
-FROM cdmv5.concept b
-inner join eu_drug_name_active_ingredient c
-on upper(regexp_replace(a.drug_name_clean, '.* \((.*)\)', '\1', 'gi')) = upper(c.brand_name)
-WHERE b.vocabulary_id = 'RxNorm'
-AND upper(b.concept_name) = c.active_substance
 AND a.concept_id is null
 and drug_name_clean ~*  '.* \((.*)\)';
 
@@ -247,11 +244,11 @@ WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
 
--- remove UNKNOWN or UNK 
+-- remove UNKNOWN or UNK except at start of drug name
 update drug_regex_mapping
-set drug_name_clean = regexp_replace(drug_name_clean, '\(\y(UNKNOWN|UNK)\y\)|\y(UNKNOWN|UNK)\y', '', 'gi')  
+set drug_name_clean = regexp_replace(drug_name_clean, '\((\ \yUNKNOWN|UNK\y)\)|\(\y(UNKNOWN|UNK)\y\)|\y(UNKNOWN|UNK)\y', '', 'gi')  
 where concept_id is null
-and drug_name_clean ~*  '\y(UNKNOWN|UNK)\y'
+and drug_name_clean ~*  '.+\y(UNKNOWN|UNK)\y.+$';
 
 -- find exact mapping
 UPDATE drug_regex_mapping a
@@ -280,7 +277,7 @@ SET drug_name_clean = regexp_replace(drug_name_clean, '\/\d+\/\ *', '', 'gi')
 where concept_id is null and 
 drug_name_original ~* '.*\/\d+\/.*';
 
-- find exact mapping
+-- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove /nnnnn/' , concept_id = b.concept_id
 FROM cdmv5.concept b
@@ -288,7 +285,25 @@ WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
 
--- derive RxNorm concepts for multi ingredient drugs (in any order of occurrence in the drug name) and for single ingredient clinical names and brand name drugs from within complex drug name strings
+-- map vitamins where only brand name or generic description is provided in drug name field
+update drug_regex_mapping a
+set drug_name_clean = 'MULTIVITAMIN PREPARATION'
+where drug_name_clean like '%VITAMIN%' and drug_name_clean not like '%VITAMIN A%' and drug_name_clean not like '%VITAMIN B%'
+and drug_name_clean not like '%VITAMIN C%' and drug_name_clean not like '%VITAMIN K%' and drug_name_clean not like '%VITAMIN D%' 
+and drug_name_clean not like '%VITAMIN E%'
+and a.concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex vitamins' , concept_id = b.concept_id
+FROM cdmv5.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- in this section of mapping logic we derive RxNorm concepts for multi ingredient drugs (in any order of occurrence in the drug name) and for single ingredient clinical names and brand name drugs from within complex drug name strings
+
+-- create a table that will hold the combined mapping of single and multiple ingredients and brand names based on separating and combining lists of words that occur within (single or multiple) ingredients or brands
 
 drop table if exists drug_regex_mapping_words;
 create table drug_regex_mapping_words as
@@ -302,7 +317,7 @@ from (
 	from drug a
 	inner join unique_all_case b on a.primaryid = b.primaryid
 	where b.isr is null
-	union all
+	union
 	select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
 	from drug_legacy a
 	inner join unique_all_case b on a.isr = b.isr
@@ -311,12 +326,15 @@ from (
 order by drug_name_original desc
 ) bb
 ) cc 
-where word NOT IN ('','CREAM','PATCH','GEL','POWDER','SOLUTION','SUSPENSION','OIL','LOTION','CAPSULE','CAPLET','TABLET','SPRAY','LIQUID','OINTMENT','MOUTHWASH','SYRUP','HCL','HYDROCHLORIDE','SUPPOSITORY','ACETIC','SODIUM','CALCIUM','SULPHATE','MONOHYDRATE')
-order by 1
+where word NOT IN ('','SYRUP','HCL','HYDROCHLORIDE', 'ACETIC','SODIUM','CALCIUM','SULPHATE','MONOHYDRATE') 
+and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+'))
+			from  cdmv5.concept b
+			where b.vocabulary_id = 'RxNorm'
+			and b.concept_class_id = 'Dose Form' order by 1);
 
 ------=====
 
--- create a target mapping table of multi ingredient drug names with each ingredient word concatenated alphabetically into a space separated string 
+-- create a target mapping table of multi ingredient drug names from the RxNorm Vocabulary with each ingredient word concatenated alphabetically into a space separated string 
 drop table if exists rxnorm_mapping_multi_ingredient_list;
 create table rxnorm_mapping_multi_ingredient_list as
 select ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
@@ -345,8 +363,7 @@ from (
 	and word !~ '^\d+$|\y\d+\-\d+\y|\y\d+\.\d+\y' 
 	group by concept_id, concept_name
 ) dd
-group by ingredient_list
-order by 2,3;
+group by ingredient_list;
 
 
 -- create a source multi-ingredient drug mapping table by extracting the multi-ingredient drug names with each ingredient word concatenated alphabetically into a space separated string
@@ -363,7 +380,7 @@ from (
 				from drug a
 				inner join unique_all_case b on a.primaryid = b.primaryid
 				where b.isr is null
-				union all
+				union
 				select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
 				from drug_legacy a
 				inner join unique_all_case b on a.isr = b.isr
@@ -392,8 +409,7 @@ from (
 			)
 	group by concept_id, drug_name_original, concept_name
 ) dd
-group by drug_name_original, ingredient_list
-order by 2,3
+group by drug_name_original, ingredient_list;
 
 
 -- map drug names containing multiple ingredient names to clinical drug form
@@ -407,12 +423,12 @@ on a.ingredient_list = b1.ingredient_list
 group by a.drug_name_original
 ) b
 where c.drug_name_original = b.drug_name_original
-and c.concept_id is null
+and c.concept_id is null;
 
 
 --*************
 
--- create a target mapping table of single ingredient drug names with each ingredient word concatenated alphabetically into a space separated string 
+-- create a target mapping table of single ingredient drug names from RxNorm Vocabulary with each ingredient word concatenated alphabetically into a space separated string 
 drop table if exists rxnorm_mapping_single_ingredient_list;
 create table rxnorm_mapping_single_ingredient_list as
 select ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
@@ -440,10 +456,8 @@ from (
 	and word !~ '^\d+$|\y\d+\-\d+\y|\y\d+\.\d+\y' 
 	group by concept_id, concept_name
 ) dd
-group by ingredient_list
-order by 2,3;
+group by ingredient_list;
 
---select * from rxnorm_mapping_single_ingredient_list order by 2,3
 
 -- create a source single-ingredient drug mapping table by extracting the single-ingredient drug names with each single ingredient word concatenated alphabetically into a space separated string
 drop table if exists drug_mapping_single_ingredient_list;
@@ -459,7 +473,7 @@ from (
 				from drug a
 				inner join unique_all_case b on a.primaryid = b.primaryid
 				where b.isr is null and drugname not like '%/%' and drugname not like '% AND %' and drugname not like '% WITH %' and drugname not like '%+%'
-				union all
+				union
 				select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
 				from drug_legacy a
 				inner join unique_all_case b on a.isr = b.isr
@@ -487,21 +501,8 @@ from (
 			)
 	group by concept_id, drug_name_original, concept_name
 ) dd
-group by drug_name_original, ingredient_list
-order by 2,3;
+group by drug_name_original, ingredient_list;
 
--- 
--- select distinct b.drug_name_original, b.concept_name from drug_regex_mapping_words c,
--- (
--- select distinct a.drug_name_original, max(upper(b1.concept_name)) as concept_name, max(b1.concept_id) as concept_id 
--- from drug_mapping_single_ingredient_list a
--- inner join rxnorm_mapping_single_ingredient_list b1
--- on a.ingredient_list = b1.ingredient_list
--- group by a.drug_name_original
--- ) b
--- where c.drug_name_original = b.drug_name_original
--- and c.update_method is null and b.concept_name not in ('VITAMIN A','SODIUM','HYDROCHLORIDE','HCL','CALCIUM','COLD CREAM','VITAMIN B 12','MALEATE','TARTRATE','MESYLATE','MONOHYDRATE','SUCCINATE','CORN SYRUP','FACTOR X','PROTEIN S')
--- order by 1,2;
 
 -- map drug names containing single ingredient names to ingredient concepts
 update drug_regex_mapping_words c
@@ -519,7 +520,7 @@ and c.update_method is null;
 
 --*************
 
--- create a target mapping table of brand names with each brand name word concatenated alphabetically into a space separated string 
+-- create a target mapping table of brand names in RxNorm Vocabulary with each brand name word concatenated alphabetically into a space separated string 
 drop table if exists rxnorm_mapping_brand_name_list;
 create table rxnorm_mapping_brand_name_list as
 select ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
@@ -547,12 +548,9 @@ from (
 	and word !~ '^\d+$|\y\d+\-\d+\y|\y\d+\.\d+\y' 
 	group by concept_id, concept_name
 ) dd
-group by ingredient_list
-order by 2,3;
+group by ingredient_list;
 
---select * from rxnorm_mapping_brand_name_list order by 2,3
-
--- create a source brand name drug mapping table by extracting the brand names with each single brane name word concatenated alphabetically into a space separated string
+-- create a source brand name drug mapping table by extracting the brand names with each single brand name word concatenated alphabetically into a space separated string
 drop table if exists drug_mapping_brand_name_list;
 create table drug_mapping_brand_name_list as
 select drug_name_original, ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
@@ -566,7 +564,7 @@ from (
 				from drug a
 				inner join unique_all_case b on a.primaryid = b.primaryid
 				where b.isr is null and drugname not like '%/%' and drugname not like '% AND %' and drugname not like '% WITH %' and drugname not like '%+%'
-				union all
+				union
 				select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
 				from drug_legacy a
 				inner join unique_all_case b on a.isr = b.isr
@@ -594,24 +592,7 @@ from (
 			)
 	group by concept_id, drug_name_original, concept_name
 ) dd
-group by drug_name_original, ingredient_list
-order by 2,3;
-
--- select distinct b.drug_name_original, b.concept_name from drug_regex_mapping_words c,
--- (
--- select distinct a.drug_name_original, max(upper(b1.concept_name)) as concept_name, max(b1.concept_id) as concept_id 
--- from drug_mapping_brand_name_list a
--- inner join rxnorm_mapping_brand_name_list b1
--- on a.ingredient_list = b1.ingredient_list
--- group by a.drug_name_original
--- ) b
--- where c.drug_name_original = b.drug_name_original
--- and c.update_method is null and b.concept_name not in ('G.B.H. SHAMPOO', 'A.P.L.', 'C.P.M.',  'ALLERGY CREAM', 'MG 217', 'ACID JELLY', 'C/T/S',  'M.A.H.', 'I.D.A.', 'N.T.A.', 'FORMULA 21', 'PRO OTIC', 'E.S.P.', 'PREPARATION H CREAM', 'H 9600 SR',
--- 	'12 HOUR COLD', 'GLYCERYL T', 'G BID', 'AT 10', 'COMPOUND 347', 'MS/S', 'HYDRO 40', 'HP 502', 'LIQUID PRED', 'ORAL PEROXIDE', 'BABY GAS', 'BC POWDER 742/38/222', 'COMFORT GEL', 'MAG 64', 'K EFFERVESCENT', 'NASAL LA', 'THERAPEUTIC SHAMPOO', 
--- 	'CHEWABLE CALCIUM', 'PAIN RELIEF (EFFERVESCENT)', 'STRESS LIQUID', 'IRON 300', 'FS SHAMPOO', 'T/GEL CONDITIONER', 'EX DEC', 'DR.S CREAM', 'JOINT GEL',  'CP ORAL', 'OTIC CARE', 'DR.S CREAM', 
--- 	'NASAL RELIEF', 'MEDICATED BLUE', 'FE 50', 'BIOTENE TOOTHPASTE', 'VITAMIN A','SODIUM','HYDROCHLORIDE','HCL','CALCIUM', 'LONG LASTING NASAL', 'TRIPLE PASTE', 'K + POTASSIUM', 'NASAL DECONGESTANT SYRUP',
--- 	'COLD CREAM','VITAMIN B 12','MALEATE','TARTRATE','MESYLATE','MONOHYDRATE','SUCCINATE','CORN SYRUP','FACTOR X','PROTEIN S')
--- order by 1,2;
+group by drug_name_original, ingredient_list;
 
 -- map drug names containing brand names to brand name concepts
 update drug_regex_mapping_words c
@@ -628,7 +609,7 @@ and c.update_method is null and b.concept_name not in ('G.B.H. SHAMPOO', 'A.P.L.
 	'12 HOUR COLD', 'GLYCERYL T', 'G BID', 'AT 10', 'COMPOUND 347', 'MS/S', 'HYDRO 40', 'HP 502', 'LIQUID PRED', 'ORAL PEROXIDE', 'BABY GAS', 'BC POWDER 742/38/222', 'COMFORT GEL', 'MAG 64', 'K EFFERVESCENT', 'NASAL LA', 'THERAPEUTIC SHAMPOO', 
 	'CHEWABLE CALCIUM', 'PAIN RELIEF (EFFERVESCENT)', 'STRESS LIQUID', 'IRON 300', 'FS SHAMPOO', 'T/GEL CONDITIONER', 'EX DEC', 'DR.S CREAM', 'JOINT GEL',  'CP ORAL', 'OTIC CARE', 'DR.S CREAM', 
 	'NASAL RELIEF', 'MEDICATED BLUE', 'FE 50', 'BIOTENE TOOTHPASTE', 'VITAMIN A','SODIUM','HYDROCHLORIDE','HCL','CALCIUM', 'LONG LASTING NASAL', 'TRIPLE PASTE', 'K + POTASSIUM', 'NASAL DECONGESTANT SYRUP',
-	'COLD CREAM','VITAMIN B 12','MALEATE','TARTRATE','MESYLATE','MONOHYDRATE','SUCCINATE','CORN SYRUP','FACTOR X','PROTEIN S')
+	'COLD CREAM','VITAMIN B 12','MALEATE','TARTRATE','MESYLATE','MONOHYDRATE','SUCCINATE','CORN SYRUP','FACTOR X','PROTEIN S');
 
 --*************
 
@@ -650,7 +631,7 @@ drop table if exists drug_ai_mapping;
 create table drug_ai_mapping as
 select distinct drugname as drug_name_original, prod_ai, cast(null as integer) as concept_id, null as update_method
 from drug a
-inner join unique_case b on a.primaryid = b.primaryid;
+inner join unique_all_case b on a.primaryid = b.primaryid where b.isr is null;
 
 drop index if exists prod_ai_ix;
 create index prod_ai_ix on drug_ai_mapping(prod_ai);
@@ -681,7 +662,7 @@ from (
 	from drug a
 	inner join unique_all_case b on a.primaryid = b.primaryid
 	where b.isr is null and nda_num is not null
-	union all
+	union
 	select distinct drugname as drug_name_original, nda_num, null as nda_ingredient, cast(null as integer) as concept_id, null as update_method
 	from drug_legacy a
 	inner join unique_all_case b on a.isr = b.isr
@@ -706,14 +687,14 @@ AND nda_ingredient.appl_no = a.nda_num;
 
 drop table if exists combined_drug_mapping;
 create table combined_drug_mapping as
-select distinct primaryid, isr, drug_name_original, lookup_value, concept_id, update_method
+select distinct primaryid, isr, role_cod, drug_name_original, lookup_value, concept_id, update_method
 from (
-	select distinct b.primaryid, b.isr, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
+	select distinct b.primaryid, b.isr, role_cod, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
 	from drug a
 	inner join unique_all_case b on a.primaryid = b.primaryid
 	where b.isr is null
-	union all
-	select distinct b.primaryid, b.isr, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
+	union
+	select distinct b.primaryid, b.isr, role_cod, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
 	from drug_legacy a
 	inner join unique_all_case b on a.isr = b.isr
 	where b.isr is not null
@@ -726,21 +707,25 @@ create index combined_drug_mapping_ix on combined_drug_mapping(upper(drug_name_o
 UPDATE combined_drug_mapping a
 SET  update_method = b.update_method , lookup_value = drug_name_clean, concept_id = b.concept_id
 FROM drug_regex_mapping b
-WHERE upper(a.drug_name_original) = upper(b.drug_name_original);
+WHERE upper(a.drug_name_original) = upper(b.drug_name_original)
+and a.concept_id is null
+and b.concept_id is not null;
 
 -- update using drug_ai_mapping
 UPDATE combined_drug_mapping a
 SET  update_method = b.update_method , lookup_value = prod_ai, concept_id = b.concept_id
 FROM drug_ai_mapping b
 WHERE upper(a.drug_name_original) = upper(b.drug_name_original)
-and a.concept_id is null;
+and a.concept_id is null
+and b.concept_id is not null;
 
 -- update using drug_nda_mapping
 UPDATE combined_drug_mapping a
 SET  update_method = b.update_method , lookup_value = nda_ingredient, concept_id = b.concept_id
 FROM drug_nda_mapping b
 WHERE upper(a.drug_name_original) = upper(b.drug_name_original)
-and a.concept_id is null;
+and a.concept_id is null
+and b.concept_id is not null;
 
 -- update using drug_usagi_mapping
 -- manually curated drug mappings
@@ -748,7 +733,8 @@ UPDATE combined_drug_mapping a
 SET  update_method = b.update_method , lookup_value = b.concept_name, concept_id = b.concept_id
 FROM drug_usagi_mapping b
 WHERE upper(a.drug_name_original) = upper(b.drug_name_original)
-and a.concept_id is null;
+and a.concept_id is null
+and b.concept_id is not null;
 
 -- update unknown drugs where drug name starts with UNKNOWN
 update combined_drug_mapping 
