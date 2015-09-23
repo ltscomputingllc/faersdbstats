@@ -30,7 +30,7 @@ create table standard_case_outcome_category as
 	left outer join outc b
 	on a.primaryid = b.primaryid
 	where a.isr is null
-	union all
+	union
 	select distinct a.primaryid, a.isr, b.outc_cod
 	from unique_all_case a
 	left outer join outc_legacy b

@@ -32,7 +32,7 @@ inner join cdmv5.concept c
 on upper(b.pt) = upper(c.concept_name)
 and c.vocabulary_id = 'MedDRA'
 where a.isr is null
-union all
+union
 select distinct a.primaryid, a.isr, b.pt, c.concept_id as outcome_concept_id
 from unique_all_case a
 inner join reac_legacy b
