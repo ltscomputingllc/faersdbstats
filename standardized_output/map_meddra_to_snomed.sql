@@ -13,7 +13,7 @@ alter table standard_case_indication add column snomed_indication_concept_id int
 update standard_case_indication a
 set snomed_indication_concept_id = snomed_concept_id
 from meddra_snomed_mapping b
-where a.indication_concept_id = b.meddra_concept_id
+where a.indication_concept_id = b.meddra_concept_id;
 
 
 -- populate standard_case_outcome SNOMED-CT concepts
@@ -23,7 +23,7 @@ alter table standard_case_outcome add column snomed_outcome_concept_id integer;
 update standard_case_outcome a
 set snomed_outcome_concept_id = snomed_concept_id
 from meddra_snomed_mapping b
-where a.outcome_concept_id = b.meddra_concept_id
+where a.outcome_concept_id = b.meddra_concept_id;
 
 -- populate standard_drug_outcome_count SNOMED-CT concepts
 
@@ -32,4 +32,4 @@ alter table standard_drug_outcome_count add column snomed_outcome_concept_id int
 update standard_drug_outcome_count a
 set snomed_outcome_concept_id = snomed_concept_id
 from meddra_snomed_mapping b
-where a.outcome_concept_id = b.meddra_concept_id
+where a.outcome_concept_id = b.meddra_concept_id;
