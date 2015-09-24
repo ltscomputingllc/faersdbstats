@@ -24,7 +24,7 @@ analyze verbose reac_legacy;
 
 drop table if exists standard_case_outcome;
 create table standard_case_outcome as
-select distinct a.primaryid, a.isr, b.pt, c.concept_id as outcome_concept_id
+select distinct a.primaryid, a.isr, b.pt, c.concept_id as outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id
 from unique_all_case a
 inner join reac b
 on a.primaryid = b.primaryid
@@ -33,7 +33,7 @@ on upper(b.pt) = upper(c.concept_name)
 and c.vocabulary_id = 'MedDRA'
 where a.isr is null
 union
-select distinct a.primaryid, a.isr, b.pt, c.concept_id as outcome_concept_id
+select distinct a.primaryid, a.isr, b.pt, c.concept_id as outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id
 from unique_all_case a
 inner join reac_legacy b
 on a.isr = b.isr
