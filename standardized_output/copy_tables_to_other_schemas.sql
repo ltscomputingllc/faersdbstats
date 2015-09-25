@@ -11,7 +11,7 @@ drop table if exists standard_case_indication;
 create table standard_case_indication as select * from faers.standard_case_indication;
 
 drop table if exists standard_case_drug;
-create table standard_case_drug as select * from faers.standard_drug;
+create table standard_case_drug as select * from faers.standard_case_drug;
 
 drop table if exists standard_case_outcome;
 create table standard_case_outcome as select * from faers.standard_case_outcome;
@@ -27,6 +27,9 @@ create table standard_drug_outcome_contingency_table as select * from faers.stan
 
 drop table if exists standard_drug_outcome_statistics;
 create table standard_drug_outcome_statistics as select * from faers.standard_drug_outcome_statistics;
+
+drop table if exists standard_drug_outcome_drilldown;
+create table standard_drug_outcome_drilldown as select * from faers.standard_drug_outcome_drilldown;
 
 -----------------------------------------
 set search_path = source;
