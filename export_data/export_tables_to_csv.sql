@@ -42,3 +42,5 @@ copy standard_case_outcome_category to '/data/outbound/standard_case_outcome_cat
 copy standard_drug_outcome_contingency_table to '/data/outbound/standard_drug_outcome_contingency_table.csv' CSV header;
 copy standard_drug_outcome_count to '/data/outbound/standard_drug_outcome_count.csv' CSV header;
 copy standard_drug_outcome_statistics to '/data/outbound/standard_drug_outcome_statistics.csv' CSV header;
+copy standard_unique_all_case to '/data/outbound/standard_unique_all_case.csv' CSV header;
+copy standard_drug_outcome_drilldown to '/data/outbound/standard_drug_outcome_drilldown.csv' CSV header;

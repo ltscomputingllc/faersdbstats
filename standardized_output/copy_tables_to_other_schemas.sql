@@ -28,6 +28,9 @@ create table standard_drug_outcome_contingency_table as select * from faers.stan
 drop table if exists standard_drug_outcome_statistics;
 create table standard_drug_outcome_statistics as select * from faers.standard_drug_outcome_statistics;
 
+drop table if exists standard_unique_all_case;
+create table standard_unique_all_case as select * from faers.unique_all_case;
+
 drop table if exists standard_drug_outcome_drilldown;
 create table standard_drug_outcome_drilldown as select * from faers.standard_drug_outcome_drilldown;
 
