@@ -124,31 +124,25 @@ and a.event_dt is not null and a.age is not null and a.sex is not null and a.rep
 
 ------------------------------
 
--- get the latest case row for each case across both the legacy LAERS and current FAERS data based on primary id (CASE and version)
+-- get the latest case row for each case across both the legacy LAERS and current FAERS data based on CASE ID
 drop table if exists unique_all_casedemo;
 create table unique_all_casedemo as
 select database, caseid, isr, caseversion, i_f_code, event_dt, age, sex, reporter_country, primaryid, drugname_list, reac_pt_list, filename
 from (
-select *, row_number() over(partition by primaryid order by primaryid desc, database desc, upper(filename) desc, i_f_code, isr desc) as row_num 
+select *, 
+row_number() over(partition by caseid order by primaryid desc, database desc, upper(filename) desc, i_f_code, isr desc) as row_num 
 from all_casedemo 
 ) a where a.row_num = 1
 
--- get the latest case row unique key for each case across both the legacy LAERS and current FAERS data based on demographic key fields
--- NOTE. when using this table for subsequent joins in the ETL process, join to FAERS data using primaryid where isr is null and join to LAERS data using isr where isr is not null
-drop table if exists unique_all_case;
+-- get the latest case row unique key for each case across both the legacy LAERS and current FAERS data, while also removing any duplicates based on demographic key fields
+-- NOTE. when using this table for subsequent joins in the ETL process, join to FAERS data using primaryid and join to LAERS data using isr
+drop table if exists unique_all_case;   
 create table unique_all_case as
-select primaryid, isr --database, caseid, isr, caseversion, i_f_code, event_dt, age, sex, reporter_country, primaryid, drugname_list, reac_pt_list, filename
+select caseid, case when isr is not null then null else primaryid end as primaryid, isr 
 from (
-select *, row_number() over(partition by event_dt, age, sex, reporter_country, drugname_list, reac_pt_list order by primaryid desc, database desc, upper(filename) desc, i_f_code, isr desc) as row_num 
+select caseid, primaryid,isr, 
+row_number() over(partition by event_dt, age, sex, reporter_country, drugname_list, reac_pt_list 
+order by primaryid desc, database desc, upper(filename) desc, i_f_code, isr desc) as row_num 
 from unique_all_casedemo 
-order by primaryid desc, database desc, upper(filename) desc, i_f_code, isr desc
 ) a where a.row_num = 1
-
--- remove the 'fake' primaryid suffixed with a '0' that we introduced earlier in this de-dup logic
--- we need the output table to contain either an isr or a primaryid but not both
-update unique_all_case
-set primaryid = null
-where isr is not null;
-
-
 
