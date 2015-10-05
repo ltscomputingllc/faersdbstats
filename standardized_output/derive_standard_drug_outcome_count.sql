@@ -10,7 +10,7 @@ set search_path = faers;
 
 drop table if exists standard_drug_outcome_count;
 create table standard_drug_outcome_count as
-select drug_concept_id, outcome_concept_id, count(*) as drug_outcome_pair_count
+select drug_concept_id, outcome_concept_id, count(*) as drug_outcome_pair_count, cast(null as integer) as snomed_outcome_concept_id
 from (
 	select 'PRIMARYID' || a.primaryid as case_key, a.standard_concept_id as drug_concept_id, b.outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id
 	from standard_case_drug a
