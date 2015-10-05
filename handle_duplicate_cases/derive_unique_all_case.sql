@@ -162,15 +162,18 @@ row_number() over(partition by caseid order by primaryid desc, database desc, fd
 from all_casedemo 
 ) a where a.row_num = 1
 
--- get the latest case row unique key for each case across both the legacy LAERS and current FAERS data, while also removing any duplicates based on demographic key fields
+-- remove any duplicates based on fully populated matching demographic key fields and exact match on list of drugs and list of outcomes (FAERS reactions)
 -- NOTE. when using this table for subsequent joins in the ETL process, join to FAERS data using primaryid and join to LAERS data using isr
 drop table if exists unique_all_case;   
 create table unique_all_case as
 select caseid, case when isr is not null then null else primaryid end as primaryid, isr 
 from (
-select caseid, primaryid,isr, 
-row_number() over(partition by event_dt, age, sex, reporter_country, drugname_list, reac_pt_list 
-order by primaryid desc, database desc, fda_dt desc, i_f_code, isr desc) as row_num 
-from unique_all_casedemo 
+	select caseid, primaryid,isr, 
+	row_number() over(partition by event_dt, age, sex, reporter_country, drugname_list, reac_pt_list order by primaryid desc, database desc, fda_dt desc, i_f_code, isr desc) as row_num 
+	from unique_all_casedemo 
+	where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null and drugname_list is not null and reac_pt_list is not null
 ) a where a.row_num = 1
-
+union 
+select caseid, case when isr is not null then null else primaryid end as primaryid, isr 
+from unique_all_casedemo 
+where caseid is null or event_dt is null or age is null or sex is null or reporter_country is null or drugname_list is null or reac_pt_list is null;
