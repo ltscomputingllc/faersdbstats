@@ -40,9 +40,9 @@ drop table if exists casedemo;
 create table casedemo as
 select caseid, caseversion, i_f_code, event_dt, age, sex, reporter_country, d.primaryid, drugname_list, reac_pt_list, fda_dt
 from demo d
-inner join drugname_list dl
+left outer join drugname_list dl
 on d.primaryid = dl.primaryid 
-inner join reac_pt_list rpl
+left outer join reac_pt_list rpl
 on d.primaryid = rpl.primaryid;
 
 ----------------------
@@ -66,9 +66,9 @@ drop table if exists casedemo_legacy;
 create table casedemo_legacy as
 select "CASE", i_f_cod, event_dt, age, gndr_cod, reporter_country, d.isr, drugname_list, reac_pt_list, fda_dt
 from demo_legacy d
-inner join drugname_legacy_list dl
+left outer join drugname_legacy_list dl
 on d.isr = dl.isr 
-inner join reac_pt_legacy_list rpl
+left outer join reac_pt_legacy_list rpl
 on d.isr = rpl.isr;
 
 ------------------------------
@@ -79,12 +79,12 @@ create table all_casedemo as
 select 'FAERS' as database, caseid, cast(null as varchar) as isr, caseversion, i_f_code, event_dt, age, sex, reporter_country, primaryid, 
 drugname_list, reac_pt_list, fda_dt, null as imputed_field_name 
 from casedemo 
-union all
+union
 select 'LAERS' as database, "CASE" as caseid, isr, cast ('0' as varchar) as caseversion, i_f_cod as i_f_code, event_dt, age, gndr_cod as sex, e.country_code as reporter_country, cast("CASE" || '0' as varchar) as primaryid, 
 drugname_list, reac_pt_list, fda_dt, null as imputed_field_name 
 from casedemo_legacy a 
 left outer join country_code e
-on upper(a.reporter_country) = upper(e.country_name)
+on upper(a.reporter_country) = upper(e.country_name);
 
 ------------------------------
 
@@ -96,7 +96,7 @@ create table default_all_casedemo_event_dt_keys as
 select caseid, age, sex, reporter_country, max(event_dt) as default_event_dt
 from all_casedemo 
 where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null
-group by caseid, age, sex, reporter_country
+group by caseid, age, sex, reporter_country;
 
 -- single imputation of missing event_dt 
 update all_casedemo a
@@ -111,7 +111,7 @@ create table default_all_casedemo_age_keys as
 select caseid, event_dt, sex, reporter_country, max(age) as default_age
 from all_casedemo 
 where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null
-group by caseid, event_dt, sex, reporter_country
+group by caseid, event_dt, sex, reporter_country;
 
 -- single imputation of missing age 
 update all_casedemo a 
@@ -126,7 +126,7 @@ create table default_all_casedemo_sex_keys as
 select caseid, event_dt, age, reporter_country, max(sex) as default_sex
 from all_casedemo 
 where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null
-group by caseid, event_dt, age, reporter_country
+group by caseid, event_dt, age, reporter_country;
 
 -- single imputation of missing gender
 update all_casedemo a 
@@ -141,7 +141,7 @@ create table default_all_casedemo_reporter_country_keys as
 select caseid, event_dt, age, sex, max(reporter_country) as default_reporter_country
 from all_casedemo 
 where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null
-group by caseid, event_dt, age, sex
+group by caseid, event_dt, age, sex;
 
 -- single imputation of missing reporter_country
 update all_casedemo a
@@ -160,7 +160,7 @@ from (
 select *, 
 row_number() over(partition by caseid order by primaryid desc, database desc, fda_dt desc, i_f_code, isr desc) as row_num 
 from all_casedemo 
-) a where a.row_num = 1
+) a where a.row_num = 1;
 
 -- remove any duplicates based on fully populated matching demographic key fields and exact match on list of drugs and list of outcomes (FAERS reactions)
 -- NOTE. when using this table for subsequent joins in the ETL process, join to FAERS data using primaryid and join to LAERS data using isr
