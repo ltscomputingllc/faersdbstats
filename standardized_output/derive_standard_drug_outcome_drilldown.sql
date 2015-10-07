@@ -34,7 +34,7 @@ select
 a.drug_concept_id, 
 a.outcome_concept_id, 
 a.snomed_outcome_concept_id, 
-b.primaryid, null as isr
+b.primaryid, null as isr, null as caseid
 from standard_drug_outcome_count a
 inner join standard_case_drug b
 on a.drug_concept_id = b.standard_concept_id
@@ -46,10 +46,23 @@ select
 a.drug_concept_id,  
 a.outcome_concept_id, 
 a.snomed_outcome_concept_id,  
-null as primary_id, b.isr
+null as primary_id, b.isr, null as caseid
 from standard_drug_outcome_count a
 inner join standard_case_drug b
 on a.drug_concept_id = b.standard_concept_id
 inner join standard_case_outcome c
 on a.outcome_concept_id = c.outcome_concept_id
 and b.isr = c.isr;
+
+-- populate the caseids that have a primaryid
+update standard_drug_outcome_drilldown a
+set caseid = b.caseid
+from unique_all_case b
+where a.primaryid = b.primaryid;
+
+-- populate the caseids that have an isr
+update standard_drug_outcome_drilldown a
+set caseid = b.caseid
+from unique_all_case b
+where a.isr = b.isr
+and a.caseid is null;
