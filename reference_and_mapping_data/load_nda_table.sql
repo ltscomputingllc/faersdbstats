@@ -27,7 +27,7 @@ truncate nda;
 
 create index ingredient_ix on nda(appl_no, ingredient);
 
-COPY nda FROM '/home/lee/data/inbound/orangebook/products.txt' WITH DELIMITER E'~' CSV HEADER QUOTE E'\b' ;
+COPY nda FROM 'products.txt' WITH DELIMITER E'~' CSV HEADER QUOTE E'\b' ;
 
 alter table nda add column drug_form varchar;
 alter table nda add column route varchar;
