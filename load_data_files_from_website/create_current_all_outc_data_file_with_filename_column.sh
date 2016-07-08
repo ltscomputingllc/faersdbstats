@@ -37,3 +37,5 @@ thefilename="${thefilenamenoprefix}.txt"
 # remove windows carriage return, remove the header line and add the filename as the last column on each line
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
+# concatenate all the outcome files with filenames together into a single file for loading
+cat outc12q4_with_filename.txt OUTC*_with_filename.txt  > all_outc_data_with_filename.txt
