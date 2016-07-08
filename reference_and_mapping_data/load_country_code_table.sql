@@ -18,7 +18,7 @@ country_code varchar
 );
 truncate country_code;
 
-COPY country_code FROM '/home/lee/data/inbound/faers/current/ascii/ISO_3166-1_country_codes.xls' WITH DELIMITER E',' CSV HEADER QUOTE E'"';
+COPY country_code FROM 'ISO_3166-1_country_codes.csv' WITH DELIMITER E',' CSV HEADER QUOTE E'"';
 
 --# Insert non-standard country names to country code mappings based on analysis of the reporter_country field in the legacy and current data
 insert into country_code values('ALAND ISLANDS', 'AX');
