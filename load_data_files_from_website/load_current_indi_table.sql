@@ -7,7 +7,7 @@
 
 set search_path = faers;
 
-drop table indi ;
+drop table if exists indi ;
 create table indi
 (
 primaryid varchar,
@@ -19,5 +19,5 @@ filename varchar
 truncate indi;
 
 COPY indi FROM '/home/lee/data/inbound/faers/current/ascii/all_indi_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select filename, count(*) from indi group by filename order by 1
+select filename, count(*) from indi group by filename order by 1;
 

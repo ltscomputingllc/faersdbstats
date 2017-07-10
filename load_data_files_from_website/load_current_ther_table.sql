@@ -7,7 +7,7 @@
 
 set search_path = faers;
 
-drop table ther;
+drop table if exists ther;
 create table ther
 (
 primaryid varchar,
@@ -22,4 +22,4 @@ filename varchar
 truncate ther;
 
 COPY ther FROM '/home/lee/data/inbound/faers/current/ascii/all_ther_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select filename, count(*) from ther group by filename order by 1 
+select filename, count(*) from ther group by filename order by 1 ;

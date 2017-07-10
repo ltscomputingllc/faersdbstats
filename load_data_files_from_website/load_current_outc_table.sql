@@ -7,7 +7,7 @@
 
 set search_path = faers;
 
-drop table outc;
+drop table if exists outc;
 create table outc
 (
 primaryid varchar,

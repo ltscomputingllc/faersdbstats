@@ -7,7 +7,7 @@
 
 set search_path = faers;
 
-drop table drug_staging_version_A ;
+drop table if exists drug_staging_version_A ;
 create table drug_staging_version_A
 (
 primaryid varchar,
@@ -36,7 +36,7 @@ truncate drug_staging_version_A;
 COPY drug_staging_version_A FROM '/home/lee/data/inbound/faers/current/ascii/all_version_A_drug_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
 select distinct filename from drug_staging_version_A order by 1 limit 10
 
-drop table drug_staging_version_B;
+drop table if exists drug_staging_version_B;
 create table drug_staging_version_B
 (
 primaryid varchar,
@@ -66,6 +66,7 @@ truncate drug_staging_version_B;
 COPY drug_staging_version_B FROM '/home/lee/data/inbound/faers/current/ascii/all_version_B_drug_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
 select distinct filename from drug_staging_version_B order by 1 limit 10
 
+drop table if exists drug;
 create table drug as
 select
 primaryid,
@@ -91,6 +92,6 @@ dose_freq,
 filename
 from drug_staging_version_A
 union all
-select * from drug_staging_version_B
+select * from drug_staging_version_B;
 
-select filename, count(*) from drug group by filename order by filename
+select filename, count(*) from drug group by filename order by filename;

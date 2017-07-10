@@ -7,7 +7,7 @@
 
 set search_path = faers;
 
-drop table drug_legacy;
+drop table if exists drug_legacy;
 create table drug_legacy
 (
 ISR varchar,
@@ -27,5 +27,5 @@ FILENAME varchar
 truncate drug_legacy;
 
 COPY drug_legacy FROM '/home/lee/data/inbound/faers/legacy/ascii/all_drug_legacy_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from drug_legacy order by 1 
+select distinct filename from drug_legacy order by 1 ;
 
