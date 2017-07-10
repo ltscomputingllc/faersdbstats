@@ -7,7 +7,7 @@
 
 set search_path = faers;
 
-drop table demo_staging_version_A;
+drop table if exists demo_staging_version_A;
 create table demo_staging_version_A
 (
 primaryid varchar,
@@ -37,9 +37,9 @@ filename varchar
 truncate demo_staging_version_A;
 
 COPY demo_staging_version_A FROM '/home/lee/data/inbound/faers/current/ascii/all_version_A_demo_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from demo_staging_version_A limit 10
+select distinct filename from demo_staging_version_A limit 10;
 
-drop table demo_staging_version_B;
+drop table if exists demo_staging_version_B;
 create table demo_staging_version_B
 (
 primaryid varchar,
@@ -72,8 +72,9 @@ filename varchar
 truncate demo_staging_version_B;
 
 COPY demo_staging_version_B FROM '/home/lee/data/inbound/faers/current/ascii/all_version_B_demo_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from demo_staging_version_B limit 10
+select distinct filename from demo_staging_version_B limit 10;
 
+drop table if exists demo;
 create table demo as
 select
 primaryid,

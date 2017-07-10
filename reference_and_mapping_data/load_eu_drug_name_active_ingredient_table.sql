@@ -27,7 +27,7 @@ create table eu_drug_name_active_ingredient_mapping as
 select distinct upper(active_substance) as active_substance, upper(brand_name) as brand_name
 from eu_drug_name_active_ingredient
 where human_or_veterinary = 'Human' and upper(active_substance) <> 'NOT APPLICABLE' and brand_name is not null
-order by 1,2
+order by 1,2;
 
 
 

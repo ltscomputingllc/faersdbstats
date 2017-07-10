@@ -7,7 +7,7 @@
 
 set search_path = faers;
 
-drop table rpsr;
+drop table if exists rpsr;
 create table rpsr
 (
 primaryid varchar,
@@ -18,5 +18,5 @@ filename varchar
 truncate rpsr;
 
 COPY rpsr FROM '/home/lee/data/inbound/faers/current/ascii/all_rpsr_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select filename, count(*) from rpsr group by filename order by 1
+select filename, count(*) from rpsr group by filename order by 1;
 

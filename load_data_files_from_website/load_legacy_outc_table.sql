@@ -7,7 +7,7 @@
 
 set search_path = faers;
 
-drop table outc_legacy;
+drop table if exists outc_legacy;
 create table outc_legacy
 (
 ISR varchar,
@@ -17,5 +17,5 @@ FILENAME varchar
 truncate outc_legacy;
 
 COPY outc_legacy FROM '/home/lee/data/inbound/faers/legacy/ascii/all_outc_legacy_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from outc_legacy order by 1 
+select distinct filename from outc_legacy order by 1 ;
 

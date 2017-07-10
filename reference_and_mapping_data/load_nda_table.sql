@@ -6,7 +6,7 @@
 --######################################################
 set search_path = faers;
 
-drop table nda;
+drop table if exists nda;
 create table nda
 (
 ingredient varchar,
@@ -20,6 +20,7 @@ product_no varchar,
 te_code varchar,
 approval_date varchar,
 rld varchar,
+rs varchar,
 type varchar,
 applicant_full_name varchar
 );
@@ -35,4 +36,4 @@ update nda set drug_form = substring(dfroute from '(.*);');
 update nda set route = substring(dfroute from ';(.*)');
 
 
---select * from nda limit 20;
+select * from nda limit 20;

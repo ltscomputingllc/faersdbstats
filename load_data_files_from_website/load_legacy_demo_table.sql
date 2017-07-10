@@ -7,7 +7,7 @@
 
 set search_path = faers;
 
-drop table demo_legacy_staging_version_A;
+drop table if exists demo_legacy_staging_version_A;
 create table demo_legacy_staging_version_A
 (
 ISR varchar,
@@ -37,9 +37,9 @@ FILENAME varchar
 truncate demo_legacy_staging_version_A;
 
 COPY demo_legacy_staging_version_A FROM '/home/lee/data/inbound/faers/legacy/ascii/all_version_A_demo_legacy_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from demo_legacy_staging_version_A order by 1 limit 10
+select distinct filename from demo_legacy_staging_version_A order by 1 limit 10;
 
-drop table demo_legacy_staging_version_B;
+drop table if exists demo_legacy_staging_version_B;
 create table demo_legacy_staging_version_B
 (
 ISR varchar,
@@ -70,8 +70,9 @@ FILENAME varchar
 truncate demo_legacy_staging_version_B;
 
 COPY demo_legacy_staging_version_B FROM '/home/lee/data/inbound/faers/legacy/ascii/all_version_B_demo_legacy_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from demo_legacy_staging_version_B order by 1 
+select distinct filename from demo_legacy_staging_version_B order by 1 ;
 
+drop table if exists demo_legacy ;
 create table demo_legacy as
 select
 ISR,
@@ -100,4 +101,4 @@ null as REPORTER_COUNTRY,
 FILENAME
 from demo_legacy_staging_version_A
 union all
-select * from demo_legacy_staging_version_B
+select * from demo_legacy_staging_version_B;
