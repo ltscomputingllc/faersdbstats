@@ -80,6 +80,34 @@ from cte2
 where scdm.standard_concept_id = cte2.concept_id_1;
 
 ------------------------------------------------------
+-- convert precise ingredient to standard ingredient or clinical drug form
+
+with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
+select distinct scdm.standard_concept_id
+from standard_combined_drug_mapping scdm
+INNER JOIN cdmv5.concept c
+on scdm.standard_concept_id = c.concept_id
+and scdm.concept_id is not null
+and c.concept_class_id  = 'Precise Ingredient'
+),
+cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
+select c1.concept_id as concept_id_1, c2.concept_id as concept_id_2
+from cdmv5.concept c1
+inner join cdmv5.concept c2
+on c2.concept_name = regexp_replace(c1.concept_name, ' decanoate$| hemihydrate$| aluminum$| tetrahydrate$| hexahydrate$| oxilate$| pivalate$| sulphonate$| anhydrous$| valerate$| dihydrate$| saccharate$| diacetate$| monosodium$| palmitate$| monophosphate$| stearate$| disodium$| propionate$| bitartrate$| pamoate$| dimesylate$| methylsulfate$| hydrobromide$| malate$| monohydrate$| silicate$| calcium$| magnesium$| tannate$| carbonate$| mesylate$| succinate$| potassium$| maleate$| benzoate$| nitrate$| citrate$| hydrate$| tartrate$| acetate$| phosphate$| dihydrochloride$| hydrochloride$| HCL$| chloride$| trihydrate$| besylate$| fumarate$| lactate$| gluconate$| bromide$| sulfate$| sodium$', '', 'i') 
+where c1.vocabulary_id = 'RxNorm'
+and c1.concept_class_id = 'Precise Ingredient'
+and c2.vocabulary_id = 'RxNorm'
+and c2.standard_concept = 'S'
+and c2.concept_class_id in ('Ingredient','Clinical Drug Form')
+and c1.concept_id in (select standard_concept_id from cte1)
+)
+update standard_combined_drug_mapping scdm
+set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
+from cte2
+where scdm.standard_concept_id = cte2.concept_id_1;
+
+------------------------------------------------------
 -- convert brand name to standard ingredient or standard clinical drug form
 
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
