@@ -656,7 +656,7 @@ AND upper(b.concept_name) = a.prod_ai;
 -- note the following table should be created one time when the FDA orange book (NDA ingredient lookup) table is loaded
 drop table if exists nda_ingredient;
 create table nda_ingredient as
-select distinct appl_no, ingredient
+select distinct appl_no, ingredient, trade_name
 from nda; 
 
 drop table if exists drug_nda_mapping;
@@ -678,13 +678,18 @@ drop index if exists nda_num_ix;
 create index nda_num_ix on drug_nda_mapping(nda_num);
 
 -- find exact mapping using the drug table nda_num, NDA to ingredient lookup
+-- compare nda ingredient name and trade name to improve specificity
 UPDATE drug_nda_mapping a
 SET update_method = 'drug nda_num ingredients' , nda_ingredient = nda_ingredient.ingredient, concept_id = b.concept_id
 FROM cdmv5.concept b
 inner join nda_ingredient
 on upper(b.concept_name) = nda_ingredient.ingredient
 WHERE b.vocabulary_id = 'RxNorm'
-AND nda_ingredient.appl_no = a.nda_num;
+AND nda_ingredient.appl_no = a.nda_num
+and (
+	(upper(a.drug_name_original) like '%' || upper(nda_ingredient.ingredient) || '%') or
+	(upper(a.drug_name_original) like '%' || upper(nda_ingredient.trade_name) || '%')
+);
 
 -----------------------------------------------
 
