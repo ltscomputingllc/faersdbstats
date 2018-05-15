@@ -1,9 +1,43 @@
 #!/bin/sh
 # this script downloads all the current ASCII format FAERS files from the FDA website
-# as of July 3rd 2017
+# as of May 15th 2018
 #
 # LTS Computing LLC
 ################################################################
+
+# FAERS ASCII 2017 Q4
+fileyearquarter=17q4
+wget https://www.fda.gov/downloads/Drugs/GuidanceComplianceRegulatoryInformation/Surveillance/AdverseDrugEffects/UCM605569.zip
+unzip UCM605569.zip
+mv FAQs.pdf "ascii/FAQs${fileyearquarter}.pdf"
+mv FAQs.doc "ascii/FAQs${fileyearquarter}.doc"
+mv Readme.pdf "ascii/Readme${fileyearquarter}.pdf"
+mv Readme.doc "ascii/Readme${fileyearquarter}.doc"
+mv ascii/ASC_NTS.pdf "ascii/ASC_NTS${fileyearquarter}.pdf"
+mv ascii/ASC_NTS.doc "ascii/ASC_NTS${fileyearquarter}.doc"
+
+# FAERS ASCII 2017 Q3
+fileyearquarter=17q3
+wget https://www.fda.gov/downloads/Drugs/GuidanceComplianceRegulatoryInformation/Surveillance/UCM590948.zip
+unzip UCM590948.zip
+mv FAQs.pdf "ascii/FAQs${fileyearquarter}.pdf"
+mv FAQs.doc "ascii/FAQs${fileyearquarter}.doc"
+mv Readme.pdf "ascii/Readme${fileyearquarter}.pdf"
+mv Readme.doc "ascii/Readme${fileyearquarter}.doc"
+mv ascii/ASC_NTS.pdf "ascii/ASC_NTS${fileyearquarter}.pdf"
+mv ascii/ASC_NTS.doc "ascii/ASC_NTS${fileyearquarter}.doc"
+
+# FAERS ASCII 2017 Q2
+fileyearquarter=17q2
+wget https://www.fda.gov/downloads/Drugs/GuidanceComplianceRegulatoryInformation/Surveillance/UCM578242.zip
+unzip UCM578242.zip
+mv FAQs.pdf "ascii/FAQs${fileyearquarter}.pdf"
+mv FAQs.doc "ascii/FAQs${fileyearquarter}.doc"
+mv Readme.pdf "ascii/Readme${fileyearquarter}.pdf"
+mv Readme.doc "ascii/Readme${fileyearquarter}.doc"
+mv ascii/ASC_NTS.pdf "ascii/ASC_NTS${fileyearquarter}.pdf"
+mv ascii/ASC_NTS.doc "ascii/ASC_NTS${fileyearquarter}.doc"
+
 # FAERS ASCII 2017 Q1
 fileyearquarter=17q1
 wget https://www.fda.gov/downloads/Drugs/GuidanceComplianceRegulatoryInformation/Surveillance/AdverseDrugEffects/UCM562290.zip
