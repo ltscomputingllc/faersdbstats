@@ -36,8 +36,8 @@ filename varchar
 );
 truncate demo_staging_version_A;
 
-COPY demo_staging_version_A FROM '/home/lee/data/inbound/faers/current/ascii/all_version_A_demo_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from demo_staging_version_A limit 10;
+COPY demo_staging_version_A FROM '/home/ubuntu/inbound_data/faers/ascii/all_version_A_demo_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+select distinct filename from demo_staging_version_A order by 1;
 
 drop table if exists demo_staging_version_B;
 create table demo_staging_version_B
@@ -71,8 +71,8 @@ filename varchar
 );
 truncate demo_staging_version_B;
 
-COPY demo_staging_version_B FROM '/home/lee/data/inbound/faers/current/ascii/all_version_B_demo_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from demo_staging_version_B limit 10;
+COPY demo_staging_version_B FROM '/home/ubuntu/inbound_data/faers/ascii/all_version_B_demo_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+select distinct filename from demo_staging_version_B order by 1;
 
 drop table if exists demo;
 create table demo as
@@ -105,4 +105,6 @@ occr_country,
 filename
 from demo_staging_version_A
 union all
-select * from demo_staging_version_B
+select * from demo_staging_version_B;
+
+select distinct filename from demo order by 1;
