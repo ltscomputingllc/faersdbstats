@@ -5,7 +5,7 @@
 # LTS Computing LLC
 ##########################################################################
 
-# load the ther files: ther12q4.txt THER13Q1.txt  THER13Q2.txt  THER13Q3.txt  THER13Q4.txt  THER14Q1.txt  THER14Q2.txt  THER14Q3.txt  THER14Q4.txt
+# load the ther files
 
 thefilenamenoprefix=ther12q4
 thefilename="${thefilenamenoprefix}.txt"
@@ -93,6 +93,21 @@ thefilename="${thefilenamenoprefix}.txt"
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
 thefilenamenoprefix=THER17Q1
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=THER17Q2
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=THER17Q3
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=THER17Q4
 thefilename="${thefilenamenoprefix}.txt"
 # remove windows carriage return, remove the header line and add the filename as the last column on each line
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"

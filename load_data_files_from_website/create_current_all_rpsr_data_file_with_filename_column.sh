@@ -5,7 +5,7 @@
 # LTS Computing LLC
 ##########################################################################
 
-# load the rpsr files: rpsr12q4.txt RPSR13Q1.txt  RPSR13Q2.txt  RPSR13Q3.txt  RPSR13Q4.txt  RPSR14Q1.txt  RPSR14Q2.txt  RPSR14Q3.txt  RPSR14Q4.txt
+# load the rpsr files
 
 thefilenamenoprefix=rpsr12q4
 thefilename="${thefilenamenoprefix}.txt"
@@ -93,6 +93,21 @@ thefilename="${thefilenamenoprefix}.txt"
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
 thefilenamenoprefix=RPSR17Q1
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=RPSR17Q2
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=RPSR17Q3
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=RPSR17Q4
 thefilename="${thefilenamenoprefix}.txt"
 # remove windows carriage return, remove the header line and add the filename as the last column on each line
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"

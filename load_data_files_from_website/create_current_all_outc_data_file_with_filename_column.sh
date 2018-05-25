@@ -5,7 +5,7 @@
 # LTS Computing LLC
 ##########################################################################
 
-# load the outcome files: outc12q4.txt OUTC13Q1.txt  OUTC13Q2.txt  OUTC13Q3.txt  OUTC13Q4.txt  OUTC14Q1.txt  OUTC14Q2.txt  OUTC14Q3.txt  OUTC14Q4.txt
+# load the outcome files
 
 thefilenamenoprefix=outc12q4
 thefilename="${thefilenamenoprefix}.txt"
@@ -93,6 +93,21 @@ thefilename="${thefilenamenoprefix}.txt"
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
 thefilenamenoprefix=OUTC17Q1
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=OUTC17Q2
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=OUTC17Q3
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=OUTC17Q4
 thefilename="${thefilenamenoprefix}.txt"
 # remove windows carriage return, remove the header line and add the filename as the last column on each line
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
