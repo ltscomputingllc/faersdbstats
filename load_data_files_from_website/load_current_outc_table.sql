@@ -17,6 +17,6 @@ filename varchar
 );
 truncate outc;
 
-COPY outc FROM '/home/lee/data/inbound/faers/current/ascii/all_outc_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+COPY outc FROM '/home/ubuntu/inbound_data/faers/ascii/all_outc_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
 select filename, count(*) from outc group by filename order by 1
 

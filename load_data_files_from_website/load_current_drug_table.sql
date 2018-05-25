@@ -33,8 +33,8 @@ filename varchar
 );
 truncate drug_staging_version_A;
 
-COPY drug_staging_version_A FROM '/home/lee/data/inbound/faers/current/ascii/all_version_A_drug_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from drug_staging_version_A order by 1 limit 10
+COPY drug_staging_version_A FROM '/home/ubuntu/inbound_data/faers/ascii/all_version_A_drug_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+select distinct filename from drug_staging_version_A order by 1;
 
 drop table if exists drug_staging_version_B;
 create table drug_staging_version_B
@@ -63,8 +63,8 @@ filename varchar
 );
 truncate drug_staging_version_B;
 
-COPY drug_staging_version_B FROM '/home/lee/data/inbound/faers/current/ascii/all_version_B_drug_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
-select distinct filename from drug_staging_version_B order by 1 limit 10
+COPY drug_staging_version_B FROM '/home/ubuntu/inbound_data/faers/ascii/all_version_B_drug_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+select distinct filename from drug_staging_version_B order by 1;
 
 drop table if exists drug;
 create table drug as
