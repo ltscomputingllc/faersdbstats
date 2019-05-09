@@ -5,6 +5,35 @@
 # LTS Computing LLC
 ################################################################
 
+
+# 19q1| https://fis.fda.gov/content/Exports/faers_ascii_2019Q1.zip
+# 18a4| https://fis.fda.gov/content/Exports/faers_ascii_2018q4.zip
+# 18q3| https://fis.fda.gov/content/Exports/faers_ascii_2018q3.zip
+# 18q2| https://fis.fda.gov/content/Exports/faers_ascii_2018q2.zip
+# 18q1| https://fis.fda.gov/content/Exports/faers_ascii_2018q1.zip
+# 17q4| https://fis.fda.gov/content/Exports/faers_ascii_2017q4.zip
+# 17q3| https://fis.fda.gov/content/Exports/faers_ascii_2017q3.zip
+# 17q2| https://fis.fda.gov/content/Exports/faers_ascii_2017q2.zip
+# 17q1| https://fis.fda.gov/content/Exports/faers_ascii_2017q1.zip
+# 16q4| https://fis.fda.gov/content/Exports/faers_ascii_2016q4.zip
+# 16q3| https://fis.fda.gov/content/Exports/faers_ascii_2016q3.zip
+# 16q2| https://fis.fda.gov/content/Exports/faers_ascii_2016q2.zip
+# 16q1| https://fis.fda.gov/content/Exports/faers_ascii_2016q1.zip
+# 15q4| https://fis.fda.gov/content/Exports/faers_ascii_2015q4.zip
+# 15q3| https://fis.fda.gov/content/Exports/faers_ascii_2015q3.zip
+# 15q2| https://fis.fda.gov/content/Exports/faers_ascii_2015q2.zip
+# 15q1| https://fis.fda.gov/content/Exports/faers_ascii_2015q1.zip
+# 14q4| https://fis.fda.gov/content/Exports/faers_ascii_2014q4.zip
+# 14q3| https://fis.fda.gov/content/Exports/faers_ascii_2014q3.zip
+# 14q2| https://fis.fda.gov/content/Exports/faers_ascii_2014q2.zip
+# 14q1| https://fis.fda.gov/content/Exports/faers_ascii_2014q1.zip
+# 13q4| https://fis.fda.gov/content/Exports/faers_ascii_2013q4.zip
+# 13q3| https://fis.fda.gov/content/Exports/faers_ascii_2013q3.zip
+# 13q2| https://fis.fda.gov/content/Exports/faers_ascii_2013q2.zip
+# 13q1| https://fis.fda.gov/content/Exports/faers_ascii_2013q1.zip
+# 12q4| https://fis.fda.gov/content/Exports/faers_ascii_2012q4.zip
+
+
 # FAERS ASCII 2017 Q4
 fileyearquarter=17q4
 wget https://www.fda.gov/downloads/Drugs/GuidanceComplianceRegulatoryInformation/Surveillance/AdverseDrugEffects/UCM605569.zip
