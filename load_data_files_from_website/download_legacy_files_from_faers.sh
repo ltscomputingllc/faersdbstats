@@ -5,6 +5,43 @@
 # LTS Computing LLC
 ################################################################
 
+# 12q3| https://fis.fda.gov/content/Exports/aers_ascii_2012q3.zip
+# 12q2| https://fis.fda.gov/content/Exports/aers_ascii_2012q2.zip
+# 12q1| https://fis.fda.gov/content/Exports/aers_ascii_2012q1.zip
+# 11q4| https://fis.fda.gov/content/Exports/aers_ascii_2011q4.zip
+# 11q3| https://fis.fda.gov/content/Exports/aers_ascii_2011q3.zip
+# 11q2| https://fis.fda.gov/content/Exports/aers_ascii_2011q2.zip
+# 11q1| https://fis.fda.gov/content/Exports/aers_ascii_2011q1.zip
+# 10q4| https://fis.fda.gov/content/Exports/aers_ascii_2010q4.zip
+# 10q3| https://fis.fda.gov/content/Exports/aers_ascii_2010q3.zip
+# 10q2| https://fis.fda.gov/content/Exports/aers_ascii_2010q2.zip
+# 10q1| https://fis.fda.gov/content/Exports/aers_ascii_2010q1.zip
+# 9q4| https://fis.fda.gov/content/Exports/aers_ascii_2009q4.zip
+# 9q3| https://fis.fda.gov/content/Exports/aers_ascii_2009q3.zip
+# 9q2| https://fis.fda.gov/content/Exports/aers_ascii_2009q2.zip
+# 9q1| https://fis.fda.gov/content/Exports/aers_ascii_2009q1.zip
+# 8q4| https://fis.fda.gov/content/Exports/aers_ascii_2008q4.zip
+# 8q3| https://fis.fda.gov/content/Exports/aers_ascii_2008q3.zip
+# 8q2| https://fis.fda.gov/content/Exports/aers_ascii_2008q2.zip
+# 8q1| https://fis.fda.gov/content/Exports/aers_ascii_2008q1.zip
+# 7q4| https://fis.fda.gov/content/Exports/aers_ascii_2007q4.zip
+# 7q3| https://fis.fda.gov/content/Exports/aers_ascii_2007q3.zip
+# 7q2| https://fis.fda.gov/content/Exports/aers_ascii_2007q2.zip
+# 7q1| https://fis.fda.gov/content/Exports/aers_ascii_2007q1.zip
+# 6q4|https://fis.fda.gov/content/Exports/aers_ascii_2006q4.zip
+# 6q3| https://fis.fda.gov/content/Exports/aers_ascii_2006q3.zip
+# 6q2| https://fis.fda.gov/content/Exports/aers_ascii_2006q2.zip
+# 6q1| https://fis.fda.gov/content/Exports/aers_ascii_2006q1.zip
+# 5q4| https://fis.fda.gov/content/Exports/aers_ascii_2005q4.zip
+# 5q3| https://fis.fda.gov/content/Exports/aers_ascii_2005q3.zip
+# 5q2| https://fis.fda.gov/content/Exports/aers_ascii_2005q2.zip
+# 5q1| https://fis.fda.gov/content/Exports/aers_ascii_2005q1.zip
+# 4q4| https://fis.fda.gov/content/Exports/aers_ascii_2004q4.zip
+# 4q3| https://fis.fda.gov/content/Exports/aers_ascii_2004q3.zip
+# 4q2| https://fis.fda.gov/content/Exports/aers_ascii_2004q2.zip
+# 4q1| https://fis.fda.gov/content/Exports/aers_ascii_2004q1.zip
+
+
 # FAERS ASCII 2012 Q3
 sleep 2
 fileyearquarter=12Q3
