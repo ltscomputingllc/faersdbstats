@@ -13,7 +13,7 @@
 # 18q1| https://fis.fda.gov/content/Exports/faers_ascii_2018q1.zip
 
 # FAERS ASCII 2019 Q1
-fileyearquarter=19q1|
+fileyearquarter=19q1
 wget https://fis.fda.gov/content/Exports/faers_ascii_2019q1.zip
 unzip faers_ascii_2019q1.zip
 mv FAQs.pdf "ascii/FAQs${fileyearquarter}.pdf"
