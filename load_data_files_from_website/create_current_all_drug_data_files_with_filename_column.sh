@@ -7,6 +7,7 @@
 # LTS Computing LLC
 ##########################################################################
 
+
 # load the drug files
 
 # file format version A
@@ -118,8 +119,33 @@ thefilename="${thefilenamenoprefix}.txt"
 # remove windows carriage return, remove the header line and add the filename as the last column on each line
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
+thefilenamenoprefix=DRUG18Q1
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=DRUG18Q2
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=DRUG18Q3
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=DRUG18Q4
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=DRUG19Q1
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
 # concatenate all the version A drug files with filenames together into a single file for loading
 cat drug12q4_with_filename.txt DRUG13Q1_with_filename.txt DRUG13Q2_with_filename.txt DRUG13Q3_with_filename.txt DRUG13Q4_with_filename.txt DRUG14Q1_with_filename.txt DRUG14Q2_with_filename.txt > all_version_A_drug_data_with_filename.txt
 
 # concatenate all the version B drug files with filenames together into a single file for loading
-cat DRUG14Q3_with_filename.txt DRUG14Q4_with_filename.txt DRUG15Q1_with_filename.txt DRUG15Q2_with_filename.txt DRUG15Q3_with_filename.txt DRUG15Q4_with_filename.txt DRUG16Q1_with_filename.txt DRUG16Q2_with_filename.txt DRUG16Q3_with_filename.txt DRUG16Q4_with_filename.txt DRUG17Q1_with_filename.txt DRUG17Q2_with_filename.txt DRUG17Q3_with_filename.txt DRUG17Q4_with_filename.txt > all_version_B_drug_data_with_filename.txt
+cat DRUG14Q3_with_filename.txt DRUG14Q4_with_filename.txt DRUG15Q1_with_filename.txt DRUG15Q2_with_filename.txt DRUG15Q3_with_filename.txt DRUG15Q4_with_filename.txt DRUG16Q1_with_filename.txt DRUG16Q2_with_filename.txt DRUG16Q3_with_filename.txt DRUG16Q4_with_filename.txt DRUG17Q1_with_filename.txt DRUG17Q2_with_filename.txt DRUG17Q3_with_filename.txt DRUG17Q4_with_filename.txt DRUG18Q1_with_filename.txt DRUG18Q2_with_filename.txt DRUG18Q3_with_filename.txt DRUG18Q4_with_filename.txt DRUG19Q1_with_filename.txt > all_version_B_drug_data_with_filename.txt
