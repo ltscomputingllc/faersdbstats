@@ -112,6 +112,31 @@ thefilename="${thefilenamenoprefix}.txt"
 # remove windows carriage return, remove the header line and add the filename as the last column on each line
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
+thefilenamenoprefix=REAC18Q1
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=REAC18Q2
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=REAC18Q3
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=REAC18Q4
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=REAC19Q1
+thefilename="${thefilenamenoprefix}.txt"
+# remove windows carriage return, remove the header line and add the filename as the last column on each line
+sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
 # concatenate all the version A reaction files with filenames together into a single file for loading
 cat reac12q4_with_filename.txt REAC13Q1_with_filename.txt REAC13Q2_with_filename.txt REAC13Q3_with_filename.txt REAC13Q4_with_filename.txt REAC14Q1_with_filename.txt REAC14Q2_with_filename.txt > all_version_A_reac_data_with_filename.txt
 
