@@ -47,4 +47,26 @@ WHERE upper(a.drug_name_original) = upper(b.drug_name_original)
 and a.concept_id is null
 and b.concept_id is not null;
 
-10. Ran generate_drug_export_for_usagi.sql again to see what remains to be mapped and the associated spontaneous report frequencies
+10. Ran generate_drug_export_for_usagi.sql again to see what remains to be mapped and the associated spontaneous report frequencies - drugs-unmapped-June2019.dsv
+
+11. ran the remaining drug names through the metamap
+
+$ cat drugs-unmapped-June2019.dsv| cut -d\| -f2 > /tmp/drugs-unmapped-June2019.txt
+
+# removed the header
+
+$ split -l 10000 drugs-unmapped-June2019.txt du-
+
+# went through each file and removed tab  and  characters
+
+# (in ZSH) 
+$ for i in du-*
+./bin/metamap -G -I --JSONf 2 -R "RXNORM,ATC" --conj $i  /home/faersdbstats/data/$i.json
+
+12. Converted the JSON output to TSV for every file
+
+$ for i in du*json
+echo $i && python parse-METAMAP.py -i $i > $i.tsv
+
+
+
