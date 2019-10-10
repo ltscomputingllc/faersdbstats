@@ -15,7 +15,7 @@ select distinct a.primaryid, a.isr, indi_drug_seq, b.indi_pt, c.concept_id as in
 from unique_all_case a
 inner join indi b
 on a.primaryid = b.primaryid
-inner join cdmv5.concept c
+inner join staging_vocabulary.concept c
 on upper(regexp_replace(b.indi_pt,'^ +','','gi')) = upper(c.concept_name) 
 and c.vocabulary_id = 'MedDRA'
 where a.isr is null
@@ -24,7 +24,7 @@ select distinct a.primaryid, a.isr, drug_seq, b.indi_pt, c.concept_id as indicat
 from unique_all_case a
 inner join indi_legacy b
 on a.isr = b.isr
-inner join cdmv5.concept c
+inner join staging_vocabulary.concept c
 on upper(regexp_replace(b.indi_pt,'^ +','','gi')) = upper(c.concept_name) 
 and c.vocabulary_id = 'MedDRA'
 where a.isr is not null;

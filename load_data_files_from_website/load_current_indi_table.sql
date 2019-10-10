@@ -18,6 +18,6 @@ filename varchar
 );
 truncate indi;
 
-COPY indi FROM '/home/ubuntu/inbound_data/faers/ascii/all_indi_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+\COPY indi FROM '/home/faersdbstats/load_data_files_from_website/ascii/all_indi_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
 select filename, count(*) from indi group by filename order by 1;
 
