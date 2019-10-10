@@ -21,5 +21,5 @@ filename varchar
 );
 truncate ther;
 
-COPY ther FROM '/home/ubuntu/inbound_data/faers/ascii/all_ther_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+\COPY ther FROM '/home/faersdbstats/load_data_files_from_website/ascii/all_ther_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
 select filename, count(*) from ther group by filename order by 1 ;

@@ -28,7 +28,7 @@ select distinct a.primaryid, a.isr, b.pt, c.concept_id as outcome_concept_id, ca
 from unique_all_case a
 inner join reac b
 on a.primaryid = b.primaryid
-inner join cdmv5.concept c
+inner join staging_vocabulary.concept c
 on upper(b.pt) = upper(c.concept_name)
 and c.vocabulary_id = 'MedDRA'
 where a.isr is null
@@ -37,7 +37,7 @@ select distinct a.primaryid, a.isr, b.pt, c.concept_id as outcome_concept_id, ca
 from unique_all_case a
 inner join reac_legacy b
 on a.isr = b.isr
-inner join cdmv5.concept c
+inner join staging_vocabulary.concept c
 on upper(b.pt) = upper(c.concept_name)
 and c.vocabulary_id = 'MedDRA'
 where a.isr is not null;
