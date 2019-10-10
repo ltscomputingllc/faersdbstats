@@ -17,7 +17,7 @@ filename varchar
 );
 truncate reac_staging_version_A;
 
-COPY reac_staging_version_A FROM '/home/ubuntu/inbound_data/faers/ascii/all_version_A_reac_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+\COPY reac_staging_version_A FROM '/home/faersdbstats/load_data_files_from_website/ascii/all_version_A_reac_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
 select distinct filename from reac_staging_version_A order by 1;
 
 drop table if exists reac_staging_version_B;
@@ -31,7 +31,7 @@ filename varchar
 );
 truncate reac_staging_version_B;
 
-COPY reac_staging_version_B FROM '/home/ubuntu/inbound_data/faers/ascii/all_version_B_reac_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+\COPY reac_staging_version_B FROM '/home/faersdbstats/load_data_files_from_website/ascii/all_version_B_reac_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
 select distinct filename from reac_staging_version_B order by 1;
 
 drop table if exists reac;
