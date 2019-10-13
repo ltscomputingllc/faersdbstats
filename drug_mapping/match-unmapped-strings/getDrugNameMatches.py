@@ -21,6 +21,7 @@ import re
 def main(argv):
     distance = 0
     drugstring = ''
+    drugstringL = None
     inputFName = ''
     outputFName = None
 
@@ -40,7 +41,7 @@ def main(argv):
 
     for opt, arg in opts:
       if opt == '-h':
-         print('getDrugNameMatches.py -d <allowable number of character changes to match> -s <drug string> -f <pipe delimited file (unix newlines) with unmapped drug strings as the first field and the count of reports as the second> -o <(optional) file to write the output to>')
+         print('getDrugNameMatches.py -d <allowable number of character changes to match> -s <drug string - could be a single drug name or a quoted pipe-delimitted list of drug names e.g., "name 1|name 2|name 3". If the latter, names cannot include pipes.> -f <pipe delimited file (unix newlines) with unmapped drug strings as the first field and the count of reports as the second> -o <(optional) file to write the output to>')
          sys.exit()
          
       elif opt in ('-d', '--distance'):
@@ -52,6 +53,8 @@ def main(argv):
               
       elif opt in ("-s", "--drugstring"):
          drugstring = arg.upper()
+         if drugstring.find(',') != -1:
+             drugstringL = [x.strip() for x in drugstring.split('|')]
 
       elif opt in ("-f", "--inputfile"):
          inputFName = arg
@@ -94,16 +97,28 @@ def main(argv):
     outString += '\n\nTotal length of unmapped drug strings input from the file (removing duplicates): ' + str(len(originalStringsD.keys())) + '\n'
 
     if distance == 0:
-        matches = filter(lambda x: x.find(drugstring) != -1, originalStringsD.keys())
+        if not drugstringL:
+            matches = list(filter(lambda x: x.find(drugstring) != -1, originalStringsD.keys()))
+        else:
+            for delt in drugstringL:
+                matches += list(filter(lambda x: x.find(delt) != -1, originalStringsD.keys()))
     else:
-        ## Iterate through the list of umapped, split each by non-alphanumeric, iterate through that list, anything that matches based on the distane is a hit        
-        for k in originalStringsD.keys():
-            kL = re.split('[^a-zA-Z]', k)
-            subMatches = filter(lambda x: Levenshtein.distance(drugstring, x) == distance, kL)
-            if len(list(subMatches)) > 0:
-                matches.append(k)
+        ## Iterate through the list of umapped, split each by non-alphanumeric, iterate through that list, anything that matches based on the distance is a hit
+        if not drugstringL:
+            for k in originalStringsD.keys():
+                kL = re.split('[^a-zA-Z]', k)
+                subMatches = filter(lambda x:  Levenshtein.distance(drugstring, x) == distance, kL)
+                if len(list(subMatches)) > 0:
+                    matches.append(k)
+        else:
+            for delt in drugstringL:
+                for k in originalStringsD.keys():
+                    kL = re.split('[^a-zA-Z]', k)
+                    subMatches = filter(lambda x: Levenshtein.distance(delt, x) == distance, kL)
+                    if len(list(subMatches)) > 0:
+                        matches.append(k)
 
-    sortedMatches = list(matches)
+    sortedMatches = list(set(matches))
     sortedMatches.sort()
 
     outString += '\n\n\nNOTE: these drug strings could not be processed because they contain more than one pipe symbol. These will need to be corrected BOTH in the database and in   the input file:\n' + "\n".join(badRecs) + '\n'
