@@ -16,7 +16,7 @@ import sys
 import getopt
 import Levenshtein
 import re
-
+import codecs
 
 def main(argv):
     distance = 0
@@ -66,12 +66,12 @@ def main(argv):
 
    
     try:
-        dnFile = open(inputFName,"r")
+        dnFile = codecs.open(inputFName,'r','utf-8')
         
     except IOError:
         outString += '\nERROR: There was an error opening the file, please be sure it is a simple text file (i.e., not a Word document or similar) pipe delimited file (unix newlines) with unmapped drug strings as the first field and the count of reports as the second\n'
        
-    lines = dnFile.read().split('\n')
+    lines = dnFile.read().split(u'\n')
     dnFile.close()
     
     linesN = len(lines)
@@ -81,7 +81,7 @@ def main(argv):
     for elt in lines:
         i +=1
         
-        pipeCnt = elt.count('|')
+        pipeCnt = elt.count(u'|')
         if pipeCnt == 0:
             outString += '\n\nNOTE: There is a record that has no pipes - assuming end of file. Total number of lines processed: ' + str(i) + '. Total lines in file:' + str(linesN) + '\n'
             break
@@ -90,7 +90,7 @@ def main(argv):
             badRecs.append(elt)
             continue
             
-        (dname,recCnt) = elt.split('|')
+        (dname,recCnt) = elt.split(u'|')
         originalStringsD[dname.upper()] = 1
 
 
@@ -106,14 +106,14 @@ def main(argv):
         ## Iterate through the list of umapped, split each by non-alphanumeric, iterate through that list, anything that matches based on the distance is a hit
         if not drugstringL:
             for k in originalStringsD.keys():
-                kL = re.split('[^a-zA-Z]', k)
+                kL = re.split(u'[^a-zA-Z]', k)
                 subMatches = filter(lambda x:  Levenshtein.distance(drugstring, x) == distance, kL)
                 if len(list(subMatches)) > 0:
                     matches.append(k)
         else:
             for delt in drugstringL:
                 for k in originalStringsD.keys():
-                    kL = re.split('[^a-zA-Z]', k)
+                    kL = re.split(u'[^a-zA-Z]', k)
                     subMatches = filter(lambda x: Levenshtein.distance(delt, x) == distance, kL)
                     if len(list(subMatches)) > 0:
                         matches.append(k)
@@ -126,7 +126,7 @@ def main(argv):
     outString += '\n\n\nMATCH RESULTS:\n' + '\n'.join(sortedMatches) + '\n'
 
     if outputFName:
-        oFile = open(outputFName, 'w')
+        oFile = codecs.open(outputFName, 'w','utf-8')
         oFile.write(outString)
         oFile.close()
     else:
