@@ -36,7 +36,7 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, 'hd:s:f:o:', ['distance=', 'drugstring=', 'inputfile=', 'outputfile='])
     except getopt.GetoptError:
-        print('getDrugNameMatches.py -d <number of character changes to match> <string>')
+        print('getDrugNameMatches.py -d <allowable number of character changes to match> -s <drug string - could be a single drug name or a quoted pipe-delimitted list of drug names e.g., "name 1|name 2|name 3". If the latter, names cannot include pipes.> -f <pipe delimited file (unix newlines) with unmapped drug strings as the first field and the count of reports as the second> -o <(optional) file to write the output to>')
         sys.exit(2)
 
     for opt, arg in opts:
@@ -53,7 +53,7 @@ def main(argv):
               
       elif opt in ("-s", "--drugstring"):
          drugstring = arg.upper()
-         if drugstring.find(',') != -1:
+         if drugstring.find('|') != -1:
              drugstringL = [x.strip() for x in drugstring.split('|')]
 
       elif opt in ("-f", "--inputfile"):
