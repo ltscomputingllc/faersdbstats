@@ -20,6 +20,9 @@
 -- Note if C is 0 then the resulting PRR and ROR values will be null. Potentially a relatively high constant value
 -- could be assigned instead, to indicate a potential PRR and ROR signal in these cases.
 --
+--
+-- Standard deviations are obtained from Douglas G Altman's Practical Statistics for Medical Research. 1999. Chapter 10.11. Page 267 
+--
 -- LTS COMPUTING LLC
 ------------------------------
 
@@ -31,8 +34,8 @@ select
 drug_concept_id, outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id,
 count_a as case_count,
 round((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)),5) as prr,
-round(exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))+1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)+(1.0/(count_c+count_d)))),5) as prr_95_percent_upper_confidence_limit,
-round(exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))-1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)+(1.0/(count_c+count_d)))),5) as prr_95_percent_lower_confidence_limit,
+round(exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))+1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)-(1.0/(count_c+count_d)))),5) as prr_95_percent_upper_confidence_limit,
+round(exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))-1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)-(1.0/(count_c+count_d)))),5) as prr_95_percent_lower_confidence_limit,
 round(((count_a / count_c) / (count_b / count_d)),5) as ror,
 round(exp((ln((count_a / count_c) / (count_b / count_d)))+1.96*sqrt((1.0/count_a)+(1.0/count_b)+(1.0/count_c)+(1.0/count_d))),5) as ror_95_percent_upper_confidence_limit,
 round(exp((ln((count_a / count_c) / (count_b / count_d)))-1.96*sqrt((1.0/count_a)+(1.0/count_b)+(1.0/count_c)+(1.0/count_d))),5) as ror_95_percent_lower_confidence_limit
