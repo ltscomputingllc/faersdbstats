@@ -1,0 +1,1183 @@
+triads-DL% for i in load_current_demo_table.sql load_current_drug_table.sql load_current_indi_table.sql load_current_outc_table.sql load_current_reac_table.sql load_current_rpsr_table.sql load_current_ther_table.sql
+echo "processing $i" && psql cem rw_grp < $i
+processing load_current_demo_table.sql
+SET
+DROP TABLE
+CREATE TABLE
+TRUNCATE TABLE
+COPY 1534886
+   filename   
+--------------
+ demo12q4.txt
+ DEMO13Q1.txt
+ DEMO13Q2.txt
+ DEMO13Q3.txt
+ DEMO13Q4.txt
+ DEMO14Q1.txt
+ DEMO14Q2.txt
+(7 rows)
+
+DROP TABLE
+CREATE TABLE
+TRUNCATE TABLE
+COPY 9146979
+     filename     
+------------------
+ DEMO14Q3.txt
+ DEMO14Q4.txt
+ DEMO15Q1.txt
+ DEMO15Q2.txt
+ DEMO15Q3.txt
+ DEMO15Q4.txt
+ DEMO16Q1.txt
+ DEMO16Q2.txt
+ DEMO16Q3.txt
+ DEMO16Q4.txt
+ DEMO17Q1.txt
+ DEMO17Q2.txt
+ DEMO17Q3.txt
+ DEMO17Q4.txt
+ DEMO18Q1_new.txt
+ DEMO18Q2.txt
+ DEMO18Q3.txt
+ DEMO18Q4.txt
+ DEMO19Q1.txt
+ DEMO19Q2.txt
+ DEMO19Q3.txt
+ DEMO19Q4.txt
+ DEMO20Q1.txt
+ DEMO20Q2.txt
+ DEMO20Q3.txt
+(25 rows)
+
+DROP TABLE
+SELECT 10681865
+     filename     
+------------------
+ demo12q4.txt
+ DEMO13Q1.txt
+ DEMO13Q2.txt
+ DEMO13Q3.txt
+ DEMO13Q4.txt
+ DEMO14Q1.txt
+ DEMO14Q2.txt
+ DEMO14Q3.txt
+ DEMO14Q4.txt
+ DEMO15Q1.txt
+ DEMO15Q2.txt
+ DEMO15Q3.txt
+ DEMO15Q4.txt
+ DEMO16Q1.txt
+ DEMO16Q2.txt
+ DEMO16Q3.txt
+ DEMO16Q4.txt
+ DEMO17Q1.txt
+ DEMO17Q2.txt
+ DEMO17Q3.txt
+ DEMO17Q4.txt
+ DEMO18Q1_new.txt
+ DEMO18Q2.txt
+ DEMO18Q3.txt
+ DEMO18Q4.txt
+ DEMO19Q1.txt
+ DEMO19Q2.txt
+ DEMO19Q3.txt
+ DEMO19Q4.txt
+ DEMO20Q1.txt
+ DEMO20Q2.txt
+ DEMO20Q3.txt
+(32 rows)
+
+--- DEMO COMPARED TO SOURCE FILE COUNTS
+
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$  wc -l ./ascii/DEMO*Q*with_filename.txt ./ascii/demo12q4*with_filename.txt
+    223016 ./ascii/DEMO13Q1_with_filename.txt
+    171764 ./ascii/DEMO13Q2_with_filename.txt
+    185569 ./ascii/DEMO13Q3_with_filename.txt
+    232247 ./ascii/DEMO13Q4_with_filename.txt
+    260057 ./ascii/DEMO14Q1_with_filename.txt
+    223845 ./ascii/DEMO14Q2_with_filename.txt
+    211309 ./ascii/DEMO14Q3_with_filename.txt
+    207964 ./ascii/DEMO14Q4_with_filename.txt
+    317071 ./ascii/DEMO15Q1_with_filename.txt
+    289270 ./ascii/DEMO15Q2_with_filename.txt
+    398860 ./ascii/DEMO15Q3_with_filename.txt
+    314704 ./ascii/DEMO15Q4_with_filename.txt
+    365682 ./ascii/DEMO16Q1_with_filename.txt
+    316056 ./ascii/DEMO16Q2_with_filename.txt
+    313613 ./ascii/DEMO16Q3_with_filename.txt
+    309534 ./ascii/DEMO16Q4_with_filename.txt
+    352913 ./ascii/DEMO17Q1_with_filename.txt
+    337398 ./ascii/DEMO17Q2_with_filename.txt
+    351388 ./ascii/DEMO17Q3_with_filename.txt
+    327848 ./ascii/DEMO17Q4_with_filename.txt
+    412702 ./ascii/DEMO18Q1_new_with_filename.txt
+         0 ./ascii/DEMO18Q1_with_filename.txt
+    457169 ./ascii/DEMO18Q2_with_filename.txt
+    420915 ./ascii/DEMO18Q3_with_filename.txt
+    394066 ./ascii/DEMO18Q4_with_filename.txt
+    413735 ./ascii/DEMO19Q1_with_filename.txt
+    441108 ./ascii/DEMO19Q2_with_filename.txt
+    452873 ./ascii/DEMO19Q3_with_filename.txt
+    419581 ./ascii/DEMO19Q4_with_filename.txt
+    460327 ./ascii/DEMO20Q1_with_filename.txt
+    429227 ./ascii/DEMO20Q2_with_filename.txt
+    431667 ./ascii/DEMO20Q3_with_filename.txt
+    238389 ./ascii/demo12q4_with_filename.txt
+  10681867 total
+
+
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/all_*demo_data*
+   1534887 ./ascii/all_version_A_demo_data_with_filename.txt
+   9146980 ./ascii/all_version_B_demo_data_with_filename.txt
+  10681867 total
+
+
+
+------------------
+
+processing load_current_indi_table.sql
+SET
+DROP TABLE
+CREATE TABLE
+TRUNCATE TABLE
+COPY 27091746
+   filename   |  count  
+--------------+---------
+ indi12q4.txt |  444517
+ INDI13Q1.txt |  453964
+ INDI13Q2.txt |  330405
+ INDI13Q3.txt |  369227
+ INDI13Q4.txt |  432190
+ INDI14Q1.txt |  581696
+ INDI14Q2.txt |  420506
+ INDI14Q3.txt |  423391
+ INDI14Q4.txt |  436621
+ INDI15Q1.txt |  748742
+ INDI15Q2.txt |  659529
+ INDI15Q3.txt |  811279
+ INDI15Q4.txt |  718340
+ INDI16Q1.txt |  878267
+ INDI16Q2.txt |  798489
+ INDI16Q3.txt |  816898
+ INDI16Q4.txt |  755832
+ INDI17Q1.txt |  859833
+ INDI17Q2.txt |  816254
+ INDI17Q3.txt |  844974
+ INDI17Q4.txt |  863690
+ INDI18Q1.txt | 1253118
+ INDI18Q2.txt | 1428287
+ INDI18Q3.txt | 1134135
+ INDI18Q4.txt | 1064664
+ INDI19Q1.txt | 1106771
+ INDI19Q2.txt | 1221162
+ INDI19Q3.txt | 1353011
+ INDI19Q4.txt | 1146938
+ INDI20Q1.txt | 1348658
+ INDI20Q2.txt | 1294010
+ INDI20Q3.txt | 1276348
+(32 rows)
+
+--------- INDI COMPARED TO FILE COUNTS
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/INDI*Q*with_filename.txt ./ascii/indi*_with_filename.txt
+    453964 ./ascii/INDI13Q1_with_filename.txt
+    330405 ./ascii/INDI13Q2_with_filename.txt
+    369227 ./ascii/INDI13Q3_with_filename.txt
+    432190 ./ascii/INDI13Q4_with_filename.txt
+    581696 ./ascii/INDI14Q1_with_filename.txt
+    420506 ./ascii/INDI14Q2_with_filename.txt
+    423391 ./ascii/INDI14Q3_with_filename.txt
+    436621 ./ascii/INDI14Q4_with_filename.txt
+    748742 ./ascii/INDI15Q1_with_filename.txt
+    659529 ./ascii/INDI15Q2_with_filename.txt
+    811279 ./ascii/INDI15Q3_with_filename.txt
+    718340 ./ascii/INDI15Q4_with_filename.txt
+    878267 ./ascii/INDI16Q1_with_filename.txt
+    798489 ./ascii/INDI16Q2_with_filename.txt
+    816898 ./ascii/INDI16Q3_with_filename.txt
+    755832 ./ascii/INDI16Q4_with_filename.txt
+    859833 ./ascii/INDI17Q1_with_filename.txt
+    816254 ./ascii/INDI17Q2_with_filename.txt
+    844974 ./ascii/INDI17Q3_with_filename.txt
+    863690 ./ascii/INDI17Q4_with_filename.txt
+   1253118 ./ascii/INDI18Q1_with_filename.txt
+   1428287 ./ascii/INDI18Q2_with_filename.txt
+   1134135 ./ascii/INDI18Q3_with_filename.txt
+   1064664 ./ascii/INDI18Q4_with_filename.txt
+   1106771 ./ascii/INDI19Q1_with_filename.txt
+   1221162 ./ascii/INDI19Q2_with_filename.txt
+   1353011 ./ascii/INDI19Q3_with_filename.txt
+   1146938 ./ascii/INDI19Q4_with_filename.txt
+   1348658 ./ascii/INDI20Q1_with_filename.txt
+   1294010 ./ascii/INDI20Q2_with_filename.txt
+   1276348 ./ascii/INDI20Q3_with_filename.txt
+    444518 ./ascii/indi12q4_with_filename.txt
+  27091747 total
+
+
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/all_*indi_data*
+27091747 ./ascii/all_indi_data_with_filename.txt
+
+
+----------------
+
+processing load_current_outc_table.sql
+SET
+DROP TABLE
+CREATE TABLE
+TRUNCATE TABLE
+COPY 7658595
+   filename   | count  
+--------------+--------
+ outc12q4.txt | 191699
+ OUTC13Q1.txt | 153733
+ OUTC13Q2.txt | 138634
+ OUTC13Q3.txt | 147472
+ OUTC13Q4.txt | 154451
+ OUTC14Q1.txt | 170437
+ OUTC14Q2.txt | 178144
+ OUTC14Q3.txt | 169754
+ OUTC14Q4.txt | 167401
+ OUTC15Q1.txt | 238008
+ OUTC15Q2.txt | 200423
+ OUTC15Q3.txt | 213108
+ OUTC15Q4.txt | 205080
+ OUTC16Q1.txt | 210280
+ OUTC16Q2.txt | 218745
+ OUTC16Q3.txt | 221346
+ OUTC16Q4.txt | 220468
+ OUTC17Q1.txt | 242274
+ OUTC17Q2.txt | 232053
+ OUTC17Q3.txt | 233715
+ OUTC17Q4.txt | 243176
+ OUTC18Q1.txt | 298710
+ OUTC18Q2.txt | 331947
+ OUTC18Q3.txt | 295817
+ OUTC18Q4.txt | 299135
+ OUTC19Q1.txt | 310663
+ OUTC19Q2.txt | 324738
+ OUTC19Q3.txt | 323787
+ OUTC19Q4.txt | 321603
+ OUTC20Q1.txt | 335470
+ OUTC20Q2.txt | 307509
+ OUTC20Q3.txt | 358815
+(32 rows)
+
+---- OUCT COMPARED TO FILE COUNTS
+
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/OUTC*Q*with_filename.txt ./ascii/outc*_with_filename.txt
+   153733 ./ascii/OUTC13Q1_with_filename.txt
+   138634 ./ascii/OUTC13Q2_with_filename.txt
+   147472 ./ascii/OUTC13Q3_with_filename.txt
+   154451 ./ascii/OUTC13Q4_with_filename.txt
+   170437 ./ascii/OUTC14Q1_with_filename.txt
+   178144 ./ascii/OUTC14Q2_with_filename.txt
+   169754 ./ascii/OUTC14Q3_with_filename.txt
+   167401 ./ascii/OUTC14Q4_with_filename.txt
+   238008 ./ascii/OUTC15Q1_with_filename.txt
+   200423 ./ascii/OUTC15Q2_with_filename.txt
+   213108 ./ascii/OUTC15Q3_with_filename.txt
+   205080 ./ascii/OUTC15Q4_with_filename.txt
+   210280 ./ascii/OUTC16Q1_with_filename.txt
+   218745 ./ascii/OUTC16Q2_with_filename.txt
+   221346 ./ascii/OUTC16Q3_with_filename.txt
+   220468 ./ascii/OUTC16Q4_with_filename.txt
+   242274 ./ascii/OUTC17Q1_with_filename.txt
+   232053 ./ascii/OUTC17Q2_with_filename.txt
+   233715 ./ascii/OUTC17Q3_with_filename.txt
+   243176 ./ascii/OUTC17Q4_with_filename.txt
+   298710 ./ascii/OUTC18Q1_with_filename.txt
+   331947 ./ascii/OUTC18Q2_with_filename.txt
+   295817 ./ascii/OUTC18Q3_with_filename.txt
+   299135 ./ascii/OUTC18Q4_with_filename.txt
+   310663 ./ascii/OUTC19Q1_with_filename.txt
+   324738 ./ascii/OUTC19Q2_with_filename.txt
+   323787 ./ascii/OUTC19Q3_with_filename.txt
+   321603 ./ascii/OUTC19Q4_with_filename.txt
+   335470 ./ascii/OUTC20Q1_with_filename.txt
+   307509 ./ascii/OUTC20Q2_with_filename.txt
+   358815 ./ascii/OUTC20Q3_with_filename.txt
+   191700 ./ascii/outc12q4_with_filename.txt
+  7658596 total
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/all_*outc_data*
+7658596 ./ascii/all_outc_data_with_filename.txt
+
+
+--------------------------
+
+processing load_current_reac_table.sql
+SET
+DROP TABLE
+CREATE TABLE
+TRUNCATE TABLE
+COPY 4624085
+   filename   
+--------------
+ reac12q4.txt
+ REAC13Q1.txt
+ REAC13Q2.txt
+ REAC13Q3.txt
+ REAC13Q4.txt
+ REAC14Q1.txt
+ REAC14Q2.txt
+(7 rows)
+
+DROP TABLE
+CREATE TABLE
+TRUNCATE TABLE
+COPY 28085075
+   filename   
+--------------
+ REAC14Q3.txt
+ REAC14Q4.txt
+ REAC15Q1.txt
+ REAC15Q2.txt
+ REAC15Q3.txt
+ REAC15Q4.txt
+ REAC16Q1.txt
+ REAC16Q2.txt
+ REAC16Q3.txt
+ REAC16Q4.txt
+ REAC17Q1.txt
+ REAC17Q2.txt
+ REAC17Q3.txt
+ REAC17Q4.txt
+ REAC18Q1.txt
+ REAC18Q2.txt
+ REAC18Q3.txt
+ REAC18Q4.txt
+ REAC19Q1.txt
+ REAC19Q2.txt
+ REAC19Q3.txt
+ REAC19Q4.txt
+ REAC20Q1.txt
+ REAC20Q2.txt
+ REAC20Q3.txt
+(25 rows)
+
+DROP TABLE
+SELECT 32709160
+   filename   |  count  
+--------------+---------
+ reac12q4.txt |  738098
+ REAC13Q1.txt |  658002
+ REAC13Q2.txt |  544835
+ REAC13Q3.txt |  584833
+ REAC13Q4.txt |  690690
+ REAC14Q1.txt |  754668
+ REAC14Q2.txt |  652959
+ REAC14Q3.txt |  667778
+ REAC14Q4.txt |  635465
+ REAC15Q1.txt |  872848
+ REAC15Q2.txt |  845134
+ REAC15Q3.txt | 1133196
+ REAC15Q4.txt |  968664
+ REAC16Q1.txt | 1013744
+ REAC16Q2.txt |  914638
+ REAC16Q3.txt |  936744
+ REAC16Q4.txt |  916308
+ REAC17Q1.txt | 1041509
+ REAC17Q2.txt |  987728
+ REAC17Q3.txt | 1025153
+ REAC17Q4.txt |  961640
+ REAC18Q1.txt | 1206259
+ REAC18Q2.txt | 1392439
+ REAC18Q3.txt | 1329530
+ REAC18Q4.txt | 1250978
+ REAC19Q1.txt | 1303533
+ REAC19Q2.txt | 1408482
+ REAC19Q3.txt | 1504790
+ REAC19Q4.txt | 1359922
+ REAC20Q1.txt | 1517264
+ REAC20Q2.txt | 1437285
+ REAC20Q3.txt | 1454044
+(32 rows)
+
+
+----- REAC COMPARED TO FILE LINE COUNTS
+
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/REAC*Q*with_filename.txt ./ascii/reac*_with_filename.txt
+    658002 ./ascii/REAC13Q1_with_filename.txt
+    544835 ./ascii/REAC13Q2_with_filename.txt
+    584833 ./ascii/REAC13Q3_with_filename.txt
+    690690 ./ascii/REAC13Q4_with_filename.txt
+    754668 ./ascii/REAC14Q1_with_filename.txt
+    652959 ./ascii/REAC14Q2_with_filename.txt
+    667779 ./ascii/REAC14Q3_with_filename.txt
+    635465 ./ascii/REAC14Q4_with_filename.txt
+    872848 ./ascii/REAC15Q1_with_filename.txt
+    845134 ./ascii/REAC15Q2_with_filename.txt
+   1133196 ./ascii/REAC15Q3_with_filename.txt
+    968664 ./ascii/REAC15Q4_with_filename.txt
+   1013744 ./ascii/REAC16Q1_with_filename.txt
+    914638 ./ascii/REAC16Q2_with_filename.txt
+    936744 ./ascii/REAC16Q3_with_filename.txt
+    916308 ./ascii/REAC16Q4_with_filename.txt
+   1041509 ./ascii/REAC17Q1_with_filename.txt
+    987728 ./ascii/REAC17Q2_with_filename.txt
+   1025153 ./ascii/REAC17Q3_with_filename.txt
+    961640 ./ascii/REAC17Q4_with_filename.txt
+   1206259 ./ascii/REAC18Q1_with_filename.txt
+   1392439 ./ascii/REAC18Q2_with_filename.txt
+   1329530 ./ascii/REAC18Q3_with_filename.txt
+   1250978 ./ascii/REAC18Q4_with_filename.txt
+   1303533 ./ascii/REAC19Q1_with_filename.txt
+   1408482 ./ascii/REAC19Q2_with_filename.txt
+   1504790 ./ascii/REAC19Q3_with_filename.txt
+   1359922 ./ascii/REAC19Q4_with_filename.txt
+   1517264 ./ascii/REAC20Q1_with_filename.txt
+   1437285 ./ascii/REAC20Q2_with_filename.txt
+   1454044 ./ascii/REAC20Q3_with_filename.txt
+    738099 ./ascii/reac12q4_with_filename.txt
+  32709162 total
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/all_*reac_data*
+   4624086 ./ascii/all_version_A_reac_data_with_filename.txt
+  28085076 ./ascii/all_version_B_reac_data_with_filename.txt
+  32709162 total
+
+
+---------------
+
+processing load_current_rpsr_table.sql
+SET
+DROP TABLE
+CREATE TABLE
+TRUNCATE TABLE
+COPY 637335
+   filename   | count 
+--------------+-------
+ rpsr12q4.txt | 25933
+ RPSR13Q1.txt | 54000
+ RPSR13Q2.txt | 27142
+ RPSR13Q3.txt | 24861
+ RPSR13Q4.txt | 26575
+ RPSR14Q1.txt | 37839
+ RPSR14Q2.txt | 22556
+ RPSR14Q3.txt | 24337
+ RPSR14Q4.txt | 23333
+ RPSR15Q1.txt | 28234
+ RPSR15Q2.txt | 20463
+ RPSR15Q3.txt | 12075
+ RPSR15Q4.txt |  5688
+ RPSR16Q1.txt |  6480
+ RPSR16Q2.txt |  9437
+ RPSR16Q3.txt |  7356
+ RPSR16Q4.txt | 10886
+ RPSR17Q1.txt | 13426
+ RPSR17Q2.txt | 15768
+ RPSR17Q3.txt | 15478
+ RPSR17Q4.txt | 15363
+ RPSR18Q1.txt | 19433
+ RPSR18Q2.txt | 15860
+ RPSR18Q3.txt | 23783
+ RPSR18Q4.txt | 21075
+ RPSR19Q1.txt | 16018
+ RPSR19Q2.txt | 23643
+ RPSR19Q3.txt | 20652
+ RPSR19Q4.txt | 23774
+ RPSR20Q1.txt | 15492
+ RPSR20Q2.txt | 13094
+ RPSR20Q3.txt | 17281
+(32 rows)
+
+---- RPSR COMPARED TO FILE COUNTS
+
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/RPSR*Q*with_filename.txt ./ascii/rpsr*_with_filename.txt
+   54000 ./ascii/RPSR13Q1_with_filename.txt
+   27142 ./ascii/RPSR13Q2_with_filename.txt
+   24861 ./ascii/RPSR13Q3_with_filename.txt
+   26575 ./ascii/RPSR13Q4_with_filename.txt
+   37839 ./ascii/RPSR14Q1_with_filename.txt
+   22556 ./ascii/RPSR14Q2_with_filename.txt
+   24337 ./ascii/RPSR14Q3_with_filename.txt
+   23333 ./ascii/RPSR14Q4_with_filename.txt
+   28234 ./ascii/RPSR15Q1_with_filename.txt
+   20463 ./ascii/RPSR15Q2_with_filename.txt
+   12075 ./ascii/RPSR15Q3_with_filename.txt
+    5688 ./ascii/RPSR15Q4_with_filename.txt
+    6480 ./ascii/RPSR16Q1_with_filename.txt
+    9437 ./ascii/RPSR16Q2_with_filename.txt
+    7356 ./ascii/RPSR16Q3_with_filename.txt
+   10886 ./ascii/RPSR16Q4_with_filename.txt
+   13426 ./ascii/RPSR17Q1_with_filename.txt
+   15768 ./ascii/RPSR17Q2_with_filename.txt
+   15478 ./ascii/RPSR17Q3_with_filename.txt
+   15363 ./ascii/RPSR17Q4_with_filename.txt
+   19433 ./ascii/RPSR18Q1_with_filename.txt
+   15860 ./ascii/RPSR18Q2_with_filename.txt
+   23783 ./ascii/RPSR18Q3_with_filename.txt
+   21075 ./ascii/RPSR18Q4_with_filename.txt
+   16018 ./ascii/RPSR19Q1_with_filename.txt
+   23643 ./ascii/RPSR19Q2_with_filename.txt
+   20652 ./ascii/RPSR19Q3_with_filename.txt
+   23774 ./ascii/RPSR19Q4_with_filename.txt
+   15492 ./ascii/RPSR20Q1_with_filename.txt
+   13094 ./ascii/RPSR20Q2_with_filename.txt
+   17281 ./ascii/RPSR20Q3_with_filename.txt
+   25934 ./ascii/rpsr12q4_with_filename.txt
+  637336 total
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/all_*rpsr_data*
+637336 ./ascii/all_rpsr_data_with_filename.txt
+
+---------
+
+
+processing load_current_ther_table.sql
+SET
+DROP TABLE
+CREATE TABLE
+TRUNCATE TABLE
+COPY 15133206
+   filename   | count  
+--------------+--------
+ ther12q4.txt | 324367
+ THER13Q1.txt | 281940
+ THER13Q2.txt | 237513
+ THER13Q3.txt | 251263
+ THER13Q4.txt | 291315
+ THER14Q1.txt | 329817
+ THER14Q2.txt | 266586
+ THER14Q3.txt | 270268
+ THER14Q4.txt | 270468
+ THER15Q1.txt | 374935
+ THER15Q2.txt | 373850
+ THER15Q3.txt | 494584
+ THER15Q4.txt | 401725
+ THER16Q1.txt | 458946
+ THER16Q2.txt | 464701
+ THER16Q3.txt | 483082
+ THER16Q4.txt | 433545
+ THER17Q1.txt | 455411
+ THER17Q2.txt | 454078
+ THER17Q3.txt | 443213
+ THER17Q4.txt | 442433
+ THER18Q1.txt | 551394
+ THER18Q2.txt | 688053
+ THER18Q3.txt | 663319
+ THER18Q4.txt | 620308
+ THER19Q1.txt | 627373
+ THER19Q2.txt | 747535
+ THER19Q3.txt | 776039
+ THER19Q4.txt | 643525
+ THER20Q1.txt | 728199
+ THER20Q2.txt | 636959
+ THER20Q3.txt | 646462
+(32 rows)
+
+----- THER COMPARED TO FILE LINE COUNTS
+
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/THER*Q*with_filename.txt ./ascii/ther*_with_filename.txt
+   281940 ./ascii/THER13Q1_with_filename.txt
+   237513 ./ascii/THER13Q2_with_filename.txt
+   251263 ./ascii/THER13Q3_with_filename.txt
+   291315 ./ascii/THER13Q4_with_filename.txt
+   329817 ./ascii/THER14Q1_with_filename.txt
+   266586 ./ascii/THER14Q2_with_filename.txt
+   270268 ./ascii/THER14Q3_with_filename.txt
+   270468 ./ascii/THER14Q4_with_filename.txt
+   374935 ./ascii/THER15Q1_with_filename.txt
+   373850 ./ascii/THER15Q2_with_filename.txt
+   494584 ./ascii/THER15Q3_with_filename.txt
+   401725 ./ascii/THER15Q4_with_filename.txt
+   458946 ./ascii/THER16Q1_with_filename.txt
+   464701 ./ascii/THER16Q2_with_filename.txt
+   483082 ./ascii/THER16Q3_with_filename.txt
+   433545 ./ascii/THER16Q4_with_filename.txt
+   455411 ./ascii/THER17Q1_with_filename.txt
+   454078 ./ascii/THER17Q2_with_filename.txt
+   443213 ./ascii/THER17Q3_with_filename.txt
+   442433 ./ascii/THER17Q4_with_filename.txt
+   551394 ./ascii/THER18Q1_with_filename.txt
+   688053 ./ascii/THER18Q2_with_filename.txt
+   663319 ./ascii/THER18Q3_with_filename.txt
+   620308 ./ascii/THER18Q4_with_filename.txt
+   627373 ./ascii/THER19Q1_with_filename.txt
+   747535 ./ascii/THER19Q2_with_filename.txt
+   776039 ./ascii/THER19Q3_with_filename.txt
+   643525 ./ascii/THER19Q4_with_filename.txt
+   728199 ./ascii/THER20Q1_with_filename.txt
+   636959 ./ascii/THER20Q2_with_filename.txt
+   646462 ./ascii/THER20Q3_with_filename.txt
+   324368 ./ascii/ther12q4_with_filename.txt
+ 15133207 total
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/all_*ther_data*
+15133207 ./ascii/all_ther_data_with_filename.txt
+
+-----------
+
+
+DROP TABLE
+CREATE TABLE
+TRUNCATE TABLE
+COPY 35132779
+   filename   
+--------------
+ DRUG14Q3.txt
+ DRUG14Q4.txt
+ DRUG15Q1.txt
+ DRUG15Q2.txt
+ DRUG15Q3.txt
+ DRUG15Q4.txt
+ DRUG16Q1.txt
+ DRUG16Q2.txt
+ DRUG16Q3.txt
+ DRUG16Q4.txt
+ DRUG17Q1.txt
+ DRUG17Q2.txt
+ DRUG17Q3.txt
+ DRUG17Q4.txt
+ DRUG18Q1.txt
+ DRUG18Q2.txt
+ DRUG18Q3.txt
+ DRUG18Q4.txt
+ DRUG19Q1.txt
+ DRUG19Q2.txt
+ DRUG19Q3.txt
+ DRUG19Q4.txt
+ DRUG20Q1.txt
+ DRUG20Q2.txt
+ DRUG20Q3.txt
+(25 rows)
+
+DROP TABLE
+SELECT 40131426
+   filename   |  count  
+--------------+---------
+ drug12q4.txt |  764515
+ DRUG13Q1.txt |  737725
+ DRUG13Q2.txt |  564548
+ DRUG13Q3.txt |  607921
+ DRUG13Q4.txt |  738501
+ DRUG14Q1.txt |  901608
+ DRUG14Q2.txt |  683829
+ DRUG14Q3.txt |  688140
+ DRUG14Q4.txt |  682292
+ DRUG15Q1.txt | 1082833
+ DRUG15Q2.txt |  967120
+ DRUG15Q3.txt | 1294625
+ DRUG15Q4.txt | 1064332
+ DRUG16Q1.txt | 1202390
+ DRUG16Q2.txt | 1144148
+ DRUG16Q3.txt | 1257054
+ DRUG16Q4.txt | 1147547
+ DRUG17Q1.txt | 1234393
+ DRUG17Q2.txt | 1188078
+ DRUG17Q3.txt | 1220118
+ DRUG17Q4.txt | 1213842
+ DRUG18Q1.txt | 1686461
+ DRUG18Q2.txt | 1987872
+ DRUG18Q3.txt | 1651966
+ DRUG18Q4.txt | 1546835
+ DRUG19Q1.txt | 1649005
+ DRUG19Q2.txt | 1863010
+ DRUG19Q3.txt | 1982442
+ DRUG19Q4.txt | 1714177
+ DRUG20Q1.txt | 1943532
+ DRUG20Q2.txt | 1825414
+ DRUG20Q3.txt | 1895153
+(32 rows)
+
+------- DRUG COMPARED TO FILE LINE COUNTS
+
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/DRUG*Q*with_filename.txt ./ascii/drug*_with_filename.txt
+    737725 ./ascii/DRUG13Q1_with_filename.txt
+    564548 ./ascii/DRUG13Q2_with_filename.txt
+    607921 ./ascii/DRUG13Q3_with_filename.txt
+    738501 ./ascii/DRUG13Q4_with_filename.txt
+    901608 ./ascii/DRUG14Q1_with_filename.txt
+    683829 ./ascii/DRUG14Q2_with_filename.txt
+    688141 ./ascii/DRUG14Q3_with_filename.txt
+    682292 ./ascii/DRUG14Q4_with_filename.txt
+   1082833 ./ascii/DRUG15Q1_with_filename.txt
+    967120 ./ascii/DRUG15Q2_with_filename.txt
+   1294625 ./ascii/DRUG15Q3_with_filename.txt
+   1064332 ./ascii/DRUG15Q4_with_filename.txt
+   1202390 ./ascii/DRUG16Q1_with_filename.txt
+   1144148 ./ascii/DRUG16Q2_with_filename.txt
+   1257054 ./ascii/DRUG16Q3_with_filename.txt
+   1147547 ./ascii/DRUG16Q4_with_filename.txt
+   1234393 ./ascii/DRUG17Q1_with_filename.txt
+   1188078 ./ascii/DRUG17Q2_with_filename.txt
+   1220118 ./ascii/DRUG17Q3_with_filename.txt
+   1213842 ./ascii/DRUG17Q4_with_filename.txt
+   1686461 ./ascii/DRUG18Q1_with_filename.txt
+   1987872 ./ascii/DRUG18Q2_with_filename.txt
+   1651966 ./ascii/DRUG18Q3_with_filename.txt
+   1546835 ./ascii/DRUG18Q4_with_filename.txt
+   1649005 ./ascii/DRUG19Q1_with_filename.txt
+   1863010 ./ascii/DRUG19Q2_with_filename.txt
+   1982442 ./ascii/DRUG19Q3_with_filename.txt
+   1714177 ./ascii/DRUG19Q4_with_filename.txt
+   1943532 ./ascii/DRUG20Q1_with_filename.txt
+   1825414 ./ascii/DRUG20Q2_with_filename.txt
+   1895153 ./ascii/DRUG20Q3_with_filename.txt
+    764516 ./ascii/drug12q4_with_filename.txt
+  40131428 total
+(base) rdb20@triads-DL:/home/faersdbstats/load_data_files_from_website$ wc -l ./ascii/all_*drug_data*
+   4998648 ./ascii/all_version_A_drug_data_with_filename.txt
+  35132780 ./ascii/all_version_B_drug_data_with_filename.txt
+  40131428 total
+
+
+--- DATABASE CONSTRAING PREPARATION
+
+select * from vocabulary.concept_synonym cs where cs.concept_id = 42739903;
+
+with todrop as 
+ (select cs.concept_id 
+ from vocabulary.concept_synonym cs left outer join vocabulary.concept on cs.concept_id = concept.concept_id
+ where concept.concept_id is null 
+)
+delete from vocabulary.concept_synonym cs2 where cs2.concept_id in (select * from todrop)
+ ;
+
+select * from vocabulary.concept_relationship cr where cr.concept_id_1 = 42627868;
+
+with todrop as 
+ (select cr.concept_id_1 
+ from vocabulary.concept_relationship cr  left outer join vocabulary.concept on cr.concept_id_1 = concept.concept_id
+ where concept.concept_id is null 
+ )
+delete from vocabulary.concept_relationship cr2 where cr2.concept_id_1 in (select * from todrop )
+;
+
+select count(*)
+from vocabulary.concept_relationship cr  left outer join vocabulary.concept on cr.concept_id_2 = concept.concept_id
+where concept.concept_id is null 
+;
+
+with todrop as 
+ (select cr.concept_id_2 
+ from vocabulary.concept_relationship cr  left outer join vocabulary.concept on cr.concept_id_2 = concept.concept_id
+ where concept.concept_id is null 
+ )
+delete from vocabulary.concept_relationship cr2 where cr2.concept_id_2 in (select * from todrop )
+;
+
+
+select count(*)
+from vocabulary.concept_ancestor ca  left outer join vocabulary.concept on ca.ancestor_concept_id = concept.concept_id
+where concept.concept_id is null 
+;
+
+with todrop as 
+ (select  ca.ancestor_concept_id 
+ from vocabulary.concept_ancestor ca   left outer join vocabulary.concept on ca.ancestor_concept_id = concept.concept_id
+ where concept.concept_id is null 
+ )
+delete from vocabulary.concept_ancestor ca2 where ca2.ancestor_concept_id in (select * from todrop )
+;
+
+
+select count(*)
+from vocabulary.concept_ancestor ca  left outer join vocabulary.concept on ca.descendant_concept_id = concept.concept_id
+where concept.concept_id is null 
+;
+
+with todrop as 
+ (select  ca.descendant_concept_id 
+ from vocabulary.concept_ancestor ca   left outer join vocabulary.concept on ca.descendant_concept_id = concept.concept_id
+ where concept.concept_id is null 
+ )
+delete from vocabulary.concept_ancestor ca2 where ca2.descendant_concept_id in (select * from todrop )
+;
+
+select distinct source_vocabulary_id from vocabulary.source_to_concept_map;
+
+select count(*)
+from vocabulary.source_to_concept_map stcm  left outer join vocabulary.concept on stcm.target_concept_id  = concept.concept_id
+where concept.concept_id is null 
+;
+
+with todrop as 
+ (select  stcm.target_concept_id 
+ from vocabulary.source_to_concept_map stcm  left outer join vocabulary.concept on stcm.target_concept_id  = concept.concept_id
+where concept.concept_id is null 
+ )
+delete from vocabulary.source_to_concept_map stcm2 where stcm2.target_concept_id in (select * from todrop )
+;
+
+
+----- DATABASE CONSTRAINTS
+
+
+ALTER TABLE concept ADD CONSTRAINT fpk_concept_domain FOREIGN KEY (domain_id)  REFERENCES domain (domain_id);
+
+ALTER TABLE concept ADD CONSTRAINT fpk_concept_class FOREIGN KEY (concept_class_id)  REFERENCES concept_class (concept_class_id);
+
+ALTER TABLE concept ADD CONSTRAINT fpk_concept_vocabulary FOREIGN KEY (vocabulary_id)  REFERENCES vocabulary (vocabulary_id);
+
+ALTER TABLE vocabulary ADD CONSTRAINT fpk_vocabulary_concept FOREIGN KEY (vocabulary_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE domain ADD CONSTRAINT fpk_domain_concept FOREIGN KEY (domain_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE concept_class ADD CONSTRAINT fpk_concept_class_concept FOREIGN KEY (concept_class_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE concept_relationship ADD CONSTRAINT fpk_concept_relationship_c_1 FOREIGN KEY (concept_id_1)  REFERENCES concept (concept_id);
+
+ALTER TABLE concept_relationship ADD CONSTRAINT fpk_conlcept_relationship_c_2 FOREIGN KEY (concept_id_2)  REFERENCES concept (concept_id);
+
+ALTER TABLE concept_relationship ADD CONSTRAINT fpk_concept_relationship_id FOREIGN KEY (relationship_id)  REFERENCES relationship (relationship_id);
+
+ALTER TABLE relationship ADD CONSTRAINT fpk_relationship_concept FOREIGN KEY (relationship_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE relationship ADD CONSTRAINT fpk_relationship_reverse FOREIGN KEY (reverse_relationship_id)  REFERENCES relationship (relationship_id);
+
+ALTER TABLE concept_synonym ADD CONSTRAINT fpk_concept_synonym_concept FOREIGN KEY (concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE concept_ancestor ADD CONSTRAINT fpk_concept_ancestor_concept_1 FOREIGN KEY (ancestor_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE concept_ancestor ADD CONSTRAINT fpk_concept_ancestor_concept_2 FOREIGN KEY (descendant_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE source_to_concept_map ADD CONSTRAINT fpk_source_to_concept_map_v_1 FOREIGN KEY (source_vocabulary_id)  REFERENCES vocabulary (vocabulary_id);
+
+ALTER TABLE source_to_concept_map ADD CONSTRAINT fpk_source_to_concept_map_v_2 FOREIGN KEY (target_vocabulary_id)  REFERENCES vocabulary (vocabulary_id);
+
+ALTER TABLE source_to_concept_map ADD CONSTRAINT fpk_source_to_concept_map_c_1 FOREIGN KEY (target_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE drug_strength ADD CONSTRAINT fpk_drug_strength_concept_1 FOREIGN KEY (drug_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE drug_strength ADD CONSTRAINT fpk_drug_strength_concept_2 FOREIGN KEY (ingredient_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE drug_strength ADD CONSTRAINT fpk_drug_strength_unit_1 FOREIGN KEY (amount_unit_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE drug_strength ADD CONSTRAINT fpk_drug_strength_unit_2 FOREIGN KEY (numerator_unit_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE drug_strength ADD CONSTRAINT fpk_drug_strength_unit_3 FOREIGN KEY (denominator_unit_concept_id)  REFERENCES concept (concept_id);
+
+ALTER TABLE concept ADD CONSTRAINT xpk_concept PRIMARY KEY (concept_id);
+
+ALTER TABLE vocabulary ADD CONSTRAINT xpk_vocabulary PRIMARY KEY (vocabulary_id);
+
+ALTER TABLE domain ADD CONSTRAINT xpk_domain PRIMARY KEY (domain_id);
+
+ALTER TABLE concept_class ADD CONSTRAINT xpk_concept_class PRIMARY KEY (concept_class_id);
+
+ALTER TABLE concept_relationship ADD CONSTRAINT xpk_concept_relationship PRIMARY KEY (concept_id_1,concept_id_2,relationship_id);
+
+ALTER TABLE relationship ADD CONSTRAINT xpk_relationship PRIMARY KEY (relationship_id);
+
+ALTER TABLE concept_ancestor ADD CONSTRAINT xpk_concept_ancestor PRIMARY KEY (ancestor_concept_id,descendant_concept_id);
+
+ALTER TABLE drug_strength ADD CONSTRAINT xpk_drug_strength PRIMARY KEY (drug_concept_id, ingredient_concept_id);
+
+ALTER TABLE cohort_definition ADD CONSTRAINT xpk_cohort_definition PRIMARY KEY (cohort_definition_id);
+
+ALTER TABLE attribute_definition ADD CONSTRAINT xpk_attribute_definition PRIMARY KEY (attribute_definition_id);
+
+-- failed -- rerun after recreating the table
+ALTER TABLE source_to_concept_map ADD CONSTRAINT xpk_source_to_concept_map PRIMARY KEY (source_vocabulary_id,target_concept_id,source_code,valid_end_date);
+
+
+--- DERIVE UNIQUE CASES
+
+(base) rdb20@triads-DL:/home/faersdbstats/handle_duplicate_cases$ psql cem rw_grp <  derive_unique_all_case.sql 
+SET
+DROP TABLE
+SELECT 10681313
+DROP TABLE
+SELECT 10681263
+DROP TABLE
+SELECT 10681865
+DROP TABLE
+SELECT 4271507
+DROP TABLE
+SELECT 4271497
+DROP TABLE
+SELECT 4276200
+DROP TABLE
+SELECT 14955111
+DROP TABLE
+SELECT 5331313
+UPDATE 54225
+DROP TABLE
+SELECT 5406299
+UPDATE 59469
+DROP TABLE
+SELECT 5434547
+UPDATE 4961
+DROP TABLE
+SELECT 5422252
+UPDATE 15675
+DROP TABLE
+SELECT 12554385
+DROP TABLE
+SELECT 12450375
+
+
+--------------
+
+------ DRUG MAPPING
+
+(base) rdb20@triads-DL:/home/faersdbstats/drug_mapping$ psql cem rw_grp < map_all_drugname_to_rxnorm.sql
+SET
+DROP INDEX
+CREATE INDEX
+INFO:  analyzing "staging_vocabulary.concept"
+INFO:  "concept": scanned 30000 of 126833 pages, containing 1569436 live rows and 0 dead rows; 30000 rows in sample, 6635209 estimated total rows
+ANALYZE
+SET
+DROP TABLE
+SELECT 789156
+NOTICE:  index "drug_name_clean_ix" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+UPDATE 35100
+UPDATE 7931
+UPDATE 84028
+UPDATE 3823
+UPDATE 33126
+UPDATE 25103
+UPDATE 13710
+UPDATE 4405
+UPDATE 2452
+UPDATE 8399
+UPDATE 5793
+UPDATE 45960
+UPDATE 79308
+UPDATE 709848
+UPDATE 17415
+UPDATE 692433
+UPDATE 169
+UPDATE 692264
+UPDATE 4075
+UPDATE 688189
+UPDATE 982
+UPDATE 687207
+UPDATE 33
+UPDATE 687174
+UPDATE 381
+UPDATE 686793
+UPDATE 0
+UPDATE 686793
+UPDATE 0
+UPDATE 10842
+UPDATE 56
+UPDATE 686737
+UPDATE 530
+UPDATE 21865
+UPDATE 686207
+UPDATE 6246
+UPDATE 12699
+UPDATE 12699
+DROP TABLE
+SELECT 2107175
+DROP TABLE
+SELECT 5369
+DROP TABLE
+SELECT 321335
+UPDATE 75039
+DROP TABLE
+SELECT 13375
+DROP TABLE
+SELECT 348731
+UPDATE 453758
+DROP TABLE
+SELECT 17221
+DROP TABLE
+SELECT 370347
+UPDATE 92685
+UPDATE 159585
+DROP TABLE
+SELECT 608976
+NOTICE:  index "prod_ai_ix" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+UPDATE 131675
+DROP TABLE
+SELECT 23878
+DROP TABLE
+SELECT 156671
+NOTICE:  index "nda_num_ix" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+UPDATE 33620
+DROP TABLE
+SELECT 43893832
+NOTICE:  index "combined_drug_mapping_ix" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+UPDATE 37670515
+UPDATE 2956261
+UPDATE 108328
+UPDATE 707394
+UPDATE 26973
+UPDATE 8111
+UPDATE 18235
+
+
+-------------- FURTHER DRUG STANDARDIZATION
+
+(base) rdb20@triads-DL:/home/faersdbstats/drug_mapping$ psql cem rw_grp < standardize_combined_drug_mapping.sql 
+SET
+DROP TABLE
+SELECT 43893832
+UPDATE 21834033
+UPDATE 0
+UPDATE 0
+UPDATE 0
+UPDATE 0
+UPDATE 0
+UPDATE 0
+UPDATE 31939
+UPDATE 0
+UPDATE 59
+UPDATE 0
+UPDATE 0
+UPDATE 3933
+UPDATE 1087
+UPDATE 98
+UPDATE 0
+UPDATE 0
+UPDATE 0
+UPDATE 0
+UPDATE 0
+UPDATE 1534
+DROP TABLE
+SELECT 39945388
+
+------------
+
+---- STANDARD OUTCOME CATEGORIES
+
+(base) rdb20@triads-DL:/home/faersdbstats/standardized_output$ psql cem rw_grp < derive_standard_case_outcome_category.sql
+SET
+DROP TABLE
+SELECT 14324342
+
+
+-----------
+
+----- STANDARD CASE OUTCOMES
+
+(base) rdb20@triads-DL:/home/faersdbstats/standardized_output$ psql cem rw_grp < derive_standard_case_outcome.sql 
+SET
+NOTICE:  index "ix_reac_1" does not exist, skipping
+DROP INDEX
+NOTICE:  index "ix_reac_2" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+CREATE INDEX
+INFO:  analyzing "faers.reac"
+INFO:  "reac": scanned 30000 of 323241 pages, containing 3035562 live rows and 0 dead rows; 30000 rows in sample, 32707270 estimated total rows
+ANALYZE
+DROP INDEX
+DROP INDEX
+CREATE INDEX
+CREATE INDEX
+INFO:  analyzing "faers.reac_legacy"
+INFO:  "reac_legacy": scanned 30000 of 135793 pages, containing 3534135 live rows and 0 dead rows; 30000 rows in sample, 15997026 estimated total rows
+ANALYZE
+DROP TABLE
+SELECT 37301987
+
+------------
+
+--- STANDARD DRUG OUTCOME 
+
+(base) rdb20@triads-DL:/home/faersdbstats/standardized_output$ psql cem rw_grp < derive_standard_drug_outcome_count.sql
+SET
+NOTICE:  table "standard_drug_outcome_count" does not exist, skipping
+DROP TABLE
+SELECT 5402307
+
+
+-------------
+
+---- Standard Drug Outcome Contingency Table 
+
+$ psql cem rw_grp < derive_standard_drug_outcome_contingency_table.sql
+
+SET
+NOTICE:  index "standard_drug_outcome_count_ix" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+NOTICE:  index "standard_drug_outcome_count_2_ix" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+NOTICE:  index "standard_drug_outcome_count_3_ix" does not exist, skipping
+DROP INDEX
+TonCREATE INDEX
+NOTICE:  index "standard_drug_outcome_count_4_ix" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+INFO:  analyzing "faers.standard_drug_outcome_count"
+INFO:  "standard_drug_outcome_count": scanned 29202 of 29202 pages, containing 5402307 live rows and 0 dead rows; 30000 rows in sample, 5402307 estimated total rows
+ANALYZE
+DROP TABLE
+SELECT 5402307
+SET
+DROP TABLE
+SELECT 5402307
+SET
+DROP TABLE
+SELECT 5402307
+SET
+DROP TABLE
+SELECT 5402307
+DROP TABLE
+SELECT 5402307
+
+
+-------------------
+
+----- STANDARD DRUG OUTCOME STATISTICS
+
+$ psql cem rw_grp < derive_standard_drug_outcome_statistics.sql 
+SET
+DROP TABLE
+SELECT 5402307
+
+
+------------------
+
+----- MAP MEDDRA TO SNOMED
+
+$ psql cem rw_grp < map_meddra_to_snomed.sql
+SET
+UPDATE 12337744
+UPDATE 28218065
+UPDATE 3310817
+UPDATE 3310817
+
+
+------------------
+
+---- STANDARD DRUG OUTCOME DRILL DOWN TABLE
+
+
+$ psql cem rw_grp < derive_standard_drug_outcome_drilldown.sql 
+SET
+NOTICE:  index "standard_case_drug_ix_1" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+NOTICE:  index "standard_case_drug_ix_2" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+NOTICE:  index "standard_case_drug_ix_3" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+NOTICE:  index "standard_case_outcome_ix_1" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+NOTICE:  index "standard_case_outcome_ix_2" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+NOTICE:  index "standard_case_outcome_ix_3" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+NOTICE:  index "standard_drug_outcome_count_ix_1" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+NOTICE:  index "standard_drug_outcome_count_ix_2" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+DROP TABLE
+SELECT 135734053
+UPDATE 98807805
+UPDATE 36926248
+
+
+
+
+
