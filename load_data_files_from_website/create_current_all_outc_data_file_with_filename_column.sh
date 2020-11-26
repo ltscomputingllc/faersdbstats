@@ -112,52 +112,57 @@
 # # remove windows carriage return, remove the header line and add the filename as the last column on each line
 # sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC18Q1
-thefilename="${thefilenamenoprefix}.txt"
-# remove windows carriagereturn, remove the header line and add the filename as the last column on each line
-sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+# thefilenamenoprefix=OUTC18Q1
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC18Q2
-thefilename="${thefilenamenoprefix}.txt"
-# remove windows carriagereturn, remove the header line and add the filename as the last column on each line
-sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+# thefilenamenoprefix=OUTC18Q2
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC18Q3
-thefilename="${thefilenamenoprefix}.txt"
-# remove windows carriagereturn, remove the header line and add the filename as the last column on each line
-sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+# thefilenamenoprefix=OUTC18Q3
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC18Q4
-thefilename="${thefilenamenoprefix}.txt"
-# remove windows carriagereturn, remove the header line and add the filename as the last column on each line
-sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+# thefilenamenoprefix=OUTC18Q4
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC19Q1
-thefilename="${thefilenamenoprefix}.txt"
-# remove windows carriagereturn, remove the header line and add the filename as the last column on each line
-sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+# thefilenamenoprefix=OUTC19Q1
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC19Q2
-thefilename="${thefilenamenoprefix}.txt"
-# remove windows carriagereturn, remove the header line and add the filename as the last column on each line
-sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+# thefilenamenoprefix=OUTC19Q2
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC19Q3
-thefilename="${thefilenamenoprefix}.txt"
-# remove windows carriagereturn, remove the header line and add the filename as the last column on each line
-sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+# thefilenamenoprefix=OUTC19Q3
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC19Q4
-thefilename="${thefilenamenoprefix}.txt"
-# remove windows carriagereturn, remove the header line and add the filename as the last column on each line
-sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+# thefilenamenoprefix=OUTC19Q4
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC20Q1
-thefilename="${thefilenamenoprefix}.txt"
-# remove windows carriagereturn, remove the header line and add the filename as the last column on each line
-sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+# thefilenamenoprefix=OUTC20Q1
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
 
-thefilenamenoprefix=OUTC20Q2
+# thefilenamenoprefix=OUTC20Q2
+# thefilename="${thefilenamenoprefix}.txt"
+# # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
+# sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
+
+thefilenamenoprefix=OUTC20Q3
 thefilename="${thefilenamenoprefix}.txt"
 # remove windows carriagereturn, remove the header line and add the filename as the last column on each line
 sed 's/\r$//' "${thefilename}"| sed '1,1d' | sed "1,$ s/$/\$${thefilename}/" >"${thefilenamenoprefix}_with_filename.txt"
