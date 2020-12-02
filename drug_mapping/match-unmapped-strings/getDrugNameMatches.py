@@ -9,8 +9,15 @@
 # exact match or a "fuzzy" to some metric of fuzzyness (e.g., 1,
 # 2, or 3, character replacements)
 
-# Return all records that have the match
+# NOTE: this program uses a file of unmapped drug names pulled from
+# the FAERS data base using the following query. The output was
+# cleaned of quotes at the begining and end of lines, purely
+# puctuatipn rows, and purely numeric rows:
 
+# select distinct drug_name_original
+#from faers.combined_drug_mapping cdm 
+# where cdm.concept_id is null 
+# ;
 
 import sys
 import getopt
@@ -82,15 +89,15 @@ def main(argv):
         i +=1
         
         pipeCnt = elt.count(u'|')
-        if pipeCnt == 0:
-            outString += '\n\nNOTE: There is a record that has no pipes - assuming end of file. Total number of lines processed: ' + str(i) + '. Total lines in file:' + str(linesN) + '\n'
+        if elt == 0:
+            outString += '\n\nNOTE: Blank line. assuming end of file. Total number of lines processed: ' + str(i) + '. Total lines in file:' + str(linesN) + '\n'
             break
         
-        if pipeCnt > 1:
+        if pipeCnt > 0:
             badRecs.append(elt)
             continue
             
-        (dname,recCnt) = elt.split(u'|')
+        dname = elt.strip()
         originalStringsD[dname.upper()] = 1
 
 
@@ -121,7 +128,7 @@ def main(argv):
     sortedMatches = list(set(matches))
     sortedMatches.sort()
 
-    outString += '\n\n\nNOTE: these drug strings could not be processed because they contain more than one pipe symbol. These will need to be corrected BOTH in the database and in   the input file:\n' + "\n".join(badRecs) + '\n'
+    outString += '\n\n\nNOTE: these drug strings could not be processed because they contain one or more pipe symbols. These will need to be corrected BOTH in the database and in   the input file:\n' + "\n".join(badRecs) + '\n'
     
     outString += '\n\n\nMATCH RESULTS:\n' + '\n'.join(sortedMatches) + '\n'
 
