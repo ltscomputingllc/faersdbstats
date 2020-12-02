@@ -39,6 +39,33 @@ from  stats inner join staging_vocabulary.concept c1 on stats.drug_concept_id = 
   inner join staging_vocabulary.concept c2 on stats.outcome_concept_id = c2.concept_id 
  ;
 
+with  tizs as (
+  select distinct upper(d.drugname)
+  from faers.drug d 
+  where upper(d.drugname) like '%TIZANIDINE%'
+), tizStandardMap as (
+  select distinct drug.drug_name_original, drug.standard_concept_id 
+  from faers.standard_combined_drug_mapping drug 
+  where drug.standard_concept_id is not null
+    and 
+   (upper(drug.drug_name_original) in (select * from tizs)
+      or upper(drug.drug_name_original ) in ('BIZANIDINE','CANAFLEX','DIZANIDINE','FANAFLEX','LANAFLEX','LIZANIDINE','PIZANIDINE','RIZANIDINE','SANAFLEX','SIDALUD','SIDALUD (SIRDALUD)','SIRADALUD','SIRALUD','SIRALUD 2','SIRDALUD (TIZANDINE HYDROCHLORIDE)','SIRDALUD (TYIZANIDINE HYDROCHLORIDE)','SIRDALUD /00740702/ (SIRDALUD - TIZANADINE HYDROCHLORIDE) 2MG (NOT SPE','SIRDALUD /00740702/ (SIRDALUD - TIZANDINE HYDROCHLORIDE) (NOT SPECIFIE','SIRDALUD/00740702/(SIRDALUD TIZANADINE HYDROCHLORIDE)','SIRDALUL','SIRDALUT','TANAFLEX','TAZANIDINE','TAZANIDINE 4MG 2X/DAY','TAZANIDINE HYDROCHLORIDE (TAZANIDINE HYDROCHLORIDE)','TERNALIN','TERNELIN (TERNELIN - TIZANADINE HYDROCHLORIDE)','TERNELIN (TIAZANIDINE HYDROCHLORIDE)','TERNELLIN','THIZANIDINE HCL','TIANIDINE 4 MG','TIAZANIDINE (TIAZANIDINE)','TICANIDINE','TIDANIDINE','TIDANIDINE HYDROCHLORIDE','TIIZANIDINE','TINZANIDINE','TINZANIDINE HYDROCHLORIDE','TIRANIDINE','TISANIDINE','TITANIDINE','TIVANIDINE','TIVANIDINE HCL','TIXANIDINE','TIZAMIDINE','TIZANADINE 4 MG','TIZANADINE HCL','TIZANADINE HCL (UNKNOWN)','TIZANADINE HYDROCHLORIDE','TIZANDIDINE','TIZANDINE 4MG','TIZANDINE 8MG','TIZANDINE HYDROCHLORIDE','TIZANDINE HYDROCHLORIDE (TIZANDINE HYDROCHLORIDE)','TIZANEDINE','TIZANICINE','TIZANIDANE','TIZANIDENE','TIZANIDIE','TIZANIDIN ACTAVIS','TIZANIDIN EOLAPATADINE','TIZANIDIN TEVA 2MG','TIZANIDINE HYDROCHLORIDE (TIZANADINE HYDROCHLORIDE)','TIZANIDINE HYDROCHLORIDE (TIZANTIDINE HYDROCHLORIDE)','TIZANIDINEM','TIZANIDINI HYDROCLORIDUM','TIZANIDINIE','TIZANINDINE','TIZANISINE','TIZANITINE HCL','TIZANNIDINE (ZARAFLEX)','TIZANOIDINE','TIZANTIDINE','TIZATIDINE','TIZENIDINE','TIZENIDINE (UNKNOWN)','TIZIANIDINE','TIZIANIDINE HCL','TIZINIDINE','TIZNIDINE','TIZONIDINE','TRIZANIDINE','TRIZANIDINE HCL','TYZANIDINE','TYZANIDINE MUSCLE RELAXANT','TZANIDINE','XANAFLEX','XANAFLEX 4MG UNKNOWN','XANAFLEX MUSCLE RELAXER','ZAMAFLEX','ZANAFIEX','ZANAFLAX','ZANAFLAX (NOS)','ZANAFLEX (TIZADNIDINE HYDROCHLORIDE)','ZANAFLEX (TIZANDIDINE HYDROCHLORIDE)','ZANAFLEX (TIZANIDFINE HYDROCHLORIDE) (TIZANIDINE HYDROCHLORDIE)','ZANAFLEX (TYZANIDINE HYDROCHLORIDE)','ZANAFLEZ','ZANAFLUX','ZANALLEX','ZANAPLEX','ZANASLEX','ZANEFLEX','ZANFLEX','ZANIFLEX','ZANNAFLEX','ZANOFLEX','ZANTAFLEX','ZEANAFLEX','ZENAFLEX','ZONAFLEX'))
+), meddraStandardMap as (
+ select c.concept_id, c.concept_name
+ from staging_vocabulary.concept c 
+ where c.concept_code in ('10021097','10005734','10042772','10006093','10040560','10016173','10017076','10023572','10052428','10007515','10007617','10047065','10022891','10047065','10007541','10007541','10022117','10022117','10022117','10022117','10007541','10007541')
+), contTable as ( 
+  select * 
+  from faers.standard_drug_outcome_contingency_table dos
+  where dos.drug_concept_id in (select distinct standard_concept_id from tizStandardMap)
+   and dos.outcome_concept_id in (select distinct concept_id from meddraStandardMap)
+  order by dos.drug_concept_id, dos.outcome_concept_id 
+)
+select c1.concept_name drug_name, c1.concept_code  drug_rxnorm, c2.concept_name meddra_ae_name, c2.concept_code meddra_ae_code, contTable.* 
+from  contTable inner join staging_vocabulary.concept c1 on contTable.drug_concept_id = c1.concept_id 
+  inner join staging_vocabulary.concept c2 on contTable.outcome_concept_id = c2.concept_id 
+ ;
+
 -------------------------------
 
 -- TIZANIDINE --
