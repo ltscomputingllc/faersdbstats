@@ -1,10 +1,47 @@
+-- Create a  table with the URI to the structurally diverse substances in G-SRS, the name of the substance of a child of the substance in G-SRS, 
+-- and a preferred common name. Rows are appended to this table that have the the URI to the structurally diverse substances in G-SRS, 
+-- an alternative common name (one per row), and the preferred common name. Additional rows are appended that have the the URI to the 
+-- structurally diverse substances in G-SRS, a constituent of the structurally diverse substance (one per row), and the preferred common name.
+
+-- NOTE: database needs to be g_substance_reg !!!
+select max(ltcnt.common_name), test_srs_np.* 
+from  scratch_sanya.test_srs_np inner join scratch_sanya.lb_to_common_names_tsv ltcnt on upper(test_srs_np.related_latin_binomial) = upper(ltcnt.latin_binomial)
+where related_common_name = ''
+;
+
+select *
+from (
+ select substance_uuid, name, related_latin_binomial, 
+        max(case when related_common_name = '' then ltcnt.common_name 
+             else related_common_name
+        end) related_common_name
+ from scratch_sanya.test_srs_np inner join scratch_sanya.lb_to_common_names_tsv ltcnt on upper(test_srs_np.related_latin_binomial) = upper(ltcnt.latin_binomial)
+ group by substance_uuid, name, related_latin_binomial
+ union
+ select substance_uuid, constituent_name, related_latin_binomial, 
+         max(case when related_common_name = '' then ltcnt.common_name 
+             else related_common_name
+         end) related_common_name
+ from scratch_sanya.test_srs_np_constituent tsnc inner join scratch_sanya.lb_to_common_names_tsv ltcnt on upper(tsnc.related_latin_binomial) = upper(ltcnt.latin_binomial)
+ group by substance_uuid, constituent_name, related_latin_binomial
+ union 
+ select test_srs_np.substance_uuid, upper(ltcnt.common_name) common_name, related_latin_binomial, 
+	     max(case when related_common_name = '' then ltcnt.common_name 
+             else related_common_name
+         end) related_common_name
+ from scratch_sanya.test_srs_np inner join scratch_sanya.lb_to_common_names_tsv ltcnt on upper(test_srs_np.related_latin_binomial) = upper(ltcnt.latin_binomial)
+ group by test_srs_np.substance_uuid, upper(ltcnt.common_name), related_latin_binomial
+ ) t
+ where related_common_name != '' and related_common_name is not null
+ order by substance_uuid 
+;
+
 
 --- Test of using SRS concepts to map NPs in FAERS ---
-
 select max(concept_id)
 from staging_vocabulary
 
--- 3/26/21 -- needed to add these to the Concept table b/c they did not make it from SRS 
+-- 3/26/21 -- needed to add these to the Concept table b/c they did not make it from SRS -- Not needed on 7/31/21
 /*begin;
 INSERT INTO staging_vocabulary.concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code, valid_start_date, valid_end_date, invalid_reason) 
     VALUES (-7984559, 'Green tea [Camellia sinensis]', 'NaPDI research', 'NAPDI', 'Green tea', '', 'af94397b-1888-4333-bdea-f0a868cb5a3e', '2000-01-01', '2099-02-22', '');
@@ -16,7 +53,7 @@ INSERT INTO staging_vocabulary.concept (concept_id, concept_name, domain_id, voc
     VALUES (-7984557, 'Mitragynine [Mitragyna speciosa]', 'NaPDI research', 'NAPDI', 'Kratom', '', 'c31862da-077c-4e8a-acb1-ffecc1542307', '2000-01-01', '2099-02-22', ''); 
 end;*/
 
--- how well did we get SRS concepts (besides the three we had to add) 
+-- how well did we get SRS concepts 
 select *
 from staging_vocabulary.concept c 
 where c.concept_class_id = 'Licorice'
@@ -60,33 +97,86 @@ from faers.drug_legacy d
 where d.drugname = 'BALLOTA NIGRA EXTRACT/COLA NITIDA/COLA NITIDA LEAF/CRATAEGUS LAEVIGATA EXTRACT/PASSIFLORA INCARNATA'
 ;
 
--- testing if we can map from NPs loaded into the vocabulary to drug strings in the reports
+
+
+--------------------------------------------------------------
+
+-- map from NPs loaded into the vocabulary to drug strings in the reports
 ---- the regex fixes quotes and removes bracketed and parenthetical parts
--- save this to file and then load into the table created by the SQL below
-with np_lb as ( 
+drop table if exists  scratch_rich.np_names_clean;
+drop table if exists  scratch_rich.upper_unmap_orig_drug_names;
+drop table if exists scratch_rich.faers_drug_to_np;
+
+select max(c.concept_id) as concept_id, 
+       TRIM(both from upper(regexp_replace(regexp_replace(regexp_replace(c.concept_name, '\[.*\]','','g'), '\(.*\)','','g'),'''''','''','g'))) as np_name
+into scratch_rich.np_names_clean
+ from staging_vocabulary.concept c 
+ where c.concept_id >= -7999999
+  and c.concept_id <= -7000000
+ group by np_name
+;
+CREATE INDEX np_names_clean_np_name_idx ON scratch_rich.np_names_clean (np_name);
+CREATE INDEX np_names_clean_concept_id_idx ON scratch_rich.np_names_clean (concept_id);
+
+ select distinct TRIM(both from UPPER(c.drug_name_original)) drug_name_original
+ into scratch_rich.upper_unmap_orig_drug_names
+ from faers.combined_drug_mapping c
+ where c.concept_id is null
+ ;
+CREATE INDEX upper_unmap_orig_drug_names_drug_name_original_idx ON scratch_rich.upper_unmap_orig_drug_names (drug_name_original);
+
+select cdm.drug_name_original, np_lb.concept_id, np_lb.np_name
+into scratch_rich.faers_drug_to_np
+from scratch_rich.upper_unmap_orig_drug_names cdm inner join scratch_rich.np_names_clean np_lb on 
+  cdm.drug_name_original like '%' || np_lb.np_name || '%'
+;
+CREATE INDEX faers_drug_to_np_drug_name_original_idx ON scratch_rich.faers_drug_to_np (drug_name_original);
+CREATE INDEX faers_drug_to_np_np_name_idx ON scratch_rich.faers_drug_to_np (np_name);
+
+
+-- older approach - too slow!
+-- drop table if exists scratch_rich.faers_drug_to_np;
+--with np_lb as ( 
+--select max(c.concept_id) as concept_id, 
+--       regexp_replace(regexp_replace(regexp_replace(c.concept_name, '\[.*\]','','g'), '\(.*\)','','g'),'''''','''','g') as np_name
+-- from staging_vocabulary.concept c 
+-- where c.concept_id >= -7999999
+--  and c.concept_id <= -7000000
+-- group by np_name
+--), cdm as ( 
+-- select distinct UPPER(c.drug_name_original) drug_name_original
+-- from faers.combined_drug_mapping c
+-- where c.concept_id is null
+--) 
+--select cdm.drug_name_original, np_lb.concept_id, np_lb.np_name
+--into scratch_rich.faers_drug_to_np
+--from cdm cross join np_lb
+--where 
+--  cdm.drug_name_original similar to concat('%', upper(np_lb.np_name), '%')
+--  or 
+--  cdm.drug_name_original = upper(np_lb.np_name)
+--;
+--CREATE INDEX faers_drug_to_np_drug_name_original_idx ON scratch_rich.faers_drug_to_np (drug_name_original);
+--CREATE INDEX faers_drug_to_np_np_name_idx ON scratch_rich.faers_drug_to_np (np_name);
+
+
+-- Test query showing that we have  the common nome, L.B., and NP constituents
 select max(c.concept_id) as concept_id, 
        regexp_replace(regexp_replace(regexp_replace(c.concept_name, '\[.*\]','','g'), '\(.*\)','','g'),'''''','''','g') as np_name
  from staging_vocabulary.concept c 
  where c.concept_id >= -7999999
   and c.concept_id <= -7000000
+  and (concept_name like '%MITRAG%'
+       or concept_name like '%KRAT%')
  group by np_name
-), cdm as ( 
- select distinct UPPER(c.drug_name_original) drug_name_original
- from faers.combined_drug_mapping c
- where c.concept_id is null
-) 
-select cdm.drug_name_original, np_lb.concept_id, np_lb.np_name
-from cdm cross join np_lb
-where 
-  cdm.drug_name_original similar to concat('%', upper(np_lb.np_name), '%')
-;
-
-create table scratch_rich.faers_drug_to_np( 
-   drug_name_original varchar(500) not null,
-   concept_id int8 not null,
-   np_name varchar(255) not null
-);
-CREATE INDEX faers_drug_to_np_drug_name_original_idx ON scratch_rich.faers_drug_to_np (drug_name_original);
+ ;
+/*-7993824	"7-HYDROXYMITRAGYNINE" 
+-7994038	KRATOM 
+-7994037	KRATUM 
+-7994035	MITRAGYNA SPECIOSA 
+-7994036	MITRAGYNA SPECIOSA  HAVIL. 
+-7994034	MITRAGYNA SPECIOSA WHOLE 
+-7993823	MITRAGYNINE */
 
 -- Now, we can create the equivalent to standard_case_drug for NPs
 -- NOTE: because this seems to map to multiple SRS names, we could be mapping to the incorrect species 
@@ -94,10 +184,216 @@ CREATE INDEX faers_drug_to_np_drug_name_original_idx ON scratch_rich.faers_drug_
 drop table if exists scratch_rich.standard_case_np;
 select primaryid, isr, drug_seq, role_cod, max(ftonp.concept_id) as standard_concept_id
 into scratch_rich.standard_case_np
-from faers.combined_drug_mapping cdm inner join scratch_rich.faers_drug_to_np ftonp on upper(cdm.drug_name_original) = ftonp.drug_name_original 
+from faers.combined_drug_mapping cdm inner join scratch_rich.faers_drug_to_np ftonp on 
+            cdm.drug_name_original = ftonp.drug_name_original or cdm.drug_name_original = ftonp.np_name 
+--          (upper(TRIM(BOTH from cdm.drug_name_original)) = upper(TRIM(BOTH from ftonp.drug_name_original)) 
+--           or 
+--           upper(TRIM(BOTH from cdm.drug_name_original)) = upper(TRIM(BOTH from ftonp.np_name))
+--          )
 group by primaryid, isr, drug_seq, role_cod
 ;
+CREATE INDEX faers_standard_case_np_concept_id_idx ON scratch_rich.standard_case_np (standard_concept_id);
+CREATE INDEX faers_standard_case_np_primaryid_idx ON scratch_rich.standard_case_np (primaryid);
 
+
+-- Test query to return all reports with any mention of Kratom by common name, L.B., or consitituent
+-- This query uses the concept_class that all of the above should be mapped to
+select *
+from scratch_rich.standard_case_np scn inner join staging_vocabulary.concept c on scn.standard_concept_id = c.concept_id 
+where c.concept_class_id = 'Kratom'
+;
+
+--  427 from FAERS and 10 from LAERS
+select count(distinct primaryid)
+--select count(distinct isr)
+from scratch_rich.standard_case_np scn inner join staging_vocabulary.concept c on scn.standard_concept_id = c.concept_id 
+where c.concept_class_id = 'Kratom'
+  and primaryid is not null
+ -- and isr is not null
+;
+
+select *
+from scratch_rich.standard_case_np scn inner join staging_vocabulary.concept c on scn.standard_concept_id = c.concept_id 
+ inner join faers.drug d on d.primaryid = scn.primaryid 
+where c.concept_class_id = 'Kratom'
+ and scn.primaryid is not null
+order by scn.primaryid, scn.drug_seq::integer 
+;
+
+-- 330 from FAERS and 10 from LAERS
+-- select count(distinct primaryid)
+select count(distinct isr)
+from scratch_rich.standard_case_np scn inner join staging_vocabulary.concept c on scn.standard_concept_id = c.concept_id 
+where c.concept_class_id = 'Hemp extract'
+ -- and primaryid is not null
+and isr is not null
+;
+
+select *
+from scratch_rich.standard_case_np scn inner join staging_vocabulary.concept c on scn.standard_concept_id = c.concept_id 
+ inner join faers.drug d on d.primaryid = scn.primaryid 
+where c.concept_class_id = 'Hemp extract'
+ and scn.primaryid is not null
+ and d.drugname like '%MARIJ%'
+order by scn.primaryid, scn.drug_seq::integer 
+;
+
+
+-- 10 from LAERS
+select count(distinct isr)
+from scratch_rich.standard_case_np scn inner join staging_vocabulary.concept c on scn.standard_concept_id = c.concept_id 
+where c.concept_class_id = 'Kratom'
+ and isr is not null
+;
+
+
+select *
+from scratch_rich.standard_case_np scn inner join staging_vocabulary.concept c on scn.standard_concept_id = c.concept_id 
+ inner join faers.drug_legacy d on d.isr = scn.isr  
+where c.concept_class_id = 'Kratom'
+ and d.isr is not null
+order by scn.primaryid, scn.drug_seq::integer 
+;
+
+
+-- 15 for FAERS and 4 for LAERS
+-- select count(distinct isr)
+select count(distinct primaryid)
+from scratch_rich.standard_case_np scn inner join staging_vocabulary.concept c on scn.standard_concept_id = c.concept_id 
+where c.concept_class_id = 'Goldenseal'
+ and primaryid is not null
+--and isr is not null
+;
+
+
+--------
+select * 
+from scratch_rich.standard_np_outcome_contingency_table snoct 
+where snoct.drug_concept_id in (-7993824,-7994038,-7994037,-7994035,-7994036,-7994034,-7993823)
+and outcome_concept_id = 35104161
+;
+/*
+ * -7994038	35104161	6	982	303	690997
+ * -7994035	35104161	1	110	308	691869
+ */
+-- Compare to 
+select * 
+from scratch_rich.standard_np_class_outcome_contingency_table snoct 
+where snoct.np_class_id = 'Kratom'
+and outcome_concept_id = 35104161
+;
+-- Kratom	35104161	7	1454	302	690525 
+
+------------------------
+select c1.concept_name np, c2.concept_name outcome, snos.* 
+from scratch_rich.standard_np_outcome_statistics snos 
+   inner join staging_vocabulary.concept c1 on snos.drug_concept_id = c1.concept_id 
+   inner join staging_vocabulary.concept c2 on snos.outcome_concept_id = c2.concept_id 
+where snos.drug_concept_id in (-7993824,-7994038,-7994037,-7994035,-7994036,-7994034,-7993823)
+ and ror_95_percent_lower_confidence_limit >= 2.0 
+ and case_count >= 10
+order by snos.case_count desc
+;
+
+/*
+ KRATOM [Mitragyna speciosa]	Death	-7994038	35809059		83	24.04754	29.65852	19.49807	26.16129	32.87100	20.82118
+MITRAGYNINE [Mitragyna speciosa]	Toxicity to various agents	-7993823	42889647		71	94.64300	117.27809	76.37657	117.89004	153.65048	90.45245
+KRATOM [Mitragyna speciosa]	Toxicity to various agents	-7994038	42889647		54	25.68566	33.45631	19.71984	27.11288	35.83993	20.51088
+MITRAGYNINE [Mitragyna speciosa]	Drug interaction	-7993823	35809310		28	13.34377	19.06683	9.33853	14.39430	21.19800	9.77431
+KRATOM [Mitragyna speciosa]	Accidental death	-7994038	35809056		27	497.15267	810.99879	304.76097	511.09245	840.43773	310.80886
+KRATOM [Mitragyna speciosa]	Drug dependence	-7994038	36919128		19	22.01032	34.60162	14.00091	22.42228	35.55404	14.14069
+MITRAGYNINE [Mitragyna speciosa]	Unresponsive to stimuli	-7993823	36718371		19	99.26000	155.54570	63.34182	104.78349	168.18982	65.28088
+KRATOM [Mitragyna speciosa]	Seizure	-7994038	36776613		15	17.84940	29.68497	10.73274	18.10915	30.34842	10.80588
+MITRAGYNINE [Mitragyna speciosa]	Pulmonary oedema	-7993823	35205259		14	39.26852	65.97405	23.37308	40.83050	70.03720	23.80349
+MITRAGYNA SPECIOSA [WHO-DD] [Mitragyna speciosa]	Drug abuse	-7994035	36919127		14	99.77326	163.53741	60.87111	114.02920	200.48191	64.85701
+MITRAGYNINE [Mitragyna speciosa]	Drug abuse	-7993823	36919127		14	31.01091	52.04192	18.47889	32.23585	55.23473	18.81334
+KRATOM [Mitragyna speciosa]	Drug withdrawal syndrome	-7994038	35809369		13	15.54881	26.84402	9.00630	15.74279	27.37345	9.05386
+MITRAGYNINE [Mitragyna speciosa]	Pulmonary congestion	-7993823	35205258		10	74.54546	138.99547	39.97991	76.66493	145.44035	40.41184
+ */
+
+
+select snos.np_class_id, c1.concept_name outcome, snos.* 
+from scratch_rich.standard_np_class_outcome_statistics snos 
+   inner join staging_vocabulary.concept c1 on snos.outcome_concept_id = c1.concept_id 
+where snos.np_class_id = 'Kratom'
+ and ror_95_percent_lower_confidence_limit >= 2.0 
+ and case_count >= 10
+order by snos.case_count desc
+;
+
+/*
+Kratom	Toxicity to various agents	Kratom	42889647	134	45.55088	53.97506	38.44151	50.04961	60.23785	41.58455
+Kratom	Death	Kratom	35809059	95	18.69343	22.79794	15.32788	19.92394	24.62373	16.12117
+Kratom	Drug interaction	Kratom	35809310	38	4.42892	6.07052	3.23124	4.52048	6.24803	3.27060
+Kratom	Drug abuse	Kratom	36919127	34	18.80321	26.38821	13.39843	19.22739	27.19421	13.59453
+Kratom	Accidental death	Kratom	35809056	34	518.60454	841.47987	319.61628	530.93709	866.22242	325.42934
+Kratom	Unresponsive to stimuli	Kratom	36718371	24	31.00625	46.71096	20.58163	31.50740	47.77228	20.78017
+Kratom	Drug dependence	Kratom	36919128	24	18.94539	28.39856	12.63894	19.24510	29.03628	12.75556
+Kratom	Seizure	Kratom	36776613	21	17.06143	26.28868	11.07292	17.29566	26.81255	11.15671
+Kratom	Pulmonary oedema	Kratom	35205259	17	11.68368	18.85266	7.24080	11.80946	19.16086	7.27855
+Kratom	Drug withdrawal syndrome	Kratom	35809369	14	11.33533	19.21146	6.68818	11.43533	19.47798	6.71357
+Kratom	Cardiac arrest	Kratom	35204966	13	4.87856	8.40509	2.83166	4.91338	8.50619	2.83809
+Kratom	Cardio-respiratory arrest	Kratom	35204970	12	8.90760	15.73207	5.04354	8.97309	15.92132	5.05714
+Kratom	Pulmonary congestion	Kratom	35205258	11	20.08223	36.63592	11.00822	20.22700	37.06212	11.03907
+Kratom	Accidental overdose	Kratom	36211491	10	13.24497	24.77772	7.08012	13.32936	25.04072	7.09531
+Kratom	Withdrawal syndrome	Kratom	35809377	10	15.10688	28.29496	8.06567	15.20410	28.59690	8.08356
+ */
+
+
+select snos.np_class_id, c1.concept_name outcome, snos.* 
+from scratch_rich.standard_np_class_outcome_statistics snos 
+   inner join staging_vocabulary.concept c1 on snos.outcome_concept_id = c1.concept_id 
+where snos.np_class_id like '%thistle%'
+ and ror_95_percent_lower_confidence_limit >= 2.0 
+ and case_count >= 10
+order by snos.case_count desc
+;
+
+-- select count(distinct isr)
+-- select count(distinct primaryid)
+select distinct c.concept_name, c.concept_class_id 
+from scratch_rich.standard_case_np scn inner join staging_vocabulary.concept c on scn.standard_concept_id = c.concept_id 
+where c.concept_class_id like '%thistle%'
+ and primaryid is not null
+--and isr is not null
+;
+
+
+
+ select snos.np_class_id, c1.concept_name outcome, snos.* 
+ from scratch_rich.standard_np_class_outcome_statistics snos 
+   inner join staging_vocabulary.concept c1 on snos.outcome_concept_id = c1.concept_id 
+ where ror_95_percent_lower_confidence_limit >= 2.0 
+ and case_count >= 10
+ order by snos.ror desc
+;
+
+select distinct t.np_class_id from (
+ select snos.* 
+ from scratch_rich.standard_np_class_outcome_statistics snos 
+   inner join staging_vocabulary.concept c1 on snos.outcome_concept_id = c1.concept_id 
+ where ror_95_percent_lower_confidence_limit >= 2.0 
+ and case_count >= 10
+ order by snos.ror desc
+) t
+;
+
+select distinct t.concept_name from (
+ select c1.concept_name, snos.* 
+ from scratch_rich.standard_np_class_outcome_statistics snos 
+   inner join staging_vocabulary.concept c1 on snos.outcome_concept_id = c1.concept_id 
+ where ror_95_percent_lower_confidence_limit >= 2.0 
+ and case_count >= 10
+ order by snos.ror desc
+) t
+;
+
+select *
+from scratch_rich.standard_np_outcome_drilldown snod 
+where snod.np_class_id = 'Kratom'
+;
+
+----------------------------------------------------------------------------------
 select *
 from scratch_rich.standard_case_np inner join staging_vocabulary.concept c on standard_case_np.standard_concept_id = c.concept_id 
 order by primaryid, isr, drug_seq

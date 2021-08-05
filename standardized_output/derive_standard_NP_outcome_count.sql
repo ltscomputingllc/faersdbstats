@@ -23,3 +23,14 @@ from (
 	on a.isr = b.isr and a.isr is not null and b.isr is not null
 ) aa
 group by drug_concept_id, outcome_concept_id;
+
+
+-- Now roll up the counts to the preferred term for the NP using teh concept_class_id column of the concept table
+drop table if exists scratch_rich.standard_np_class_outcome_sum;
+create table scratch_rich.standard_np_class_outcome_sum as 
+select c.concept_class_id np_class_id, outcome_concept_id, sum(snoc.drug_outcome_pair_count) as np_class_outcome_pair_sum
+from scratch_rich.standard_np_outcome_count snoc inner join staging_vocabulary.concept c on snoc.drug_concept_id = c.concept_id 
+group by c.concept_class_id, outcome_concept_id
+;
+  
+

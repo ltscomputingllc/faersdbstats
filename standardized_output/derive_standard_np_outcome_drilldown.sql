@@ -1,6 +1,7 @@
 ------------------------------
 --
 -- Create standard_np_outcome_drilldown table for use in joins to get all cases for a natural product (NP)/outcome pair count
+-- Also, rolls up to the NP preferred term
 --
 -- LTS COMPUTING LLC
 ------------------------------
@@ -34,27 +35,27 @@ create index standard_np_outcome_count_ix_2 on standard_np_outcome_count(outcome
 drop table if exists standard_np_outcome_drilldown;
 create table standard_np_outcome_drilldown as
 select 
+concept.concept_class_id np_class_id,
 a.drug_concept_id, 
 a.outcome_concept_id, 
 a.snomed_outcome_concept_id, 
 b.primaryid, null as isr, null as caseid
 from standard_np_outcome_count a
-inner join standard_case_np b
-on a.drug_concept_id = b.standard_concept_id
-inner join faers.standard_case_outcome c
-on a.outcome_concept_id = c.outcome_concept_id
+inner join standard_case_np b on a.drug_concept_id = b.standard_concept_id
+inner join staging_vocabulary.concept on concept.concept_id = a.drug_concept_id
+inner join faers.standard_case_outcome c on a.outcome_concept_id = c.outcome_concept_id
 and b.primaryid = c.primaryid
 union
 select
+concept.concept_class_id np_class_id,
 a.drug_concept_id,  
 a.outcome_concept_id, 
 a.snomed_outcome_concept_id,  
 null as primary_id, b.isr, null as caseid
 from standard_np_outcome_count a
-inner join standard_case_np b
-on a.drug_concept_id = b.standard_concept_id
-inner join faers.standard_case_outcome c
-on a.outcome_concept_id = c.outcome_concept_id
+inner join standard_case_np b on a.drug_concept_id = b.standard_concept_id
+inner join staging_vocabulary.concept on concept.concept_id = a.drug_concept_id
+inner join faers.standard_case_outcome c on a.outcome_concept_id = c.outcome_concept_id
 and b.isr = c.isr;
 
 -- populate the caseids that have a primaryid
