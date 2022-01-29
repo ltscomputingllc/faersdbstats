@@ -1,0 +1,2 @@
+CREATE SCHEMA IF NOT EXISTS faers;
+CREATE SCHEMA IF NOT EXISTS staging_vocabulary;
