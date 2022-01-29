@@ -28,7 +28,8 @@ truncate nda;
 
 create index ingredient_ix on nda(appl_no, ingredient);
 
-\COPY nda FROM 'products.txt' WITH DELIMITER E'~' CSV HEADER QUOTE E'\b' ;
+/* integrated into Pentaho LoadOrangeBook transformation */
+/*\COPY nda FROM 'products.txt' WITH DELIMITER E'~' CSV HEADER QUOTE E'\b' ;*/
 
 alter table nda add column drug_form varchar;
 alter table nda add column route varchar;
