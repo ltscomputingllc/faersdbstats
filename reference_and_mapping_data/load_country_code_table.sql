@@ -19,7 +19,10 @@ country_code varchar
 truncate country_code;
 
 -- data pulled from curl -L https://datahub.io/core/country-list/r/0.csv > ISO_3166-1_country_codes.csv
-COPY country_code FROM 'ISO_3166-1_country_codes.csv' WITH DELIMITER E',' CSV HEADER QUOTE E'"';
+/* moved ISO_3166-1_country_codes.csvcreate into /data */
+/* integrated into Pentaho LoadOrangeBook transformation */
+
+/*COPY country_code FROM 'ISO_3166-1_country_codes.csv' WITH DELIMITER E',' CSV HEADER QUOTE E'"';*/
 
 --# Insert non-standard country names to country code mappings based on analysis of the reporter_country field in the legacy and current data
 insert into country_code values('ALAND ISLANDS', 'AX');
