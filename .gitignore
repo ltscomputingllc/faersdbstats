@@ -1,2 +1,4 @@
-/config/pentaho.config
-/config/aws.config
+config/pentaho.config
+config/aws.config
+config/pentaho.config
+config.config
