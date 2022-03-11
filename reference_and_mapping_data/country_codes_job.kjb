@@ -470,14 +470,14 @@
       <attributes_kjc />
     </entry>
     <entry>
-      <name>Create country_code table (load_country_code_table.sql)</name>
+      <name>Create country_code table (create_country_code_table.sql)</name>
       <description />
       <type>SQL</type>
       <attributes />
       <sql />
       <useVariableSubstitution>F</useVariableSubstitution>
       <sqlfromfile>T</sqlfromfile>
-      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/load_country_code_table.sql</sqlfilename>
+      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/create_country_code_table.sql</sqlfilename>
       <sendOneStatement>F</sendOneStatement>
       <connection>cem_sandbox</connection>
       <parallel>N</parallel>
@@ -591,7 +591,7 @@ aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/ISO_31
     </hop>
     <hop>
       <from>Set Config Variables</from>
-      <to>Create country_code table (load_country_code_table.sql)</to>
+      <to>Create country_code table (create_country_code_table.sql)</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -608,7 +608,7 @@ aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/ISO_31
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Create country_code table (load_country_code_table.sql)</from>
+      <from>Create country_code table (create_country_code_table.sql)</from>
       <to>Country_Code_Data_File_Upload_To_S3</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -639,8 +639,8 @@ Copy the download link into the pentaho.config
 
 
 </note>
-      <xloc>768</xloc>
-      <yloc>112</yloc>
+      <xloc>448</xloc>
+      <yloc>64</yloc>
       <width>645</width>
       <heigth>197</heigth>
       <fontname>Ubuntu</fontname>
