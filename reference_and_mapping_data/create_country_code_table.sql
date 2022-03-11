@@ -8,7 +8,7 @@
 --# LTS Computing LLC
 --######################################################
 
-set search_path = faers;
+-- set search_path = faers;
 
 drop table if exists country_code;
 create table country_code
