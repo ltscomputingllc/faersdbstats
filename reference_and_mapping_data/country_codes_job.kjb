@@ -565,7 +565,7 @@
 #aws s3api put-object --bucket ${AWS_S3_BUCKET_NAME} --key orange-book-download-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup
 
 
-aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/ISO_3166-1_country_codes.csv s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER}/ISO_3166-1_country_codes.csv
+aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/ISO_3166-1_country_codes.csv s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup/ISO_3166-1_country_codes.csv
 
 
 

@@ -663,10 +663,10 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <aws_access_key>Encrypted 414b4943e9c0e09029fda0b2992c9d49fcaaf9ec</aws_access_key>
-    <aws_secret_key>Encrypted 715a5365744e6252682b564f78525a664e31784d6847665bfdaafcb924d6958c833ff65fdba7ac83</aws_secret_key>
-    <bucket>napdi-cem-sandbox-files</bucket>
-    <filename>data/ISO_3166-1_country_codes.csv</filename>
+    <aws_access_key>${AWS_S3_ACCESS_KEY}</aws_access_key>
+    <aws_secret_key>${AWS_S3_SECRET_KEY}</aws_secret_key>
+    <bucket>${AWS_S3_BUCKET_NAME}</bucket>
+    <filename>${CEM_DOWNLOAD_DATA_FOLDER}_setup/ISO_3166-1_country_codes.csv</filename>
     <filename_field />
     <rownum_field />
     <include_filename>N</include_filename>
