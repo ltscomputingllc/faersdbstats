@@ -582,11 +582,11 @@
       <script>#!/bin/bash 
 
 #create folder
-#aws s3api put-object --bucket ${AWS_S3_BUCKET_NAME} --key orange-book-download-files/${CEM_DOWNLOAD_DATA_FOLDER}
+#aws s3api put-object --bucket ${AWS_S3_BUCKET_NAME} --key orange-book-download-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup
 
 
 #aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/EU_registered_drugs_by_active_ingredient_utf8.txt s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER} --recursive
-aws s3 cp /home/brb265/faers/faersdbstats/data/EU_registered_drugs_by_active_ingredient_utf8.txt s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER}/EU_registered_drugs_by_active_ingredient_utf8.txt
+aws s3 cp /home/brb265/faers/faersdbstats/data/EU_registered_drugs_by_active_ingredient_utf8.txt s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup/EU_registered_drugs_by_active_ingredient_utf8.txt
                         #/home/brb265/faers/faersdbstats/reference_and_mapping_data/EU_registered_drugs_by_active_ingredient_utf8.txt
 </script>
       <loglevel>Rowlevel</loglevel>
