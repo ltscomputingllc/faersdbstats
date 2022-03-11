@@ -500,10 +500,10 @@ unzip $downloadlocation/$filename -d "orange-book-data-files"</script>
       <script>#!/bin/bash 
 
 #create folder
-#aws s3api put-object --bucket ${AWS_S3_BUCKET_NAME} --key orange-book-download-files/${CEM_DOWNLOAD_DATA_FOLDER}
+#aws s3api put-object --bucket ${AWS_S3_BUCKET_NAME} --key orange-book-download-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup
 
 
-aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}/orange-book-data-files/ s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER} --recursive
+aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange-book-data-files/ s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup --recursive
 
 
 

@@ -18,8 +18,8 @@ rm -rf ${BASE_FILE_DIR}/data
 
 echo CEM_ORANGE_BOOK_DOWNLOAD_URL is $CEM_ORANGE_BOOK_DOWNLOAD_URL
 
-mkdir data
-cd data
+mkdir data_setup
+cd data_setup
 
 echo pwd is
 pwd
@@ -50,7 +50,7 @@ else
 
     zipinfo $filename
 
-    cd ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER} 
+    cd ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup
 
     echo changed directories to
     pwd
@@ -66,7 +66,7 @@ else
     #unzip $filename -d "orange-book-data-files"/${CEM_DOWNLOAD_YEAR}/${CEM_DOWNLOAD_MONTH}
     unzip ${BASE_FILE_DIR}/data/$filename -d "orange-book-data-files"
 
-    echo in ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}/orange-book-data-files line counts are as follows
+    echo in ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange-book-data-files line counts are as follows
     wc -l orange-book-data-files/exclusivity.txt
     wc -l orange-book-data-files/patent.txt #do we use this? 
     wc -l orange-book-data-files/products.txt 
