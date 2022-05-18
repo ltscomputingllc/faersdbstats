@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
   <name>orange_book_job</name>
-  <description />
-  <extended_description />
-  <job_version />
+  <description/>
+  <extended_description/>
+  <job_version/>
   <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
@@ -11,7 +11,32 @@
   <modified_user>-</modified_user>
   <modified_date>2022/01/17 17:39:02.118</modified_date>
   <parameters>
-    </parameters>
+    <parameter>
+      <name>AWS_DEFAULT_REGION</name>
+      <default_value>${AWS_DEFAULT_REGION}</default_value>
+      <description/>
+    </parameter>
+    <parameter>
+      <name>AWS_S3_ACCESS_KEY</name>
+      <default_value>${AWS_S3_ACCESS_KEY}</default_value>
+      <description/>
+    </parameter>
+    <parameter>
+      <name>AWS_S3_BUCKET_NAME</name>
+      <default_value>${AWS_DEFAULT_REGION}</default_value>
+      <description/>
+    </parameter>
+    <parameter>
+      <name>AWS_S3_SECRET_KEY</name>
+      <default_value>${AWS_S3_SECRET_KEY}</default_value>
+      <description/>
+    </parameter>
+    <parameter>
+      <name>FAERSDBSTATS_REPO_LOCATION</name>
+      <default_value>/home/pentaho-secondary/projects-brb265/faers/faersdbstats</default_value>
+      <description/>
+    </parameter>
+  </parameters>
   <connection>
     <name>cem_sandbox_log</name>
     <server>napdi-pv-faers.cvafeuxzoav4.us-west-2.rds.amazonaws.com</server>
@@ -21,9 +46,9 @@
     <port>5432</port>
     <username>brb265</username>
     <password>Encrypted 2be98afc86aa7f2e4bf298747f7bc9dcd</password>
-    <servername />
-    <data_tablespace />
-    <index_tablespace />
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
     <attributes>
       <attribute>
         <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
@@ -336,18 +361,18 @@
     </field>
   </channel-log-table>
   <pass_batchid>N</pass_batchid>
-  <shared_objects_file />
+  <shared_objects_file/>
   <entries>
     <entry>
       <name>Unzip file</name>
-      <description />
+      <description/>
       <type>UNZIP</type>
-      <attributes />
-      <zipfilename />
-      <wildcard />
-      <wildcardexclude />
-      <targetdirectory />
-      <movetodirectory />
+      <attributes/>
+      <zipfilename/>
+      <wildcard/>
+      <wildcardexclude/>
+      <targetdirectory/>
+      <movetodirectory/>
       <afterunzip>0</afterunzip>
       <addfiletoresult>N</addfiletoresult>
       <isfromprevious>N</isfromprevious>
@@ -355,11 +380,11 @@
       <addtime>N</addtime>
       <addOriginalTimestamp>N</addOriginalTimestamp>
       <SpecifyFormat>N</SpecifyFormat>
-      <date_time_format />
+      <date_time_format/>
       <rootzip>N</rootzip>
       <createfolder>N</createfolder>
       <nr_limit>10</nr_limit>
-      <wildcardSource />
+      <wildcardSource/>
       <success_condition>success_if_no_errors</success_condition>
       <iffileexists>SKIP</iffileexists>
       <create_move_to_directory>N</create_move_to_directory>
@@ -369,42 +394,42 @@
       <nr>0</nr>
       <xloc>208</xloc>
       <yloc>112</yloc>
-      <attributes_kjc />
+      <attributes_kjc/>
     </entry>
     <entry>
       <name>Upload files to FTPS</name>
-      <description />
+      <description/>
       <type>FTPS_PUT</type>
-      <attributes />
-      <servername />
+      <attributes/>
+      <servername/>
       <serverport>21</serverport>
-      <username />
+      <username/>
       <password>Encrypted </password>
-      <remoteDirectory />
-      <localDirectory />
-      <wildcard />
+      <remoteDirectory/>
+      <localDirectory/>
+      <wildcard/>
       <binary>N</binary>
       <timeout>0</timeout>
       <remove>N</remove>
       <only_new>N</only_new>
       <active>N</active>
-      <proxy_host />
-      <proxy_port />
-      <proxy_username />
-      <proxy_password />
+      <proxy_host/>
+      <proxy_port/>
+      <proxy_username/>
+      <proxy_password/>
       <connection_type>FTP_CONNECTION</connection_type>
       <parallel>N</parallel>
       <draw>N</draw>
       <nr>0</nr>
       <xloc>112</xloc>
       <yloc>48</yloc>
-      <attributes_kjc />
+      <attributes_kjc/>
     </entry>
     <entry>
       <name>Start</name>
-      <description />
+      <description/>
       <type>SPECIAL</type>
-      <attributes />
+      <attributes/>
       <start>Y</start>
       <dummy>N</dummy>
       <repeat>N</repeat>
@@ -420,15 +445,15 @@
       <nr>0</nr>
       <xloc>128</xloc>
       <yloc>32</yloc>
-      <attributes_kjc />
+      <attributes_kjc/>
     </entry>
     <entry>
       <name>orange_download.sh</name>
-      <description />
+      <description/>
       <type>SHELL</type>
-      <attributes />
+      <attributes/>
       <filename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/orange_download.sh</filename>
-      <work_directory />
+      <work_directory/>
       <arg_from_previous>N</arg_from_previous>
       <exec_per_row>N</exec_per_row>
       <set_logfile>Y</set_logfile>
@@ -479,21 +504,21 @@ unzip $downloadlocation/$filename -d "orange-book-data-files"</script>
       <nr>0</nr>
       <xloc>128</xloc>
       <yloc>144</yloc>
-      <attributes_kjc />
+      <attributes_kjc/>
     </entry>
     <entry>
       <name>Orange_Data_Files_Upload_To_S3</name>
-      <description />
+      <description/>
       <type>SHELL</type>
-      <attributes />
-      <filename />
-      <work_directory />
+      <attributes/>
+      <filename/>
+      <work_directory/>
       <arg_from_previous>N</arg_from_previous>
       <exec_per_row>N</exec_per_row>
       <set_logfile>N</set_logfile>
-      <logfile />
+      <logfile/>
       <set_append_logfile>N</set_append_logfile>
-      <logext />
+      <logext/>
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
@@ -502,8 +527,18 @@ unzip $downloadlocation/$filename -d "orange-book-data-files"</script>
 #create folder
 #aws s3api put-object --bucket ${AWS_S3_BUCKET_NAME} --key orange-book-download-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup
 
+export "AWS_ACCESS_KEY_ID=${AWS_S3_ACCESS_KEY}"
+#echo "AWS_S3_ACCESS_KEY = ${AWS_S3_ACCESS_KEY}"
 
-aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange-book-data-files/ s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup --recursive
+export "AWS_SECRET_ACCESS_KEY=${AWS_S3_SECRET_KEY}"
+#echo "AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}"
+
+export "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}"
+
+aws configure list
+
+#echo "aws s3 cp ${BASE_FILE_DIR}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange-book-data-files/ s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup --recursive"
+aws s3 cp ${BASE_FILE_DIR}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange-book-data-files/ s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup --recursive
 
 
 
@@ -514,17 +549,17 @@ aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange
       <nr>0</nr>
       <xloc>128</xloc>
       <yloc>272</yloc>
-      <attributes_kjc />
+      <attributes_kjc/>
     </entry>
     <entry>
       <name>orange_book_transform</name>
-      <description />
+      <description/>
       <type>TRANS</type>
-      <attributes />
+      <attributes/>
       <specification_method>filename</specification_method>
-      <trans_object_id />
+      <trans_object_id/>
       <filename>${Internal.Entry.Current.Directory}/orange_book_transform.ktr</filename>
-      <transname />
+      <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
       <exec_per_row>N</exec_per_row>
@@ -537,13 +572,14 @@ aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange
       <add_time>Y</add_time>
       <loglevel>Rowlevel</loglevel>
       <cluster>N</cluster>
-      <slave_server_name />
+      <slave_server_name/>
       <set_append_logfile>Y</set_append_logfile>
       <wait_until_finished>Y</wait_until_finished>
       <follow_abort_remote>N</follow_abort_remote>
       <create_parent_folder>Y</create_parent_folder>
       <logging_remote_work>N</logging_remote_work>
       <run_configuration>Pentaho local</run_configuration>
+      <suppress_result_data>N</suppress_result_data>
       <parameters>
         <pass_all_parameters>Y</pass_all_parameters>
       </parameters>
@@ -552,13 +588,13 @@ aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange
       <nr>0</nr>
       <xloc>128</xloc>
       <yloc>384</yloc>
-      <attributes_kjc />
+      <attributes_kjc/>
     </entry>
     <entry>
       <name>Set job variables</name>
-      <description />
+      <description/>
       <type>SET_VARIABLES</type>
-      <attributes />
+      <attributes/>
       <replacevars>Y</replacevars>
       <filename>${Internal.Entry.Current.Directory}/../faers.config</filename>
       <file_variable_type>JVM</file_variable_type>
@@ -573,63 +609,118 @@ aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange
           <variable_value>${FAERSDBSTATS_REPO_LOCATION}</variable_value>
           <variable_type>JVM</variable_type>
         </field>
+        <field>
+          <variable_name>AWS_S3_BUCKET_NAME</variable_name>
+          <variable_value>${AWS_S3_BUCKET_NAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>AWS_S3_ACCESS_KEY</variable_name>
+          <variable_value>${AWS_S3_ACCESS_KEY}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>AWS_S3_SECRET_KEY</variable_name>
+          <variable_value>${AWS_S3_SECRET_KEY}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>AWS_DEFAULT_REGION</variable_name>
+          <variable_value>${AWS_DEFAULT_REGION}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>339</xloc>
       <yloc>121</yloc>
-      <attributes_kjc />
+      <attributes_kjc/>
     </entry>
     <entry>
       <name>Shell</name>
-      <description />
+      <description/>
       <type>SHELL</type>
-      <attributes />
-      <filename />
-      <work_directory />
+      <attributes/>
+      <filename/>
+      <work_directory/>
       <arg_from_previous>N</arg_from_previous>
       <exec_per_row>N</exec_per_row>
       <set_logfile>N</set_logfile>
-      <logfile />
+      <logfile/>
       <set_append_logfile>N</set_append_logfile>
-      <logext />
+      <logext/>
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>N</insertScript>
-      <script />
+      <script/>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>1500</xloc>
       <yloc>484</yloc>
-      <attributes_kjc />
+      <attributes_kjc/>
     </entry>
     <entry>
       <name>Shell 2</name>
-      <description />
+      <description/>
       <type>SHELL</type>
-      <attributes />
-      <filename />
-      <work_directory />
+      <attributes/>
+      <filename/>
+      <work_directory/>
       <arg_from_previous>N</arg_from_previous>
       <exec_per_row>N</exec_per_row>
       <set_logfile>N</set_logfile>
-      <logfile />
+      <logfile/>
       <set_append_logfile>N</set_append_logfile>
-      <logext />
+      <logext/>
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>N</insertScript>
-      <script />
+      <script/>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>1700</xloc>
       <yloc>484</yloc>
-      <attributes_kjc />
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>setup aws credentials</name>
+      <description/>
+      <type>SHELL</type>
+      <attributes/>
+      <filename/>
+      <work_directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <set_append_logfile>N</set_append_logfile>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <insertScript>Y</insertScript>
+      <script>#echo "last minute aws credential check"
+#export AWS_S3_BUCKET_NAME="${AWS_S3_BUCKET_NAME}"
+#echo "AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}"
+
+#export AWS_S3_ACCESS_KEY="${AWS_S3_ACCESS_KEY}"
+#echo "AWS_S3_ACCESS_KEY = ${AWS_S3_ACCESS_KEY}"
+
+#echo "AWS_S3_SECRET_KEY=${AWS_S3_SECRET_KEY}"
+#echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}"
+
+aws configure list</script>
+      <loglevel>Basic</loglevel>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>240</yloc>
+      <attributes_kjc/>
     </entry>
   </entries>
   <hops>
@@ -693,7 +784,7 @@ aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange
       <note>This job...
 
 ~ orange_download.sh
-    - Downloads data (prducts.txt) from ... https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files
+    - Downloads data (products.txt) from ... https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files
 
     - Unzips the file.
 
@@ -706,12 +797,11 @@ aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange
 [note: Set job variables only needed if run independently of Fears_meta]
 [...also to resolve permissions issues on orange_download.sh cd to location and chmod +m orange_download.sh]
 
-
-</note>
+TODO learn why aws credentials won't stay in env between steps</note>
       <xloc>464</xloc>
       <yloc>16</yloc>
-      <width>836</width>
-      <heigth>316</heigth>
+      <width>845</width>
+      <heigth>299</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>

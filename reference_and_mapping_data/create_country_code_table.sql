@@ -8,15 +8,15 @@
 --# LTS Computing LLC
 --######################################################
 
--- set search_path = faers;
+set search_path = ${DATABASE_SCHEMA};
 
-drop table if exists country_code;
-create table country_code
+-- drop table if exists country_code;
+create table if not exists country_code
 (
 country_name varchar,
 country_code varchar
 );
-truncate country_code;
+-- truncate country_code;
 
 -- data pulled from curl -L https://datahub.io/core/country-list/r/0.csv > ISO_3166-1_country_codes.csv
 /* moved ISO_3166-1_country_codes.csvcreate into /data */

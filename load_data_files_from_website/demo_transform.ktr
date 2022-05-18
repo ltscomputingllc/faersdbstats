@@ -532,7 +532,7 @@
     <aws_access_key>${AWS_S3_ACCESS_KEY}</aws_access_key>
     <aws_secret_key>${AWS_S3_SECRET_KEY}</aws_secret_key>
     <bucket>napdi-cem-sandbox-files</bucket>
-    <filename>data/demo/${LOAD_NEW_YEAR}/Q1/DEMO15Q1.txt</filename>
+    <filename>data_test/demo/${LOAD_NEW_YEAR}/Q1/DEMO15Q1.txt</filename>
     <filename_field />
     <rownum_field />
     <include_filename>N</include_filename>

@@ -5,10 +5,10 @@
 -- 
 -- LTS Computing LLC
 -----------------------------------------------------------------------------------------------
-set search_path = faers;
+set search_path = ${DATABASE_SCHEMA}
 
-drop table if exists eu_drug_name_active_ingredient;
-create table eu_drug_name_active_ingredient 
+--drop table if exists eu_drug_name_active_ingredient;
+create if not exists table eu_drug_name_active_ingredient 
 (
 	active_substance varchar,
 	brand_name varchar,

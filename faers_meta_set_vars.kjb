@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
-  <name>country_codes_job</name>
+  <name>faers_meta_set_vars</name>
   <description/>
   <extended_description/>
   <job_version/>
   <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
-  <created_date>2022/01/17 17:39:02.118</created_date>
+  <created_date>2022/02/16 16:52:21.170</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2022/01/17 17:39:02.118</modified_date>
+  <modified_date>2022/02/16 16:52:21.170</modified_date>
   <parameters>
     </parameters>
   <connection>
     <name>cem_sandbox</name>
-    <server>napdi-pv-faers.cvafeuxzoav4.us-west-2.rds.amazonaws.com</server>
+    <server>${DATABASE_HOST}</server>
     <type>POSTGRESQL</type>
     <access>Native</access>
-    <database>cem_sandbox</database>
+    <database>${DATABASE_NAME}</database>
     <port>5432</port>
-    <username>brb265</username>
-    <password>Encrypted 2be98afc86aa7f2e4bf298747f7bc9dcd</password>
+    <username>${DATABASE_USERNAME}</username>
+    <password>${DATABASE_PASSWORD}</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -66,12 +66,12 @@
   <slaveservers>
     </slaveservers>
   <job-log-table>
-    <connection>cem_sandbox_log</connection>
-    <schema>public</schema>
-    <table>pdi_logging</table>
-    <size_limit_lines>5000</size_limit_lines>
-    <interval>1s</interval>
-    <timeout_days>3.0</timeout_days>
+    <connection>cem_sandbox</connection>
+    <schema>${DATABASE_LOG_SCHEMA}</schema>
+    <table>${DATABASE_LOG_TABLE}</table>
+    <size_limit_lines>3000</size_limit_lines>
+    <interval>1</interval>
+    <timeout_days>3</timeout_days>
     <field>
       <id>ID_JOB</id>
       <enabled>Y</enabled>
@@ -179,10 +179,10 @@
     </field>
   </job-log-table>
   <jobentry-log-table>
-    <connection>cem_sandbox_log</connection>
-    <schema>public</schema>
-    <table>pdi_logging</table>
-    <timeout_days>3.0</timeout_days>
+    <connection/>
+    <schema/>
+    <table/>
+    <timeout_days/>
     <field>
       <id>ID_BATCH</id>
       <enabled>Y</enabled>
@@ -270,10 +270,10 @@
     </field>
   </jobentry-log-table>
   <channel-log-table>
-    <connection>cem_sandbox_log</connection>
-    <schema>public</schema>
-    <table>pdi_logging</table>
-    <timeout_days>3.0</timeout_days>
+    <connection/>
+    <schema/>
+    <table/>
+    <timeout_days/>
     <field>
       <id>ID_BATCH</id>
       <enabled>Y</enabled>
@@ -339,68 +339,6 @@
   <shared_objects_file/>
   <entries>
     <entry>
-      <name>Unzip file</name>
-      <description/>
-      <type>UNZIP</type>
-      <attributes/>
-      <zipfilename/>
-      <wildcard/>
-      <wildcardexclude/>
-      <targetdirectory/>
-      <movetodirectory/>
-      <afterunzip>0</afterunzip>
-      <addfiletoresult>N</addfiletoresult>
-      <isfromprevious>N</isfromprevious>
-      <adddate>N</adddate>
-      <addtime>N</addtime>
-      <addOriginalTimestamp>N</addOriginalTimestamp>
-      <SpecifyFormat>N</SpecifyFormat>
-      <date_time_format/>
-      <rootzip>N</rootzip>
-      <createfolder>N</createfolder>
-      <nr_limit>10</nr_limit>
-      <wildcardSource/>
-      <success_condition>success_if_no_errors</success_condition>
-      <iffileexists>SKIP</iffileexists>
-      <create_move_to_directory>N</create_move_to_directory>
-      <setOriginalModificationDate>N</setOriginalModificationDate>
-      <parallel>N</parallel>
-      <draw>N</draw>
-      <nr>0</nr>
-      <xloc>208</xloc>
-      <yloc>112</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>Upload files to FTPS</name>
-      <description/>
-      <type>FTPS_PUT</type>
-      <attributes/>
-      <servername/>
-      <serverport>21</serverport>
-      <username/>
-      <password>Encrypted </password>
-      <remoteDirectory/>
-      <localDirectory/>
-      <wildcard/>
-      <binary>N</binary>
-      <timeout>0</timeout>
-      <remove>N</remove>
-      <only_new>N</only_new>
-      <active>N</active>
-      <proxy_host/>
-      <proxy_port/>
-      <proxy_username/>
-      <proxy_password/>
-      <connection_type>FTP_CONNECTION</connection_type>
-      <parallel>N</parallel>
-      <draw>N</draw>
-      <nr>0</nr>
-      <xloc>112</xloc>
-      <yloc>48</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
       <name>Start</name>
       <description/>
       <type>SPECIAL</type>
@@ -418,17 +356,17 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>32</yloc>
+      <xloc>32</xloc>
+      <yloc>16</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>Set Config Variables</name>
+      <name>Set job variables</name>
       <description/>
       <type>SET_VARIABLES</type>
       <attributes/>
       <replacevars>Y</replacevars>
-      <filename>${FAERSDBSTATS_REPO_LOCATION}/faers.config</filename>
+      <filename>${Internal.Entry.Current.Directory}/faers.config</filename>
       <file_variable_type>JVM</file_variable_type>
       <fields>
         <field>
@@ -437,28 +375,13 @@
           <variable_type>JVM</variable_type>
         </field>
         <field>
-          <variable_name>FILE_NAME</variable_name>
-          <variable_value>omop-vocabulary.zip</variable_value>
-          <variable_type>JVM</variable_type>
-        </field>
-        <field>
-          <variable_name>CEM_ORANGE_BOOK_DOWNLOAD_URL</variable_name>
-          <variable_value>${CEM_ORANGE_BOOK_DOWNLOAD_URL}</variable_value>
-          <variable_type>JVM</variable_type>
-        </field>
-        <field>
-          <variable_name>BASE_FILE_DIR</variable_name>
-          <variable_value>${BASE_FILE_DIR}</variable_value>
+          <variable_name>FAERSDBSTATS_REPO_LOCATION</variable_name>
+          <variable_value>${FAERSDBSTATS_REPO_LOCATION}</variable_value>
           <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>CEM_DOWNLOAD_DATA_FOLDER</variable_name>
           <variable_value>${CEM_DOWNLOAD_DATA_FOLDER}</variable_value>
-          <variable_type>JVM</variable_type>
-        </field>
-        <field>
-          <variable_name>FAERSDBSTATS_REPO_LOCATION</variable_name>
-          <variable_value>${FAERSDBSTATS_REPO_LOCATION}</variable_value>
           <variable_type>JVM</variable_type>
         </field>
         <field>
@@ -477,196 +400,70 @@
           <variable_type>JVM</variable_type>
         </field>
         <field>
-          <variable_name>AWS_DEFAULT_REGION</variable_name>
-          <variable_value>${AWS_DEFAULT_REGION}</variable_value>
+          <variable_name>DATABASE_HOST</variable_name>
+          <variable_value>${DATABASE_HOST}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_NAME</variable_name>
+          <variable_value>${DATABASE_NAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_SCHEMA</variable_name>
+          <variable_value>${DATABASE_SCHEMA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_USERNAME</variable_name>
+          <variable_value>${DATABASE_USERNAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_PASSWORD</variable_name>
+          <variable_value>${DATABASE_PASSWORD}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_LOG_SCHEMA</variable_name>
+          <variable_value>${DATABASE_LOG_SCHEMA}</variable_value>
           <variable_type>JVM</variable_type>
         </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>320</xloc>
-      <yloc>128</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>Create country_code table (create_country_code_table.sql)</name>
-      <description/>
-      <type>SQL</type>
-      <attributes/>
-      <sql/>
-      <useVariableSubstitution>T</useVariableSubstitution>
-      <sqlfromfile>T</sqlfromfile>
-      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/create_country_code_table.sql</sqlfilename>
-      <sendOneStatement>F</sendOneStatement>
-      <connection>cem_sandbox</connection>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>256</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>create faers.nda (load_nda_table.sql)</name>
-      <description/>
-      <type>SQL</type>
-      <attributes/>
-      <sql/>
-      <useVariableSubstitution>T</useVariableSubstitution>
-      <sqlfromfile>T</sqlfromfile>
-      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/load_nda_table.sql</sqlfilename>
-      <sendOneStatement>F</sendOneStatement>
-      <connection>cem_sandbox</connection>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>592</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>country_code_transform</name>
-      <description/>
-      <type>TRANS</type>
-      <attributes/>
-      <specification_method>filename</specification_method>
-      <trans_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/country_code_transform.ktr</filename>
-      <transname/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <clear_rows>N</clear_rows>
-      <clear_files>N</clear_files>
-      <set_logfile>N</set_logfile>
-      <logfile>${FAERSDBSTATS_REPO_LOCATION}/../logs/country_code_transform</logfile>
-      <logext>txt</logext>
-      <add_date>Y</add_date>
-      <add_time>Y</add_time>
-      <loglevel>Rowlevel</loglevel>
-      <cluster>N</cluster>
-      <slave_server_name/>
-      <set_append_logfile>Y</set_append_logfile>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <create_parent_folder>Y</create_parent_folder>
-      <logging_remote_work>N</logging_remote_work>
-      <run_configuration>Pentaho local</run_configuration>
-      <suppress_result_data>N</suppress_result_data>
-      <parameters>
-        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>464</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>Country_Code_Data_File_Upload_To_S3</name>
-      <description/>
-      <type>SHELL</type>
-      <attributes/>
-      <filename/>
-      <work_directory/>
-      <arg_from_previous>N</arg_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <set_append_logfile>N</set_append_logfile>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <insertScript>Y</insertScript>
-      <script>#!/bin/bash 
-
-#create folder
-#aws s3api put-object --bucket ${AWS_S3_BUCKET_NAME} --key orange-book-download-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup
-
-
-aws s3 cp ${BASE_FILE_DIR}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/ISO_3166-1_country_codes.csv s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup/ISO_3166-1_country_codes.csv
-
-
-
-</script>
-      <loglevel>Basic</loglevel>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>368</xloc>
-      <yloc>352</yloc>
+      <xloc>224</xloc>
+      <yloc>16</yloc>
       <attributes_kjc/>
     </entry>
   </entries>
   <hops>
     <hop>
       <from>Start</from>
-      <to>Set Config Variables</to>
+      <to>Set job variables</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>Y</unconditional>
     </hop>
-    <hop>
-      <from>Set Config Variables</from>
-      <to>Create country_code table (create_country_code_table.sql)</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>country_code_transform</from>
-      <to>create faers.nda (load_nda_table.sql)</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Create country_code table (create_country_code_table.sql)</from>
-      <to>Country_Code_Data_File_Upload_To_S3</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Country_Code_Data_File_Upload_To_S3</from>
-      <to>country_code_transform</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Create country_code table (create_country_code_table.sql)</from>
-      <to>country_code_transform</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
   </hops>
   <notepads>
     <notepad>
-      <note>creates country codes
+      <note>Note you will always have to manually set up a database connection to span multiple jobs/transforms
 
-create_country_code_table.sql manually inserts 32 country codes
+Edit > Set Environment Variables
+
+set BASE_FILE_DIR  to the directory containing your faers.config file
+
+https://help.hitachivantara.com/Documentation/Pentaho/5.2/0L0/0Y0/090/020/000/000
 
 </note>
-      <xloc>448</xloc>
-      <yloc>64</yloc>
-      <width>445</width>
-      <heigth>95</heigth>
+      <xloc>384</xloc>
+      <yloc>0</yloc>
+      <width>684</width>
+      <heigth>163</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
@@ -683,16 +480,5 @@ create_country_code_table.sql manually inserts 32 country codes
       <drawshadow>Y</drawshadow>
     </notepad>
   </notepads>
-  <attributes>
-    <group>
-      <name>METASTORE.pentaho</name>
-      <attribute>
-        <key>Default Run Configuration</key>
-        <value>{"namespace":"pentaho","id":"Default Run Configuration","name":"Default Run Configuration","description":"Defines a default run configuration","metaStoreName":null}</value>
-      </attribute>
-    </group>
-    <group>
-      <name>{"_":"Embedded MetaStore Elements","namespace":"pentaho","type":"Default Run Configuration"}</name>
-    </group>
-  </attributes>
+  <attributes/>
 </job>

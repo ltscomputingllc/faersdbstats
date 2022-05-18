@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
-  <name>eu_drug_name_active_ingredient_job</name>
-  <description/>
-  <extended_description/>
-  <job_version/>
+  <name>demo_data_jobV2b</name>
+  <description />
+  <extended_description />
+  <job_version />
   <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
-  <created_date>2022/01/17 17:39:02.118</created_date>
+  <created_date>2022/02/23 17:41:40.777</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2022/01/17 17:39:02.118</modified_date>
+  <modified_date>2022/02/23 17:41:40.777</modified_date>
   <parameters>
     </parameters>
   <connection>
     <name>cem_sandbox</name>
-    <server>napdi-pv-faers.cvafeuxzoav4.us-west-2.rds.amazonaws.com</server>
+    <server>${DATABASE_HOST}</server>
     <type>POSTGRESQL</type>
     <access>Native</access>
-    <database>cem_sandbox</database>
+    <database>${DATABASE_NAME}</database>
     <port>5432</port>
-    <username>brb265</username>
-    <password>Encrypted 2be98afc86aa7f2e4bf298747f7bc9dcd</password>
-    <servername/>
-    <data_tablespace/>
-    <index_tablespace/>
+    <username>${DATABASE_USERNAME}</username>
+    <password>${DATABASE_PASSWORD}</password>
+    <servername />
+    <data_tablespace />
+    <index_tablespace />
     <attributes>
       <attribute>
         <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
@@ -66,11 +66,11 @@
   <slaveservers>
     </slaveservers>
   <job-log-table>
-    <connection>cem_sandbox</connection>
+    <connection>${DATABASE_NAME}</connection>
     <schema>${DATABASE_LOG_SCHEMA}</schema>
-    <table>${DATABASE_LOG_TABLE}</table>
+    <table>${DATABASE_LOG_NAME}</table>
     <size_limit_lines>5000</size_limit_lines>
-    <interval>1s</interval>
+    <interval>30s</interval>
     <timeout_days>3.0</timeout_days>
     <field>
       <id>ID_JOB</id>
@@ -179,9 +179,9 @@
     </field>
   </job-log-table>
   <jobentry-log-table>
-    <connection>cem_sandbox_log</connection>
+    <connection>${DATABASE_NAME}</connection>
     <schema>${DATABASE_LOG_SCHEMA}</schema>
-    <table>${DATABASE_LOG_TABLE}</table>
+    <table>${DATABASE_LOG_NAME}</table>
     <timeout_days>3.0</timeout_days>
     <field>
       <id>ID_BATCH</id>
@@ -270,9 +270,9 @@
     </field>
   </jobentry-log-table>
   <channel-log-table>
-    <connection>cem_sandbox_log</connection>
+    <connection>${DATABASE_NAME}</connection>
     <schema>${DATABASE_LOG_SCHEMA}</schema>
-    <table>${DATABASE_LOG_TABLE}</table>
+    <table>${DATABASE_LOG_NAME}</table>
     <timeout_days>3.0</timeout_days>
     <field>
       <id>ID_BATCH</id>
@@ -336,75 +336,13 @@
     </field>
   </channel-log-table>
   <pass_batchid>N</pass_batchid>
-  <shared_objects_file/>
+  <shared_objects_file />
   <entries>
     <entry>
-      <name>Unzip file</name>
-      <description/>
-      <type>UNZIP</type>
-      <attributes/>
-      <zipfilename/>
-      <wildcard/>
-      <wildcardexclude/>
-      <targetdirectory/>
-      <movetodirectory/>
-      <afterunzip>0</afterunzip>
-      <addfiletoresult>N</addfiletoresult>
-      <isfromprevious>N</isfromprevious>
-      <adddate>N</adddate>
-      <addtime>N</addtime>
-      <addOriginalTimestamp>N</addOriginalTimestamp>
-      <SpecifyFormat>N</SpecifyFormat>
-      <date_time_format/>
-      <rootzip>N</rootzip>
-      <createfolder>N</createfolder>
-      <nr_limit>10</nr_limit>
-      <wildcardSource/>
-      <success_condition>success_if_no_errors</success_condition>
-      <iffileexists>SKIP</iffileexists>
-      <create_move_to_directory>N</create_move_to_directory>
-      <setOriginalModificationDate>N</setOriginalModificationDate>
-      <parallel>N</parallel>
-      <draw>N</draw>
-      <nr>0</nr>
-      <xloc>208</xloc>
-      <yloc>112</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>Upload files to FTPS</name>
-      <description/>
-      <type>FTPS_PUT</type>
-      <attributes/>
-      <servername/>
-      <serverport>21</serverport>
-      <username/>
-      <password>Encrypted </password>
-      <remoteDirectory/>
-      <localDirectory/>
-      <wildcard/>
-      <binary>N</binary>
-      <timeout>0</timeout>
-      <remove>N</remove>
-      <only_new>N</only_new>
-      <active>N</active>
-      <proxy_host/>
-      <proxy_port/>
-      <proxy_username/>
-      <proxy_password/>
-      <connection_type>FTP_CONNECTION</connection_type>
-      <parallel>N</parallel>
-      <draw>N</draw>
-      <nr>0</nr>
-      <xloc>112</xloc>
-      <yloc>48</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
       <name>Start</name>
-      <description/>
+      <description />
       <type>SPECIAL</type>
-      <attributes/>
+      <attributes />
       <start>Y</start>
       <dummy>N</dummy>
       <repeat>N</repeat>
@@ -418,17 +356,55 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>192</xloc>
+      <xloc>64</xloc>
       <yloc>32</yloc>
-      <attributes_kjc/>
+      <attributes_kjc />
     </entry>
     <entry>
-      <name>Set Config Variables</name>
-      <description/>
+      <name>demo_transform</name>
+      <description />
+      <type>TRANS</type>
+      <attributes />
+      <specification_method>filename</specification_method>
+      <trans_object_id />
+      <filename>${Internal.Entry.Current.Directory}/demo_transform.ktr</filename>
+      <transname />
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <set_logfile>Y</set_logfile>
+      <logfile>/home/brb265/faers/logs/demo_data</logfile>
+      <logext>txt</logext>
+      <add_date>Y</add_date>
+      <add_time>Y</add_time>
+      <loglevel>Basic</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name />
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <run_configuration>Pentaho local</run_configuration>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>528</xloc>
+      <yloc>48</yloc>
+      <attributes_kjc />
+    </entry>
+    <entry>
+      <name>Set job variables 2</name>
+      <description />
       <type>SET_VARIABLES</type>
-      <attributes/>
+      <attributes />
       <replacevars>Y</replacevars>
-      <filename>${FAERSDBSTATS_REPO_LOCATION}/faers.config</filename>
+      <filename>${Internal.Entry.Current.Directory}/../faers.config</filename>
       <file_variable_type>JVM</file_variable_type>
       <fields>
         <field>
@@ -437,18 +413,8 @@
           <variable_type>JVM</variable_type>
         </field>
         <field>
-          <variable_name>FILE_NAME</variable_name>
-          <variable_value>omop-vocabulary.zip</variable_value>
-          <variable_type>JVM</variable_type>
-        </field>
-        <field>
-          <variable_name>CEM_ORANGE_BOOK_DOWNLOAD_URL</variable_name>
-          <variable_value>${CEM_ORANGE_BOOK_DOWNLOAD_URL}</variable_value>
-          <variable_type>JVM</variable_type>
-        </field>
-        <field>
-          <variable_name>BASE_FILE_DIR</variable_name>
-          <variable_value>${BASE_FILE_DIR}</variable_value>
+          <variable_name>FAERSDBSTATS_REPO_LOCATION</variable_name>
+          <variable_value>${FAERSDBSTATS_REPO_LOCATION}</variable_value>
           <variable_type>JVM</variable_type>
         </field>
         <field>
@@ -457,8 +423,8 @@
           <variable_type>JVM</variable_type>
         </field>
         <field>
-          <variable_name>FAERSDBSTATS_REPO_LOCATION</variable_name>
-          <variable_value>${FAERSDBSTATS_REPO_LOCATION}</variable_value>
+          <variable_name>AWS_S3_BUCKET_NAME</variable_name>
+          <variable_value>${AWS_S3_BUCKET_NAME}</variable_value>
           <variable_type>JVM</variable_type>
         </field>
         <field>
@@ -472,8 +438,33 @@
           <variable_type>JVM</variable_type>
         </field>
         <field>
-          <variable_name>AWS_S3_BUCKET_NAME</variable_name>
-          <variable_value>${AWS_S3_BUCKET_NAME}</variable_value>
+          <variable_name>DATABASE_HOST</variable_name>
+          <variable_value>${DATABASE_HOST}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_NAME</variable_name>
+          <variable_value>${DATABASE_NAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_SCHEMA</variable_name>
+          <variable_value>${DATABASE_SCHEMA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_USERNAME</variable_name>
+          <variable_value>${DATABASE_USERNAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_PASSWORD</variable_name>
+          <variable_value>${DATABASE_PASSWORD}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_LOG_SCHEMA</variable_name>
+          <variable_value>${DATABASE_LOG_SCHEMA}</variable_value>
           <variable_type>JVM</variable_type>
         </field>
         <field>
@@ -481,167 +472,108 @@
           <variable_value>${DATABASE_LOG_NAME}</variable_value>
           <variable_type>JVM</variable_type>
         </field>
+        <field>
+          <variable_name>LOAD_NEW_YEAR</variable_name>
+          <variable_value>${LOAD_NEW_YEAR}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_NEW_QUARTER</variable_name>
+          <variable_value>${LOAD_NEW_QUARTER}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_NEW_DATA</variable_name>
+          <variable_value>${LOAD_NEW_DATA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>144</yloc>
-      <attributes_kjc/>
+      <xloc>224</xloc>
+      <yloc>48</yloc>
+      <attributes_kjc />
     </entry>
     <entry>
-      <name>Create table (create_eu_drug_name_active_ingredient.sql)</name>
-      <description/>
+      <name>create demo_ table</name>
+      <description />
       <type>SQL</type>
-      <attributes/>
+      <attributes />
       <sql>set search_path = ${DATABASE_SCHEMA};
 
-create table if not exists eu_drug_name_active_ingredient 
-(
-	active_substance varchar,
-	brand_name varchar,
-	eu_number varchar,
-	reference_name varchar
-	-- ,
-	-- human_or_veterinary varchar,
-	-- procedure_type varchar,
-	-- details varchar
+drop table if exists demo;
+CREATE TABLE faers.demo (
+	primaryid varchar NULL,
+	caseid varchar NULL,
+	caseversion varchar NULL,
+	i_f_code varchar NULL,
+	event_dt varchar NULL,
+	mfr_dt varchar NULL,
+	init_fda_dt varchar NULL,
+	fda_dt varchar NULL,
+	rept_cod varchar NULL,
+	auth_num varchar NULL,
+	mfr_num varchar NULL,
+	mfr_sndr varchar NULL,
+	lit_ref varchar NULL,
+	age varchar NULL,
+	age_cod varchar NULL,
+	age_grp varchar NULL,
+	sex varchar NULL,
+	e_sub varchar NULL,
+	wt varchar NULL,
+	wt_cod varchar NULL,
+	rept_dt varchar NULL,
+	to_mfr varchar NULL,
+	occp_cod varchar NULL,
+	reporter_country varchar NULL,
+	occr_country varchar NULL,
+	filename varchar NULL
 );</sql>
       <useVariableSubstitution>T</useVariableSubstitution>
       <sqlfromfile>F</sqlfromfile>
-      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/create_eu_drug_name_active_ingredient_table.sql</sqlfilename>
+      <sqlfilename />
       <sendOneStatement>F</sendOneStatement>
       <connection>cem_sandbox</connection>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>240</yloc>
-      <attributes_kjc/>
+      <xloc>384</xloc>
+      <yloc>48</yloc>
+      <attributes_kjc />
     </entry>
     <entry>
-      <name>Create table (create_eu_drug_name_active_ingredient.sql) 2</name>
-      <description/>
-      <type>SQL</type>
-      <attributes/>
-      <sql/>
-      <useVariableSubstitution>F</useVariableSubstitution>
-      <sqlfromfile>T</sqlfromfile>
-      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/create_eu_drug_name_active_ingredient_part_2.sql</sqlfilename>
-      <sendOneStatement>F</sendOneStatement>
-      <connection>cem_sandbox</connection>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>592</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>eu_drug_name_active_ingredient_transform</name>
-      <description/>
-      <type>TRANS</type>
-      <attributes/>
-      <specification_method>filename</specification_method>
-      <trans_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/eu_drug_name_active_ingredient_transform.ktr</filename>
-      <transname/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <clear_rows>N</clear_rows>
-      <clear_files>N</clear_files>
-      <set_logfile>Y</set_logfile>
-      <logfile>${FAERSDBSTATS_REPO_LOCATION}/../logs/eu_drug_trans</logfile>
-      <logext>txt</logext>
-      <add_date>Y</add_date>
-      <add_time>N</add_time>
-      <loglevel>Rowlevel</loglevel>
-      <cluster>N</cluster>
-      <slave_server_name/>
-      <set_append_logfile>Y</set_append_logfile>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <create_parent_folder>Y</create_parent_folder>
-      <logging_remote_work>N</logging_remote_work>
-      <run_configuration>Pentaho local</run_configuration>
-      <suppress_result_data>N</suppress_result_data>
-      <parameters>
-        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>480</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>Eu_Drug_Data_Files_Upload_To_S3</name>
-      <description/>
+      <name>Download Data From S3</name>
+      <description />
       <type>SHELL</type>
-      <attributes/>
-      <filename/>
-      <work_directory/>
+      <attributes />
+      <filename />
+      <work_directory />
       <arg_from_previous>N</arg_from_previous>
       <exec_per_row>N</exec_per_row>
       <set_logfile>N</set_logfile>
-      <logfile>${FAERSDBSTATS_REPO_LOCATION}/../logs/eu_drug</logfile>
-      <set_append_logfile>Y</set_append_logfile>
-      <logext>txt</logext>
-      <add_date>Y</add_date>
+      <logfile />
+      <set_append_logfile>N</set_append_logfile>
+      <logext />
+      <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>#!/bin/bash 
-
-#create folder
-#aws s3api put-object --bucket ${AWS_S3_BUCKET_NAME} --key orange-book-download-files/${CEM_DOWNLOAD_DATA_FOLDER}_setup
-
-
-aws configure list
-
-
-#aws s3 cp ${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/EU_registered_drugs_by_active_ingredient_utf8.txt s3://napdi-cem-sandbox-files/${CEM_DOWNLOAD_DATA_FOLDER} --recursive
-aws s3 cp ${BASE_FILE_DIR}/data_setup/EU_registered_drugs_by_active_ingredient_utf8.txt s3://${AWS_S3_BUCKET_NAME}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/EU_registered_drugs_by_active_ingredient_utf8.txt
-                        #/home/brb265/faers/faersdbstats/reference_and_mapping_data/EU_registered_drugs_by_active_ingredient_utf8.txt
+      <script>aws s3 cp s3://napdi-cem-sandbox-files/data_test/ /home/brb265/faers/data_test/ --recursive --exclude "*" --include "*.txt"
 </script>
-      <loglevel>Rowlevel</loglevel>
+      <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>352</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>LOAD_ALL_TIME = 1</name>
-      <description/>
-      <type>SIMPLE_EVAL</type>
-      <attributes/>
-      <valuetype>variable</valuetype>
-      <fieldname/>
-      <variablename>${LOAD_ALL_TIME}</variablename>
-      <fieldtype>string</fieldtype>
-      <mask/>
-      <comparevalue>1</comparevalue>
-      <minvalue/>
-      <maxvalue/>
-      <successcondition>equal</successcondition>
-      <successnumbercondition>equal</successnumbercondition>
-      <successbooleancondition>false</successbooleancondition>
-      <successwhenvarset>N</successwhenvarset>
-      <parallel>N</parallel>
-      <draw>N</draw>
-      <nr>0</nr>
-      <xloc>416</xloc>
-      <yloc>352</yloc>
-      <attributes_kjc/>
+      <xloc>96</xloc>
+      <yloc>176</yloc>
+      <attributes_kjc />
     </entry>
   </entries>
   <hops>
     <hop>
       <from>Start</from>
-      <to>Set Config Variables</to>
+      <to>Set job variables 2</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -649,8 +581,8 @@ aws s3 cp ${BASE_FILE_DIR}/data_setup/EU_registered_drugs_by_active_ingredient_u
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Set Config Variables</from>
-      <to>Create table (create_eu_drug_name_active_ingredient.sql)</to>
+      <from>Set job variables 2</from>
+      <to>create demo_ table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -658,26 +590,8 @@ aws s3 cp ${BASE_FILE_DIR}/data_setup/EU_registered_drugs_by_active_ingredient_u
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>eu_drug_name_active_ingredient_transform</from>
-      <to>Create table (create_eu_drug_name_active_ingredient.sql) 2</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Create table (create_eu_drug_name_active_ingredient.sql)</from>
-      <to>Eu_Drug_Data_Files_Upload_To_S3</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Eu_Drug_Data_Files_Upload_To_S3</from>
-      <to>eu_drug_name_active_ingredient_transform</to>
+      <from>create demo_ table</from>
+      <to>demo_transform</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -687,16 +601,12 @@ aws s3 cp ${BASE_FILE_DIR}/data_setup/EU_registered_drugs_by_active_ingredient_u
   </hops>
   <notepads>
     <notepad>
-      <note>create if not exists
-
-LOAD_ALL_TIME logic not needed (hidden)
-
-
+      <note>demo_data.sh hidden
 </note>
-      <xloc>336</xloc>
-      <yloc>32</yloc>
-      <width>294</width>
-      <heigth>112</heigth>
+      <xloc>781</xloc>
+      <yloc>257</yloc>
+      <width>155</width>
+      <heigth>44</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
