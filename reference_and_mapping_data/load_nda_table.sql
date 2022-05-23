@@ -28,8 +28,8 @@ route varchar
 );
 --truncate nda;
 
-drop index if exists ingredient_ix;
-create index ingredient_ix on nda(appl_no, ingredient);
+--drop index if exists ingredient_ix;
+create index if not exists ingredient_ix on nda(appl_no, ingredient);
 
 /* integrated into Pentaho LoadOrangeBook transformation */
 /*\COPY nda FROM 'products.txt' WITH DELIMITER E'~' CSV HEADER QUOTE E'\b' ;*/

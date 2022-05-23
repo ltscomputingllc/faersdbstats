@@ -535,12 +535,12 @@ in trial run rpsr and ther data files were reduced in size w/  sed -i '15001,$ d
   </connection>
   <order>
     <hop>
-      <from>Demo - CSV file input</from>
+      <from>demo - CSV file input</from>
       <to>load_in_demo_table</to>
       <enabled>N</enabled>
     </hop>
     <hop>
-      <from>Drug - CSV file input</from>
+      <from>drug - CSV file input</from>
       <to>load_in_drug_table</to>
       <enabled>N</enabled>
     </hop>
@@ -571,7 +571,7 @@ in trial run rpsr and ther data files were reduced in size w/  sed -i '15001,$ d
     </hop>
   </order>
   <step>
-    <name>Demo - CSV file input</name>
+    <name>demo - CSV file input</name>
     <type>CsvInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -887,7 +887,7 @@ in trial run rpsr and ther data files were reduced in size w/  sed -i '15001,$ d
     </GUI>
   </step>
   <step>
-    <name>Drug - CSV file input</name>
+    <name>drug - CSV file input</name>
     <type>CsvInput</type>
     <description/>
     <distribute>Y</distribute>

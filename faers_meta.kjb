@@ -551,7 +551,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>80</xloc>
-      <yloc>416</yloc>
+      <yloc>480</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -588,7 +588,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>304</xloc>
-      <yloc>432</yloc>
+      <yloc>480</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -644,7 +644,7 @@ WHERE z.ROW_NUM = 1;
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>112</xloc>
-      <yloc>496</yloc>
+      <yloc>608</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -717,8 +717,8 @@ WHERE z.ROW_NUM = 1;
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>640</xloc>
-      <yloc>512</yloc>
+      <xloc>96</xloc>
+      <yloc>736</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -756,8 +756,8 @@ WHERE z.ROW_NUM = 1;
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>64</xloc>
-      <yloc>688</yloc>
+      <xloc>688</xloc>
+      <yloc>736</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -768,9 +768,7 @@ WHERE z.ROW_NUM = 1;
       <sql>--if LOAD_ALL_TIME drops &amp; creates domain tables
 --truncates are not needed if LOAD_ALL_TIME because dropped then created; and not needed if just adding new quarter of data
 
-set search_path = '${DATABASE_SCHEMA}' ;
-
-if "${LOAD_ALL_TIME}" THEN
+set search_path = ${DATABASE_SCHEMA};
 
 --demo
 
@@ -847,8 +845,8 @@ indi_pt varchar,
 filename varchar
 );
 --truncate indi;
---CREATE INDEX indi_caseid_idx ON frs.indi USING btree (caseid);
-CREATE INDEX indi_filename_idx ON indi USING btree (filename);
+--CREATE INDEX IF NOT EXISTS indi_caseid_idx ON frs.indi USING btree (caseid); --NOTE FRS does not exist
+CREATE INDEX IF NOT EXISTS indi_filename_idx ON indi USING btree (filename);
 
 
 
@@ -861,8 +859,8 @@ CREATE TABLE IF NOT EXISTS outc (
 	filename varchar NULL
 );
 --truncate outc;
-CREATE INDEX outc_caseid_idx ON outc USING btree (caseid);
-CREATE INDEX outc_filename_idx ON outc USING btree (filename);
+CREATE INDEX IF NOT EXISTS outc_caseid_idx ON outc USING btree (caseid);
+CREATE INDEX IF NOT EXISTS outc_filename_idx ON outc USING btree (filename);
 
 
 --reac
@@ -876,10 +874,10 @@ CREATE TABLE IF NOT EXISTS reac (
 	filename varchar NULL
 );
 --truncate reac ;
-CREATE INDEX ix_reac_1 ON reac USING btree (upper((pt)::text));
-CREATE INDEX ix_reac_2 ON reac USING btree (primaryid);
-CREATE INDEX reac_caseid_idx ON reac USING btree (caseid);
-CREATE INDEX reac_filename_idx ON reac USING btree (filename);
+CREATE INDEX IF NOT EXISTS ix_reac_1 ON reac USING btree (upper((pt)::text));
+CREATE INDEX IF NOT EXISTS ix_reac_2 ON reac USING btree (primaryid);
+CREATE INDEX IF NOT EXISTS reac_caseid_idx ON reac USING btree (caseid);
+CREATE INDEX IF NOT EXISTS reac_filename_idx ON reac USING btree (filename);
 
 
 --rpsr
@@ -892,8 +890,8 @@ CREATE TABLE IF NOT EXISTS rpsr (
 	filename varchar NULL
 );
 --truncate rpsr;
-CREATE INDEX rpsr_caseid_idx ON rpsr USING btree (caseid, primaryid);
-CREATE INDEX rpsr_filename_idx ON rpsr USING btree (filename);
+CREATE INDEX IF NOT EXISTS rpsr_caseid_idx ON rpsr USING btree (caseid, primaryid);
+CREATE INDEX IF NOT EXISTS rpsr_filename_idx ON rpsr USING btree (filename);
 
 --ther
 
@@ -909,8 +907,7 @@ CREATE TABLE IF NOT EXISTS ther (
 	filename varchar NULL
 );
 --truncate ther;
-
-END IF;</sql>
+</sql>
       <useVariableSubstitution>T</useVariableSubstitution>
       <sqlfromfile>F</sqlfromfile>
       <sqlfilename/>
@@ -919,8 +916,8 @@ END IF;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>352</xloc>
-      <yloc>512</yloc>
+      <xloc>400</xloc>
+      <yloc>608</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -1016,8 +1013,8 @@ END IF;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>64</xloc>
-      <yloc>576</yloc>
+      <xloc>784</xloc>
+      <yloc>528</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -1046,7 +1043,7 @@ END IF;</sql>
 -- LTS Computing LLC
 -------------------------------
 
-set search_path = '${DATABASE_SCHEMA}';
+set search_path = ${DATABASE_SCHEMA};
 
 -- generate a table to lookup concatenated string of current drugnames by primaryid
 drop table if exists drugname_list;
@@ -1213,8 +1210,8 @@ where caseid is null or event_dt is null or age is null or sex is null or report
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>272</xloc>
-      <yloc>688</yloc>
+      <xloc>80</xloc>
+      <yloc>880</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -1227,7 +1224,7 @@ where caseid is null or event_dt is null or age is null or sex is null or report
 --added "if not exists" to creates
 --index and binary tree commented out
 
-set search_path = "${DATABASE_SCHEMA}";
+set search_path = ${DATABASE_SCHEMA};
 --demo
 
 --drop table if exists demo_legacy;
@@ -1376,8 +1373,8 @@ CREATE TABLE IF NOT EXISTS all_casedemo (
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>256</xloc>
-      <yloc>608</yloc>
+      <xloc>400</xloc>
+      <yloc>736</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -1405,12 +1402,12 @@ CREATE TABLE IF NOT EXISTS all_casedemo (
 
 -- temporarily create an index on the cdmv5 schema concept table to improve performance of all the mapping lookups
 -- we will then drop it at the end of this script
-set search_path = "${DATABASE_STAGING_SCHEMA}";
+set search_path = ${DATABASE_STAGING_SCHEMA};
 drop index if exists vocab_concept_name_ix;
 create index vocab_concept_name_ix on staging_vocabulary.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
 analyze verbose staging_vocabulary.concept;
 
-set search_path = "${DATABASE_SCHEMA}";
+set search_path = ${DATABASE_SCHEMA};
 
 -- build a mapping table to generate a cleaned up version of the drugname for exact match joins to the concept table concept_name column 
 -- for RxNorm concepts only 
@@ -2160,8 +2157,8 @@ and update_method is null;
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>96</xloc>
-      <yloc>816</yloc>
+      <xloc>128</xloc>
+      <yloc>1072</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2196,7 +2193,7 @@ CREATE INDEX IF NOT EXISTS "IDX_${DATABASE_LOG_NAME}_2" ON ${DATABASE_LOG_SCHEMA
       <description/>
       <type>SQL</type>
       <attributes/>
-      <sql>set search_path = "${DATABASE_SCHEMA}";
+      <sql>set search_path = ${DATABASE_SCHEMA};
 
 --drop table if exists drug_usagi_mapping;
 CREATE TABLE if not exists drug_usagi_mapping
@@ -2216,8 +2213,8 @@ CREATE TABLE if not exists drug_usagi_mapping
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>496</xloc>
-      <yloc>688</yloc>
+      <xloc>464</xloc>
+      <yloc>880</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2234,7 +2231,7 @@ CREATE TABLE if not exists drug_usagi_mapping
 -- LTS COMPUTING LLC
 ------------------------------
 
-set search_path = "${DATABASE_SCHEMA}";
+set search_path = ${DATABASE_SCHEMA};
 
 insert into drug_usagi_mapping
 select a.source_code_description as drug_name_original , 
@@ -2251,8 +2248,8 @@ on cast(a.target_concept_id as integer) = b.concept_id
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>96</xloc>
-      <yloc>944</yloc>
+      <xloc>112</xloc>
+      <yloc>1280</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2264,7 +2261,7 @@ on cast(a.target_concept_id as integer) = b.concept_id
 --
 -- LTS Computing LLC
 -----------------------------------------------------------------------------------------------
-set search_path = "${DATABASE_SCHEMA}";
+set search_path = ${DATABASE_SCHEMA};
 
 drop table if exists usagi_import;
 CREATE TABLE usagi_import
@@ -2288,8 +2285,8 @@ CREATE TABLE usagi_import
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>720</xloc>
-      <yloc>688</yloc>
+      <xloc>704</xloc>
+      <yloc>880</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2302,7 +2299,7 @@ CREATE TABLE usagi_import
 --
 -- LTS Computing LLC
 --------------------------------------------
-set search_path = "${DATABASE_SCHEMA}";
+set search_path = ${DATABASE_SCHEMA};
 
 select row_number() over () as source_code, 
 upper(drug_name_original) as source_code_description, 
@@ -2319,8 +2316,8 @@ order by count(*) desc
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>352</xloc>
-      <yloc>816</yloc>
+      <xloc>416</xloc>
+      <yloc>1072</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2345,8 +2342,8 @@ order by count(*) desc
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>608</xloc>
-      <yloc>816</yloc>
+      <xloc>656</xloc>
+      <yloc>1072</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2384,8 +2381,8 @@ order by count(*) desc
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>672</xloc>
-      <yloc>1280</yloc>
+      <xloc>768</xloc>
+      <yloc>1168</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2731,8 +2728,8 @@ and c.standard_concept = 'S';
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>336</xloc>
-      <yloc>1024</yloc>
+      <xloc>400</xloc>
+      <yloc>1280</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2804,8 +2801,8 @@ select * from cte2
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>592</xloc>
-      <yloc>1088</yloc>
+      <xloc>704</xloc>
+      <yloc>1280</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2852,8 +2849,8 @@ where a.isr is not null;
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>128</xloc>
-      <yloc>1184</yloc>
+      <xloc>112</xloc>
+      <yloc>1408</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2913,8 +2910,8 @@ where a.isr is not null;
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>368</xloc>
-      <yloc>1280</yloc>
+      <xloc>384</xloc>
+      <yloc>1408</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2957,7 +2954,7 @@ group by drug_concept_id, outcome_concept_id;
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>704</xloc>
-      <yloc>1392</yloc>
+      <yloc>1408</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -3058,7 +3055,7 @@ on ab.drug_concept_id = d2.drug_concept_id and ab.outcome_concept_id = d2.outcom
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>176</xloc>
-      <yloc>1440</yloc>
+      <yloc>1536</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -3105,8 +3102,8 @@ where a.outcome_concept_id = b.meddra_concept_id;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>448</xloc>
-      <yloc>1504</yloc>
+      <xloc>432</xloc>
+      <yloc>1568</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -3124,7 +3121,7 @@ where a.outcome_concept_id = b.meddra_concept_id;</sql>
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>768</xloc>
-      <yloc>1536</yloc>
+      <yloc>1568</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -3188,7 +3185,7 @@ GRANT ALL ON SCHEMA ${DATABASE_SCHEMA} TO ${DATABASE_USERNAME};
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>80</xloc>
-      <yloc>320</yloc>
+      <yloc>352</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -3206,7 +3203,7 @@ GRANT ALL ON SCHEMA ${DATABASE_SCHEMA} TO ${DATABASE_USERNAME};
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>304</xloc>
-      <yloc>320</yloc>
+      <yloc>352</yloc>
       <attributes_kjc/>
     </entry>
   </entries>
@@ -3270,7 +3267,7 @@ GRANT ALL ON SCHEMA ${DATABASE_SCHEMA} TO ${DATABASE_USERNAME};
       <to>create domain tables</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3544,12 +3541,15 @@ GRANT ALL ON SCHEMA ${DATABASE_SCHEMA} TO ${DATABASE_USERNAME};
 - a database connection established within Pentaho (edit > show used environment variables... define host, db, user, pw)
 - a properly configured faers.config file
 - omop data loaded into vocabulary schema
+-data's in staging_vocabulary for create_meddra_snomed_mapping.sql
 
 ABOUT EACH STEP
 -set job variables						-brings in environment variables
 -Create pdi_logging table			-creates the pentaho logging database tables
 -update LOG SQL						-updates pdi_logging for pentaho 9
+SUCCESS IF LOAD_ALL_TIME=1		**USE CASE LOGIC***
 -orange_book_job					-downloads s3 data and uploads it to s3 then inputs it into the databse w/ orange_book_transform
+-nda													-create table and index if not exists
 -country_codes_job					-creates country codes table, uploads to s3, and inputs data w/ country_code_transform
 -eu_active_job						-was eu_registered_drugs_by_active_ingredent_job, creates table, uploads to s3, and inputs data w/ eu transform
 -omop								-most excellently creates omop data
@@ -3568,7 +3568,7 @@ To-do: reestablish database connection so that faers_meta works without having t
       <xloc>448</xloc>
       <yloc>16</yloc>
       <width>1343</width>
-      <heigth>469</heigth>
+      <heigth>520</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
@@ -3585,14 +3585,11 @@ To-do: reestablish database connection so that faers_meta works without having t
       <drawshadow>Y</drawshadow>
     </notepad>
     <notepad>
-      <note>create sql structure statements - job
-
-
-then a transform for each copy ?</note>
-      <xloc>448</xloc>
-      <yloc>912</yloc>
-      <width>253</width>
-      <heigth>78</heigth>
+      <note>&lt;&lt;&lt; used "CREATE TABLE IF NOT EXISTS" no drops and no truncates</note>
+      <xloc>528</xloc>
+      <yloc>608</yloc>
+      <width>454</width>
+      <heigth>27</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
@@ -3615,6 +3612,27 @@ then a transform for each copy ?</note>
       <yloc>1680</yloc>
       <width>635</width>
       <heigth>44</heigth>
+      <fontname>Ubuntu</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>&lt;&lt;&lt; DUPLICATE (decent starting point for only running 2nd half of meta)</note>
+      <xloc>864</xloc>
+      <yloc>528</yloc>
+      <width>487</width>
+      <heigth>27</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
