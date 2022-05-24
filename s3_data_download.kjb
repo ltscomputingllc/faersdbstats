@@ -4,6 +4,7 @@
   <description/>
   <extended_description/>
   <job_version/>
+  <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
   <created_date>2022/03/17 10:28:12.502</created_date>
@@ -14,12 +15,12 @@
   <slaveservers>
     </slaveservers>
   <job-log-table>
-    <connection/>
-    <schema/>
-    <table/>
-    <size_limit_lines/>
-    <interval/>
-    <timeout_days/>
+    <connection>cem_sandbox</connection>
+    <schema>${DATABASE_LOG_SCHEMA}</schema>
+    <table>${DATABASE_LOG_TABLE}</table>
+    <size_limit_lines>5k</size_limit_lines>
+    <interval>30</interval>
+    <timeout_days>3</timeout_days>
     <field>
       <id>ID_JOB</id>
       <enabled>Y</enabled>
@@ -369,11 +370,11 @@ done;
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>download_s3_data.sh</name>
+      <name>s3_data_download.sh</name>
       <description/>
       <type>SHELL</type>
       <attributes/>
-      <filename>${BASE_FILE_DIR}/download_s3_data.sh</filename>
+      <filename>${FAERSDBSTATS_REPO_LOCATION}/s3_data_download.sh</filename>
       <work_directory/>
       <arg_from_previous>N</arg_from_previous>
       <exec_per_row>N</exec_per_row>
@@ -450,7 +451,34 @@ fi
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>144</xloc>
+      <xloc>304</xloc>
+      <yloc>48</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Set variables</name>
+      <description/>
+      <type>SET_VARIABLES</type>
+      <attributes/>
+      <replacevars>Y</replacevars>
+      <filename>${BASE_FILE_DIR}/faers.config</filename>
+      <file_variable_type>JVM</file_variable_type>
+      <fields>
+        <field>
+          <variable_name>DATABASE_LOG_SCHEMA</variable_name>
+          <variable_value>${DATABASE_LOG_SCHEMA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_LOG_TABLE</variable_name>
+          <variable_value>${DATABASE_LOG_TABLE}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>160</xloc>
       <yloc>48</yloc>
       <attributes_kjc/>
     </entry>
@@ -458,12 +486,21 @@ fi
   <hops>
     <hop>
       <from>Start</from>
-      <to>download_s3_data.sh</to>
+      <to>Set variables</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>Set variables</from>
+      <to>s3_data_download.sh</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
     </hop>
   </hops>
   <notepads>
