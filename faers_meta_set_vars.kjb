@@ -11,67 +11,21 @@
   <modified_user>-</modified_user>
   <modified_date>2022/02/16 16:52:21.170</modified_date>
   <parameters>
-    </parameters>
-  <connection>
-    <name>cem_sandbox</name>
-    <server>${DATABASE_HOST}</server>
-    <type>POSTGRESQL</type>
-    <access>Native</access>
-    <database>${DATABASE_NAME}</database>
-    <port>5432</port>
-    <username>${DATABASE_USERNAME}</username>
-    <password>${DATABASE_PASSWORD}</password>
-    <servername/>
-    <data_tablespace/>
-    <index_tablespace/>
-    <attributes>
-      <attribute>
-        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
-        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
-        <code>IS_CLUSTERED</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
-        <code>PORT_NUMBER</code>
-        <attribute>5432</attribute>
-      </attribute>
-      <attribute>
-        <code>PRESERVE_RESERVED_WORD_CASE</code>
-        <attribute>Y</attribute>
-      </attribute>
-      <attribute>
-        <code>QUOTE_ALL_FIELDS</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
-        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
-        <attribute>Y</attribute>
-      </attribute>
-      <attribute>
-        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
-        <attribute>Y</attribute>
-      </attribute>
-      <attribute>
-        <code>USE_POOLING</code>
-        <attribute>N</attribute>
-      </attribute>
-    </attributes>
-  </connection>
+    <parameter>
+      <name>BASE_FILE_DIR</name>
+      <default_value>/home/pentaho-secondary/projects-brb265/faers</default_value>
+      <description>Directory where </description>
+    </parameter>
+  </parameters>
   <slaveservers>
     </slaveservers>
   <job-log-table>
-    <connection>cem_sandbox</connection>
-    <schema>${DATABASE_LOG_SCHEMA}</schema>
-    <table>${DATABASE_LOG_TABLE}</table>
-    <size_limit_lines>3000</size_limit_lines>
-    <interval>1</interval>
-    <timeout_days>3</timeout_days>
+    <connection/>
+    <schema/>
+    <table/>
+    <size_limit_lines/>
+    <interval/>
+    <timeout_days/>
     <field>
       <id>ID_JOB</id>
       <enabled>Y</enabled>
@@ -366,7 +320,7 @@
       <type>SET_VARIABLES</type>
       <attributes/>
       <replacevars>Y</replacevars>
-      <filename>${Internal.Entry.Current.Directory}/faers.config</filename>
+      <filename>${BASE_FILE_DIR}/faers.config</filename>
       <file_variable_type>JVM</file_variable_type>
       <fields>
         <field>
@@ -429,6 +383,11 @@
           <variable_value>${DATABASE_LOG_SCHEMA}</variable_value>
           <variable_type>JVM</variable_type>
         </field>
+        <field>
+          <variable_name>DATABASE_LOG_TABLE</variable_name>
+          <variable_value>${DATABASE_LOG_TABLE}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
@@ -451,19 +410,26 @@
   </hops>
   <notepads>
     <notepad>
-      <note>Note you will always have to manually set up a database connection to span multiple jobs/transforms
+      <note>First right click workspace
+...Properties
+...Parameters
+...define BASE_FILE_DIR
+
+
+
+
+Note you will always have to manually set up a database connection to span multiple jobs/transforms
 
 Edit > Set Environment Variables
 
 set BASE_FILE_DIR  to the directory containing your faers.config file
 
 https://help.hitachivantara.com/Documentation/Pentaho/5.2/0L0/0Y0/090/020/000/000
-
 </note>
-      <xloc>384</xloc>
-      <yloc>0</yloc>
+      <xloc>32</xloc>
+      <yloc>160</yloc>
       <width>684</width>
-      <heigth>163</heigth>
+      <heigth>282</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>

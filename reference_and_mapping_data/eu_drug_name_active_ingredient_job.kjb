@@ -692,11 +692,12 @@ aws s3 cp ${BASE_FILE_DIR}/data_setup/EU_registered_drugs_by_active_ingredient_u
 LOAD_ALL_TIME logic not needed (hidden)
 
 
-</note>
+right click transform for logging location
+	${FAERSDBSTATS_REPO_LOCATION}/../logs/eu_drug_trans</note>
       <xloc>336</xloc>
       <yloc>32</yloc>
-      <width>294</width>
-      <heigth>112</heigth>
+      <width>424</width>
+      <heigth>129</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
