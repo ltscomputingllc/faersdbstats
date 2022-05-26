@@ -12,7 +12,7 @@
     </parameters>
     <log>
       <trans-log-table>
-        <connection>cem_sandbox_conn</connection>
+        <connection>cem_sandbox</connection>
         <schema>public</schema>
         <table>pdi_logging</table>
         <size_limit_lines>5000</size_limit_lines>
@@ -126,7 +126,7 @@
         </field>
       </trans-log-table>
       <perf-log-table>
-        <connection>cem_sandbox_conn</connection>
+        <connection>cem_sandbox</connection>
         <schema>public</schema>
         <table>pdi_logging</table>
         <interval>1s</interval>
@@ -208,7 +208,7 @@
         </field>
       </perf-log-table>
       <channel-log-table>
-        <connection>cem_sandbox_conn</connection>
+        <connection>cem_sandbox</connection>
         <schema>public</schema>
         <table>pdi_logging</table>
         <timeout_days>3.0</timeout_days>
@@ -274,7 +274,7 @@
         </field>
       </channel-log-table>
       <step-log-table>
-        <connection>cem_sandbox_conn</connection>
+        <connection>cem_sandbox</connection>
         <schema>public</schema>
         <table>pdi_logging</table>
         <timeout_days>3.0</timeout_days>
@@ -345,12 +345,12 @@
         </field>
         <field>
           <id>LOG_FIELD</id>
-          <enabled>N</enabled>
+          <enabled>Y</enabled>
           <name>LOG_FIELD</name>
         </field>
       </step-log-table>
       <metrics-log-table>
-        <connection>cem_sandbox_conn</connection>
+        <connection>cem_sandbox</connection>
         <schema>public</schema>
         <table>pdi_logging</table>
         <timeout_days>3.0</timeout_days>
@@ -436,10 +436,13 @@
   </info>
   <notepads>
     <notepad>
-      <note>TODO:
-_add table create statements for other domains (after drug)
+      <note>in trial run all domain data files were reduced in size with...
+  sed -i '15001,$ d' ther.txt
+^example for ther domain
 
-first thoughts for logging...
+
+
+older thoughts for logging...
 
 ${BASE_FILE_DIR}/logs/download_results.txt 
 
@@ -460,12 +463,11 @@ download_results.txt
 echo 'demo.txt file to import has..." >> upload_results.txt
 wc -l demo.txt >> upload_results.txt
 echo ' lines to import' >> upload_results.txt
-
-in trial run rpsr and ther data files were reduced in size w/  sed -i '15001,$ d' ther.txt</note>
-      <xloc>608</xloc>
-      <yloc>96</yloc>
-      <width>561</width>
-      <heigth>452</heigth>
+</note>
+      <xloc>464</xloc>
+      <yloc>80</yloc>
+      <width>414</width>
+      <heigth>486</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
@@ -537,32 +539,32 @@ in trial run rpsr and ther data files were reduced in size w/  sed -i '15001,$ d
     <hop>
       <from>demo - CSV file input</from>
       <to>load_in_demo_table</to>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>drug - CSV file input</from>
       <to>load_in_drug_table</to>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>indi - CSV file input</from>
       <to>load_in_indi_table</to>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>outc - CSV file input</from>
       <to>load_in_outc_table</to>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>reac - CSV file input</from>
       <to>load_in_reac_table</to>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>rpsr - CSV file input</from>
       <to>load_in_rpsr_table</to>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>ther - CSV file input</from>

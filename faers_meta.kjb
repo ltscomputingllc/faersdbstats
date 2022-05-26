@@ -393,7 +393,7 @@ aws configure list</script>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>80</xloc>
+      <xloc>128</xloc>
       <yloc>672</yloc>
       <attributes_kjc/>
     </entry>
@@ -3242,7 +3242,7 @@ WHERE z.ROW_NUM = 1;
       <to>Set AWS Credentials</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3404,7 +3404,7 @@ WHERE z.ROW_NUM = 1;
       <to>Update LOG SQL</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3413,7 +3413,7 @@ WHERE z.ROW_NUM = 1;
       <to>copy_tables_to_other_schemas.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3431,7 +3431,7 @@ WHERE z.ROW_NUM = 1;
       <to>derive_standard_drug_outcome_drilldown.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3440,7 +3440,7 @@ WHERE z.ROW_NUM = 1;
       <to>create_usagi_import_table.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3449,7 +3449,7 @@ WHERE z.ROW_NUM = 1;
       <to>map_meddra_to_snomed.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3458,7 +3458,7 @@ WHERE z.ROW_NUM = 1;
       <to>generate_drug_export_for_usagi.sql </to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3467,7 +3467,7 @@ WHERE z.ROW_NUM = 1;
       <to>derive_standard_drug_outcome_contingency_table.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3476,7 +3476,7 @@ WHERE z.ROW_NUM = 1;
       <to>map_all_drugname_to_rxnorm</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3485,7 +3485,7 @@ WHERE z.ROW_NUM = 1;
       <to>derive_standard_drug_outcome_count.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3494,7 +3494,7 @@ WHERE z.ROW_NUM = 1;
       <to>Bulk load from MySQL into file</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3503,7 +3503,7 @@ WHERE z.ROW_NUM = 1;
       <to>derive_standard_case_outcome.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3512,7 +3512,7 @@ WHERE z.ROW_NUM = 1;
       <to>load_drug_usagi_mapping.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3521,7 +3521,7 @@ WHERE z.ROW_NUM = 1;
       <to>derive_standard_case_indication.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3530,7 +3530,7 @@ WHERE z.ROW_NUM = 1;
       <to>standardize_combined_drug_mapping.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3539,7 +3539,7 @@ WHERE z.ROW_NUM = 1;
       <to>derive_standard_case_outcome_category.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3584,11 +3584,13 @@ SUCCESS IF LOAD_ALL_TIME=1		**USE CASE LOGIC***
 
 
 
-To-do: reestablish database connection so that faers_meta works without having to run orange_book_job first.</note>
+To-do: reestablish database connection so that faers_meta works without having to run orange_book_job first.
+update s3 bucket location to faers and laers
+</note>
       <xloc>464</xloc>
       <yloc>16</yloc>
       <width>1343</width>
-      <heigth>520</heigth>
+      <heigth>554</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
