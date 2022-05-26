@@ -1,7 +1,9 @@
 #!/bin/bash
 #shell options #-s enable (set) each optname #globstar enables ** recursive dir search
 
-source ./faersdbstats/faers.config
+#source ../faers.config
+
+#source ./faersdbstats/faers.config
  #export AWS_PROFILE=user1
 
 export "AWS_ACCESS_KEY_ID=${AWS_S3_ACCESS_KEY}"
@@ -42,7 +44,7 @@ if [ "${LOAD_ALL_TIME}" = 1 ]; then
     headempty=0
     echo 'pwd is ';
     echo `pwd` it should be path/to/data_from_s3;
-    for domain in drug demo; do # indi rpsr outc; do
+    for domain in demo drug indi outc reac rpsr ther; do
         echo 'domain is '$domain;
         #mkdir $domain #throws error because aws cp created it
         cd $domain
@@ -77,9 +79,19 @@ else #not LOAD_ALL_DATA equivalent to LOAD_NEW_DATA
         curdir=`pwd`;
         headempty=0
         echo 'pwd is ';
-        echo `pwd` it should be path/to/data_from_s3;
-        for domain in demo drug; do # indi outc reac rpsr ther; do # indi rpsr outc; do
-            newpath=s3://napdi-cem-sandbox-files/data_test/$domain/${LOAD_NEW_YEAR}/${LOAD_NEW_QUARTER}
+        echo `pwd` it should be path/to/data_from_s3 aka BASE_FILE_DIR;
+
+        #make use case for legacy data faers_or_laers
+        if [ ${LOAD_NEW_YEAR} -le 2012 ]
+        then
+            faers_or_laers='laers';
+        else
+            faers_or_laers='faers';
+        fi
+
+        for domain in demo drug indi outc reac rpsr ther; do # indi rpsr outc; do
+            newpath=s3://napdi-cem-sandbox-files/$faers_or_laers/data_test/$domain/${LOAD_NEW_YEAR}/${LOAD_NEW_QUARTER}
+            #newpath=s3://napdi-cem-sandbox-files/$faers_or_laers/data/$domain/${LOAD_NEW_YEAR}/${LOAD_NEW_QUARTER}
             state=`aws s3 ls $newpath`
             if [ -z "$state" ]
                 then
@@ -89,9 +101,9 @@ else #not LOAD_ALL_DATA equivalent to LOAD_NEW_DATA
                     echo $newpath' Path exists'                
                     aws s3 cp $newpath ${BASE_FILE_DIR}/data_from_s3/$domain/${LOAD_NEW_YEAR}/${LOAD_NEW_QUARTER} --recursive --exclude "*" --include "*.txt"
                     #mkdir $domain #throws error because aws cp created it
-                    cd $domain
+                    cd "$domain"
                     #for name in "${BASE_FILE_DIR}"/data_from_s3/**/*.txt; do #if data_from_s3 isn't specified it might run /all_data/ and take forever
-                    ls ./**
+                    echo $(ls ./**)
                     for name in ./**/*.txt; do
                         echo 'name is '$name;
                             if [ $headempty = 0 ]; then

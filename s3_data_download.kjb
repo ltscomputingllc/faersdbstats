@@ -506,11 +506,17 @@ fi
   <notepads>
     <notepad>
       <note>Downloads all time data or specific quarters data as configured in the faers.config file
-</note>
+
+
+Note s3 bucket locations change from faers to laers dependent around faers_or_laers being set from the LOAD_NEW_YEAR config value
+	LAERS if LOAD_NEW_YEAR &lt;= 2012  else  FAERS
+
+dev note:
+s3_data_download set to data_test folder</note>
       <xloc>64</xloc>
       <yloc>160</yloc>
-      <width>579</width>
-      <heigth>44</heigth>
+      <width>914</width>
+      <heigth>146</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
