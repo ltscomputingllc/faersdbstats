@@ -1325,8 +1325,8 @@ order by count(*) desc
 -----------------------------------------------------------------------------------------------
 set search_path = ${DATABASE_SCHEMA};
 
-drop table if exists usagi_import;
-CREATE TABLE usagi_import
+--drop table if exists usagi_import;
+CREATE TABLE IF NOT EXISTS usagi_import
 (
   source_code character varying,
   source_concept_id character varying,
@@ -1365,6 +1365,14 @@ CREATE TABLE usagi_import
 ------------------------------
 
 set search_path = ${DATABASE_SCHEMA};
+
+select row_number() over () as source_code, 
+upper(drug_name_original) as source_code_description, 
+count(*) as frequency -- (case frequency)
+from combined_drug_mapping where concept_id is null
+group by upper(drug_name_original)
+order by count(*) desc
+;
 
 insert into drug_usagi_mapping
 select a.source_code_description as drug_name_original , 
@@ -1465,10 +1473,10 @@ CREATE INDEX IF NOT EXISTS "IDX_${DATABASE_LOG_NAME}_2" ON ${DATABASE_LOG_SCHEMA
 
 -- temporarily create an index on the cdmv5 schema concept table to improve performance of all the mapping lookups
 -- we will then drop it at the end of this script
-set search_path = ${DATABASE_STAGING_SCHEMA};
+set search_path = vocabulary;
 --drop index if exists vocab_concept_name_ix;
-create index if not exists vocab_concept_name_ix on staging_vocabulary.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
-analyze verbose staging_vocabulary.concept;
+create index if not exists vocab_concept_name_ix on vocabulary.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
+analyze verbose vocabulary.concept;
 
 set search_path = ${DATABASE_SCHEMA};
 
@@ -1529,7 +1537,7 @@ and drug_name_clean ~*  '\(*(\y\ *(HCL|HYDROCHLORIDE)\ *\y)\)*';
 -- find exact mapping for drug name after we have removed the above keywords
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove keywords' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1550,7 +1558,7 @@ AND a.concept_id is null;
 -- find exact mapping for active ingredient
 UPDATE drug_regex_mapping a
 SET update_method = 'regex EU drug name to active ingredient' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1566,7 +1574,7 @@ and a.drug_name_clean ~*  '.* \((.*)\)';
 -- find exact mapping for active ingredient
 UPDATE drug_regex_mapping a
 SET update_method = 'regex EU drug name in parentheses to active ingredient' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1574,7 +1582,7 @@ and a.concept_id is null;
 -- lookup RxNorm concept name using words from last set of parentheses in the drug name (typically this is the ingredient name(s) for a branded drug
 UPDATE drug_regex_mapping a
 SET update_method = 'regex ingredient name in parentheses' , concept_id = b.concept_id, drug_name_clean = upper(b.concept_name)
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = regexp_replace(a.drug_name_clean, '.* \((.*)\)', '\1', 'gi')
 AND a.concept_id is null
@@ -1583,7 +1591,7 @@ and drug_name_clean ~*  '.* \((.*)\)';
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex upper' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean;
 
@@ -1595,7 +1603,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex trailing space or period chars' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1608,7 +1616,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove multiple white space' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1621,7 +1629,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove trailing spaces' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1634,7 +1642,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove leading spaces' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1647,7 +1655,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove single quotes' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1660,7 +1668,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove ^*$? punctuation chars' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1673,7 +1681,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex change forward slash to back slash' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1686,7 +1694,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove spaces before closing parenthesis' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1700,7 +1708,7 @@ and drug_name_clean ~*  '.+\y(UNKNOWN|UNK)\y.+$';
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove (unknown)' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1713,7 +1721,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove blinded' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1732,7 +1740,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove /nnnnn/' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1748,7 +1756,7 @@ and a.concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex vitamins' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -1780,7 +1788,7 @@ order by drug_name_original desc
 ) cc 
 where word NOT IN ('','SYRUP','HCL','HYDROCHLORIDE', 'ACETIC','SODIUM','CALCIUM','SULPHATE','MONOHYDRATE') 
 and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  staging_vocabulary.concept b
+			from  vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1);
 
@@ -1797,7 +1805,7 @@ from (
 			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
 			from (
 				select upper(concept_name) as concept_name, concept_id
-				from staging_vocabulary.concept b
+				from vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id = 'Clinical Drug Form' 
 				and concept_name like '%\/%'
@@ -1807,7 +1815,7 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  staging_vocabulary.concept b
+			from  vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
@@ -1843,13 +1851,13 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  staging_vocabulary.concept b
+			from  vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word  in (	select * 
 			from (
 				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+')) as word
-				from  staging_vocabulary.concept b
+				from  vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id in ('Clinical Drug Form')
 				and b.concept_name like '%\/%' 
@@ -1891,7 +1899,7 @@ from (
 			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
 			from (
 				select upper(concept_name) as concept_name, concept_id
-				from staging_vocabulary.concept b
+				from vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id = 'Ingredient' 
 			) aa
@@ -1900,7 +1908,7 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  staging_vocabulary.concept b
+			from  vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
@@ -1936,13 +1944,13 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  staging_vocabulary.concept b
+			from  vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word  in (	select * 
 			from (
 				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+')) as word
-				from  staging_vocabulary.concept b
+				from  vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id in ('Ingredient')
 			) aa 
@@ -1983,7 +1991,7 @@ from (
 			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
 			from (
 				select upper(concept_name) as concept_name, concept_id
-				from staging_vocabulary.concept b
+				from vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id = 'Brand Name' 
 			) aa
@@ -1992,7 +2000,7 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  staging_vocabulary.concept b
+			from  vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
@@ -2004,7 +2012,7 @@ group by ingredient_list;
 
 -- create a source brand name drug mapping table by extracting the brand names with each single brand name word concatenated alphabetically into a space separated string
 --drop table if exists drug_mapping_brand_name_list;
-create if not exists table drug_mapping_brand_name_list as
+create table if not exists drug_mapping_brand_name_list as
 select drug_name_original, ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
 from (
 	select concept_id, drug_name_original, concept_name, string_agg(word, ' ' order by word) as ingredient_list  from (
@@ -2027,13 +2035,13 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  staging_vocabulary.concept b
+			from  vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word  in (	select * 
 			from (
 				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+')) as word
-				from  staging_vocabulary.concept b
+				from  vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id in ('Brand Name')
 			) aa 
@@ -2091,7 +2099,7 @@ create index if not exists prod_ai_ix on drug_ai_mapping(prod_ai);
 -- find exact mapping using the active ingredient provided in the drug table
 UPDATE drug_ai_mapping a
 SET update_method = 'drug active ingredients' , concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.prod_ai;
 
@@ -2128,7 +2136,7 @@ create index if not exists nda_num_ix on drug_nda_mapping(nda_num);
 -- compare nda ingredient name and trade name to improve specificity
 UPDATE drug_nda_mapping a
 SET update_method = 'drug nda_num ingredients' , nda_ingredient = nda_ingredient.ingredient, concept_id = b.concept_id
-FROM staging_vocabulary.concept b
+FROM vocabulary.concept b
 inner join nda_ingredient
 on upper(b.concept_name) = nda_ingredient.ingredient
 WHERE b.vocabulary_id = 'RxNorm'
@@ -3350,7 +3358,7 @@ WHERE z.ROW_NUM = 1;
       <to>derive_unique_all_case.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3440,7 +3448,7 @@ WHERE z.ROW_NUM = 1;
       <to>create_usagi_import_table.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3458,7 +3466,7 @@ WHERE z.ROW_NUM = 1;
       <to>generate_drug_export_for_usagi.sql </to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3476,7 +3484,7 @@ WHERE z.ROW_NUM = 1;
       <to>map_all_drugname_to_rxnorm</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3494,7 +3502,7 @@ WHERE z.ROW_NUM = 1;
       <to>Bulk load from MySQL into file</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3508,8 +3516,8 @@ WHERE z.ROW_NUM = 1;
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Bulk load from MySQL into file</from>
-      <to>load_drug_usagi_mapping.sql</to>
+      <from>derive_standard_case_outcome_category.sql</from>
+      <to>derive_standard_case_indication.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>N</enabled>
@@ -3517,11 +3525,11 @@ WHERE z.ROW_NUM = 1;
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>derive_standard_case_outcome_category.sql</from>
-      <to>derive_standard_case_indication.sql</to>
+      <from>Bulk load from MySQL into file</from>
+      <to>load_drug_usagi_mapping.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
