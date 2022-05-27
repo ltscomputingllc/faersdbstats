@@ -643,8 +643,8 @@ update standard_drug_outcome_drilldown a
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>544</xloc>
-      <yloc>1536</yloc>
+      <xloc>176</xloc>
+      <yloc>1632</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -691,8 +691,8 @@ from meddra_snomed_mapping b
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>96</xloc>
-      <yloc>1664</yloc>
+      <xloc>720</xloc>
+      <yloc>1600</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -1029,1454 +1029,10 @@ select * from cte2
       <description/>
       <type>SQL</type>
       <attributes/>
-      <sql>------------------------------
---
--- This SQL script performs two tasks:
---
--- 1) Find active OMOP CDM vocabulary standard RxNorm codes for all unique legacy LAERS and current FAERS case drugs we have mapped
--- 2) Map from the standard codes to standard codes with concept_class of 'Ingredient' or 'Clinical Drug Form' because We need to roll-up the safety signal stats that we generate to these two concept classes.
---
--- LTS COMPUTING LLC
-------------------------------
-set search_path = ${DATABASE_SCHEMA};
--- ====================== find active OMOP CDM vocabulary standard RxNorm codes ==============================
--- create a combined drug mapping table which will have OHDSI vocabulary standard concept codes assigned to it
---drop table if exists standard_combined_drug_mapping;
-create table if not exists standard_combined_drug_mapping as
-select a.*,
-    cast (concept_id as integer) as standard_concept_id
-from combined_drug_mapping a;
-------------------------------------------------------
--- directly lookup the standard concept associated with the drug concepts we derived from drug name
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        inner join staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.standard_concept is null
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        inner join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and cr.invalid_reason is null
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert standard branded drug form to standard ingredient or standard clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Branded Drug Form'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        inner join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and cr.invalid_reason is null
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert precise ingredient to standard ingredient or clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Precise Ingredient'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select c1.concept_id as concept_id_1,
-        c2.concept_id as concept_id_2
-    from staging_vocabulary.concept c1
-        inner join staging_vocabulary.concept c2 on c2.concept_name = regexp_replace(
-            c1.concept_name,
-            ' decanoate$| hemihydrate$| aluminum$| tetrahydrate$| hexahydrate$| oxilate$| pivalate$| sulphonate$| anhydrous$| valerate$| dihydrate$| saccharate$| diacetate$| monosodium$| palmitate$| monophosphate$| stearate$| disodium$| propionate$| bitartrate$| pamoate$| dimesylate$| methylsulfate$| hydrobromide$| malate$| monohydrate$| silicate$| calcium$| magnesium$| tannate$| carbonate$| mesylate$| succinate$| potassium$| maleate$| benzoate$| nitrate$| citrate$| hydrate$| tartrate$| acetate$| phosphate$| dihydrochloride$| hydrochloride$| HCL$| chloride$| trihydrate$| besylate$| fumarate$| lactate$| gluconate$| bromide$| sulfate$| sodium$',
-            '',
-            'i'
-        )
-    where c1.vocabulary_id = 'RxNorm'
-        and c1.concept_class_id = 'Precise Ingredient'
-        and c2.vocabulary_id = 'RxNorm'
-        and c2.standard_concept = 'S'
-        and c2.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and c1.concept_id in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert brand name to standard ingredient or standard clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason is null
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-        and relationship_id = 'Tradename of'
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- map to the standard ingredient for a single ingredient brand name that has been updated
-- - 'Concept replaced by'->'Tradename of'
-and standard_concept = 'S'
-and invalid_reason is null with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason = 'U'
-),
-cte2 as (
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship a
-        inner join staging_vocabulary.concept b on a.concept_id_1 = b.concept_id
-        inner join staging_vocabulary.concept c on a.concept_id_2 = c.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and c.vocabulary_id = 'RxNorm'
-    where a.relationship_id = 'Concept replaced by'
-        and a.concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-),
-cte3 as (
-    select cr.concept_id_1 -- this cte eliminates brands with multi-ingredient drugs
-    from cte2
-        inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and cr.relationship_id = 'Tradename of'
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.invalid_reason is null
-    group by cr.concept_id_1
-    having count(cr.concept_id_1) = 1
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = b.concept_id -- update the standard concept id to the standard concept id we found
-from cte3
-    inner join cte2 on cte2.concept_id_2 = cte3.concept_id_1
-    inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-    inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-    and cr.relationship_id = 'Tradename of'
-    and b.vocabulary_id = 'RxNorm'
-    and b.standard_concept = 'S'
-    and b.invalid_reason is null
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- map to the standard ingredient for a brand name that has been deleted
-- - 'Concept replaced by'->'Tradename of'->'Form of' with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason = 'D'
-),
-cte2 as (
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship a
-        inner join staging_vocabulary.concept b on a.concept_id_1 = b.concept_id
-        inner join staging_vocabulary.concept c on a.concept_id_2 = c.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and c.vocabulary_id = 'RxNorm'
-    where a.relationship_id = 'Tradename of'
-        and a.concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = b.concept_id -- update the standard concept id to the standard concept id we found
-from cte2
-    inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-    inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-    and cr.relationship_id = 'Form of'
-    and b.vocabulary_id = 'RxNorm'
-    and b.standard_concept = 'S'
-    and b.invalid_reason is null
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert U or D status concepts to standard ingredient or clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.invalid_reason in ('U', 'D')
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert the standard clinical drug form concepts (that we derived in all the previous logic) with only a single ingredient, to standard ingredient
--- note RxNorm multi-ingredient drugs have a "/" char separating the ingredients in the clinical drug form name
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Clinical Drug Form'
-        and c.concept_name not like '%/%'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
--------------------------------------------------------
--- these updates correct some edge cases around updated and deleted status concepts 
--- that are non-trivial to map directly using the concept_relationship table
--- potentially these cases could otherwise be handled via manual usagi mapping
--- map concept "Valproate sodium" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40239960;
--- map concept "Aricept" to "donepezil"
-update standard_combined_drug_mapping
-set standard_concept_id = 715997
-where standard_concept_id = 40011116;
--- map concept "Rabeprazole Sodium" to "rabeprazole"
-update standard_combined_drug_mapping
-set standard_concept_id = 911735
-where standard_concept_id = 40077081;
--- map concept "Naprosyn" to "Naproxen"
-update standard_combined_drug_mapping
-set standard_concept_id = 1115008
-where standard_concept_id = 40064300;
--- map concept "Tazocin" to "Piperacillin / tazobactam Injectable Solution"
-update standard_combined_drug_mapping
-set standard_concept_id = 40077118
-where standard_concept_id = 40091355;
--- map concept "Azulfidine EN-tabs" to "Sulfasalazine"
-update standard_combined_drug_mapping
-set standard_concept_id = 964339
-where standard_concept_id = 40013106;
--- map concept "Valproic Acid Syrup" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40086873;
--- map concept "Valproic Acid 500 MG" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40086835;
--- map concept "Senna" to "standardized senna concentrate"
-update standard_combined_drug_mapping
-set standard_concept_id = 19086491
-where standard_concept_id = 40080434;
--- map concept "Vancocin HCl" to "Vancomycin"
-update standard_combined_drug_mapping------------------------------
---
--- This SQL script performs two tasks:
---
--- 1) Find active OMOP CDM vocabulary standard RxNorm codes for all unique legacy LAERS and current FAERS case drugs we have mapped
--- 2) Map from the standard codes to standard codes with concept_class of 'Ingredient' or 'Clinical Drug Form' because We need to roll-up the safety signal stats that we generate to these two concept classes.
---
--- LTS COMPUTING LLC
-------------------------------
-set search_path = ${DATABASE_SCHEMA};
--- ====================== find active OMOP CDM vocabulary standard RxNorm codes ==============================
--- create a combined drug mapping table which will have OHDSI vocabulary standard concept codes assigned to it
---drop table if exists standard_combined_drug_mapping;
-create table if not exists standard_combined_drug_mapping as
-select a.*,
-    cast (concept_id as integer) as standard_concept_id
-from combined_drug_mapping a;
-------------------------------------------------------
--- directly lookup the standard concept associated with the drug concepts we derived from drug name
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        inner join staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.standard_concept is null
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        inner join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and cr.invalid_reason is null
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert standard branded drug form to standard ingredient or standard clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Branded Drug Form'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        inner join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and cr.invalid_reason is null
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert precise ingredient to standard ingredient or clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Precise Ingredient'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select c1.concept_id as concept_id_1,
-        c2.concept_id as concept_id_2
-    from staging_vocabulary.concept c1
-        inner join staging_vocabulary.concept c2 on c2.concept_name = regexp_replace(
-            c1.concept_name,
-            ' decanoate$| hemihydrate$| aluminum$| tetrahydrate$| hexahydrate$| oxilate$| pivalate$| sulphonate$| anhydrous$| valerate$| dihydrate$| saccharate$| diacetate$| monosodium$| palmitate$| monophosphate$| stearate$| disodium$| propionate$| bitartrate$| pamoate$| dimesylate$| methylsulfate$| hydrobromide$| malate$| monohydrate$| silicate$| calcium$| magnesium$| tannate$| carbonate$| mesylate$| succinate$| potassium$| maleate$| benzoate$| nitrate$| citrate$| hydrate$| tartrate$| acetate$| phosphate$| dihydrochloride$| hydrochloride$| HCL$| chloride$| trihydrate$| besylate$| fumarate$| lactate$| gluconate$| bromide$| sulfate$| sodium$',
-            '',
-            'i'
-        )
-    where c1.vocabulary_id = 'RxNorm'
-        and c1.concept_class_id = 'Precise Ingredient'
-        and c2.vocabulary_id = 'RxNorm'
-        and c2.standard_concept = 'S'
-        and c2.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and c1.concept_id in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert brand name to standard ingredient or standard clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason is null
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-        and relationship_id = 'Tradename of'
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- map to the standard ingredient for a single ingredient brand name that has been updated
-- - 'Concept replaced by'->'Tradename of'
-and standard_concept = 'S'
-and invalid_reason is null with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason = 'U'
-),
-cte2 as (
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship a
-        inner join staging_vocabulary.concept b on a.concept_id_1 = b.concept_id
-        inner join staging_vocabulary.concept c on a.concept_id_2 = c.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and c.vocabulary_id = 'RxNorm'
-    where a.relationship_id = 'Concept replaced by'
-        and a.concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-),
-cte3 as (
-    select cr.concept_id_1 -- this cte eliminates brands with multi-ingredient drugs
-    from cte2
-        inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and cr.relationship_id = 'Tradename of'
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.invalid_reason is null
-    group by cr.concept_id_1
-    having count(cr.concept_id_1) = 1
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = b.concept_id -- update the standard concept id to the standard concept id we found
-from cte3
-    inner join cte2 on cte2.concept_id_2 = cte3.concept_id_1
-    inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-    inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-    and cr.relationship_id = 'Tradename of'
-    and b.vocabulary_id = 'RxNorm'
-    and b.standard_concept = 'S'
-    and b.invalid_reason is null
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- map to the standard ingredient for a brand name that has been deleted
-- - 'Concept replaced by'->'Tradename of'->'Form of' with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason = 'D'
-),
-cte2 as (
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship a
-        inner join staging_vocabulary.concept b on a.concept_id_1 = b.concept_id
-        inner join staging_vocabulary.concept c on a.concept_id_2 = c.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and c.vocabulary_id = 'RxNorm'
-    where a.relationship_id = 'Tradename of'
-        and a.concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = b.concept_id -- update the standard concept id to the standard concept id we found
-from cte2
-    inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-    inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-    and cr.relationship_id = 'Form of'
-    and b.vocabulary_id = 'RxNorm'
-    and b.standard_concept = 'S'
-    and b.invalid_reason is null
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert U or D status concepts to standard ingredient or clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.invalid_reason in ('U', 'D')
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert the standard clinical drug form concepts (that we derived in all the previous logic) with only a single ingredient, to standard ingredient
--- note RxNorm multi-ingredient drugs have a "/" char separating the ingredients in the clinical drug form name
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Clinical Drug Form'
-        and c.concept_name not like '%/%'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
--------------------------------------------------------
--- these updates correct some edge cases around updated and deleted status concepts 
--- that are non-trivial to map directly using the concept_relationship table
--- potentially these cases could otherwise be handled via manual usagi mapping
--- map concept "Valproate sodium" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40239960;
--- map concept "Aricept" to "donepezil"
-update standard_combined_drug_mapping
-set standard_concept_id = 715997
-where standard_concept_id = 40011116;
--- map concept "Rabeprazole Sodium" to "rabeprazole"
-update standard_combined_drug_mapping
-set standard_concept_id = 911735
-where standard_concept_id = 40077081;
--- map concept "Naprosyn" to "Naproxen"
-update standard_combined_drug_mapping
-set standard_concept_id = 1115008
-where standard_concept_id = 40064300;
--- map concept "Tazocin" to "Piperacillin / tazobactam Injectable Solution"
-update standard_combined_drug_mapping
-set standard_concept_id = 40077118
-where standard_concept_id = 40091355;
--- map concept "Azulfidine EN-tabs" to "Sulfasalazine"
-update standard_combined_drug_mapping
-set standard_concept_id = 964339
-where standard_concept_id = 40013106;
--- map concept "Valproic Acid Syrup" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40086873;
--- map concept "Valproic Acid 500 MG" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40086835;
--- map concept "Senna" to "standardized senna concentrate"
-update standard_combined_drug_mapping
-set standard_concept_id = 19086491
-where standard_concept_id = 40080434;
--- map concept "Vancocin HCl" to "Vancomycin"------------------------------
---
--- This SQL script performs two tasks:
---
--- 1) Find active OMOP CDM vocabulary standard RxNorm codes for all unique legacy LAERS and current FAERS case drugs we have mapped
--- 2) Map from the standard codes to standard codes with concept_class of 'Ingredient' or 'Clinical Drug Form' because We need to roll-up the safety signal stats that we generate to these two concept classes.
---
--- LTS COMPUTING LLC
-------------------------------
-set search_path = ${DATABASE_SCHEMA};
--- ====================== find active OMOP CDM vocabulary standard RxNorm codes ==============================
--- create a combined drug mapping table which will have OHDSI vocabulary standard concept codes assigned to it
---drop table if exists standard_combined_drug_mapping;
-create table if not exists standard_combined_drug_mapping as
-select a.*,
-    cast (concept_id as integer) as standard_concept_id
-from combined_drug_mapping a;
-------------------------------------------------------
--- directly lookup the standard concept associated with the drug concepts we derived from drug name
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        inner join staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.standard_concept is null
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        inner join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and cr.invalid_reason is null
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert standard branded drug form to standard ingredient or standard clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Branded Drug Form'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        inner join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and cr.invalid_reason is null
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert precise ingredient to standard ingredient or clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Precise Ingredient'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select c1.concept_id as concept_id_1,
-        c2.concept_id as concept_id_2
-    from staging_vocabulary.concept c1
-        inner join staging_vocabulary.concept c2 on c2.concept_name = regexp_replace(
-            c1.concept_name,
-            ' decanoate$| hemihydrate$| aluminum$| tetrahydrate$| hexahydrate$| oxilate$| pivalate$| sulphonate$| anhydrous$| valerate$| dihydrate$| saccharate$| diacetate$| monosodium$| palmitate$| monophosphate$| stearate$| disodium$| propionate$| bitartrate$| pamoate$| dimesylate$| methylsulfate$| hydrobromide$| malate$| monohydrate$| silicate$| calcium$| magnesium$| tannate$| carbonate$| mesylate$| succinate$| potassium$| maleate$| benzoate$| nitrate$| citrate$| hydrate$| tartrate$| acetate$| phosphate$| dihydrochloride$| hydrochloride$| HCL$| chloride$| trihydrate$| besylate$| fumarate$| lactate$| gluconate$| bromide$| sulfate$| sodium$',
-            '',
-            'i'
-        )
-    where c1.vocabulary_id = 'RxNorm'
-        and c1.concept_class_id = 'Precise Ingredient'
-        and c2.vocabulary_id = 'RxNorm'
-        and c2.standard_concept = 'S'
-        and c2.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and c1.concept_id in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert brand name to standard ingredient or standard clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason is null
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-        and relationship_id = 'Tradename of'
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- map to the standard ingredient for a single ingredient brand name that has been updated
-- - 'Concept replaced by'->'Tradename of'
-and standard_concept = 'S'
-and invalid_reason is null with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason = 'U'
-),
-cte2 as (
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship a
-        inner join staging_vocabulary.concept b on a.concept_id_1 = b.concept_id
-        inner join staging_vocabulary.concept c on a.concept_id_2 = c.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and c.vocabulary_id = 'RxNorm'
-    where a.relationship_id = 'Concept replaced by'
-        and a.concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-),
-cte3 as (
-    select cr.concept_id_1 -- this cte eliminates brands with multi-ingredient drugs
-    from cte2
-        inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and cr.relationship_id = 'Tradename of'
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.invalid_reason is null
-    group by cr.concept_id_1
-    having count(cr.concept_id_1) = 1
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = b.concept_id -- update the standard concept id to the standard concept id we found
-from cte3
-    inner join cte2 on cte2.concept_id_2 = cte3.concept_id_1
-    inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-    inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-    and cr.relationship_id = 'Tradename of'
-    and b.vocabulary_id = 'RxNorm'
-    and b.standard_concept = 'S'
-    and b.invalid_reason is null
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- map to the standard ingredient for a brand name that has been deleted
-- - 'Concept replaced by'->'Tradename of'->'Form of' with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason = 'D'
-),
-cte2 as (
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship a
-        inner join staging_vocabulary.concept b on a.concept_id_1 = b.concept_id
-        inner join staging_vocabulary.concept c on a.concept_id_2 = c.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and c.vocabulary_id = 'RxNorm'
-    where a.relationship_id = 'Tradename of'
-        and a.concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = b.concept_id -- update the standard concept id to the standard concept id we found
-from cte2
-    inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-    inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-    and cr.relationship_id = 'Form of'
-    and b.vocabulary_id = 'RxNorm'
-    and b.standard_concept = 'S'
-    and b.invalid_reason is null
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert U or D status concepts to standard ingredient or clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.invalid_reason in ('U', 'D')
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert the standard clinical drug form concepts (that we derived in all the previous logic) with only a single ingredient, to standard ingredient
--- note RxNorm multi-ingredient drugs have a "/" char separating the ingredients in the clinical drug form name
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Clinical Drug Form'
-        and c.concept_name not like '%/%'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
--------------------------------------------------------
--- these updates correct some edge cases around updated and deleted status concepts 
--- that are non-trivial to map directly using the concept_relationship table
--- potentially these cases could otherwise be handled via manual usagi mapping
--- map concept "Valproate sodium" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40239960;
--- map concept "Aricept" to "donepezil"
-update standard_combined_drug_mapping
-set standard_concept_id = 715997
-where standard_concept_id = 40011116;
--- map concept "Rabeprazole Sodium" to "rabeprazole"
-update standard_combined_drug_mapping
-set standard_concept_id = 911735
-where standard_concept_id = 40077081;
--- map concept "Naprosyn" to "Naproxen"
-update standard_combined_drug_mapping
-set standard_concept_id = 1115008
-where standard_concept_id = 40064300;
--- map concept "Tazocin" to "Piperacillin / tazobactam Injectable Solution"
-update standard_combined_drug_mapping
-set standard_concept_id = 40077118
-where standard_concept_id = 40091355;
--- map concept "Azulfidine EN-tabs" to "Sulfasalazine"
-update standard_combined_drug_mapping
-set standard_concept_id = 964339
-where standard_concept_id = 40013106;
--- map concept "Valproic Acid Syrup" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40086873;
--- map concept "Valproic Acid 500 MG" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40086835;
--- map concept "Senna" to "standardized senna concentrate"
-update standard_combined_drug_mapping
-set standard_concept_id = 19086491
-where standard_concept_id = 40080434;------------------------------
---
--- This SQL script performs two tasks:
---
--- 1) Find active OMOP CDM vocabulary standard RxNorm codes for all unique legacy LAERS and current FAERS case drugs we have mapped
--- 2) Map from the standard codes to standard codes with concept_class of 'Ingredient' or 'Clinical Drug Form' because We need to roll-up the safety signal stats that we generate to these two concept classes.
---
--- LTS COMPUTING LLC
-------------------------------
-set search_path = ${DATABASE_SCHEMA};
--- ====================== find active OMOP CDM vocabulary standard RxNorm codes ==============================
--- create a combined drug mapping table which will have OHDSI vocabulary standard concept codes assigned to it
---drop table if exists standard_combined_drug_mapping;
-create table if not exists standard_combined_drug_mapping as
-select a.*,
-    cast (concept_id as integer) as standard_concept_id
-from combined_drug_mapping a;
-------------------------------------------------------
--- directly lookup the standard concept associated with the drug concepts we derived from drug name
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        inner join staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.standard_concept is null
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        inner join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and cr.invalid_reason is null
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert standard branded drug form to standard ingredient or standard clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Branded Drug Form'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        inner join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and cr.invalid_reason is null
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert precise ingredient to standard ingredient or clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Precise Ingredient'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select c1.concept_id as concept_id_1,
-        c2.concept_id as concept_id_2
-    from staging_vocabulary.concept c1
-        inner join staging_vocabulary.concept c2 on c2.concept_name = regexp_replace(
-            c1.concept_name,
-            ' decanoate$| hemihydrate$| aluminum$| tetrahydrate$| hexahydrate$| oxilate$| pivalate$| sulphonate$| anhydrous$| valerate$| dihydrate$| saccharate$| diacetate$| monosodium$| palmitate$| monophosphate$| stearate$| disodium$| propionate$| bitartrate$| pamoate$| dimesylate$| methylsulfate$| hydrobromide$| malate$| monohydrate$| silicate$| calcium$| magnesium$| tannate$| carbonate$| mesylate$| succinate$| potassium$| maleate$| benzoate$| nitrate$| citrate$| hydrate$| tartrate$| acetate$| phosphate$| dihydrochloride$| hydrochloride$| HCL$| chloride$| trihydrate$| besylate$| fumarate$| lactate$| gluconate$| bromide$| sulfate$| sodium$',
-            '',
-            'i'
-        )
-    where c1.vocabulary_id = 'RxNorm'
-        and c1.concept_class_id = 'Precise Ingredient'
-        and c2.vocabulary_id = 'RxNorm'
-        and c2.standard_concept = 'S'
-        and c2.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and c1.concept_id in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert brand name to standard ingredient or standard clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason is null
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-        and relationship_id = 'Tradename of'
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- map to the standard ingredient for a single ingredient brand name that has been updated
-- - 'Concept replaced by'->'Tradename of'
-and standard_concept = 'S'
-and invalid_reason is null with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason = 'U'
-),
-cte2 as (
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship a
-        inner join staging_vocabulary.concept b on a.concept_id_1 = b.concept_id
-        inner join staging_vocabulary.concept c on a.concept_id_2 = c.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and c.vocabulary_id = 'RxNorm'
-    where a.relationship_id = 'Concept replaced by'
-        and a.concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-),
-cte3 as (
-    select cr.concept_id_1 -- this cte eliminates brands with multi-ingredient drugs
-    from cte2
-        inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and cr.relationship_id = 'Tradename of'
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.invalid_reason is null
-    group by cr.concept_id_1
-    having count(cr.concept_id_1) = 1
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = b.concept_id -- update the standard concept id to the standard concept id we found
-from cte3
-    inner join cte2 on cte2.concept_id_2 = cte3.concept_id_1
-    inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-    inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-    and cr.relationship_id = 'Tradename of'
-    and b.vocabulary_id = 'RxNorm'
-    and b.standard_concept = 'S'
-    and b.invalid_reason is null
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- map to the standard ingredient for a brand name that has been deleted
-- - 'Concept replaced by'->'Tradename of'->'Form of' with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Brand Name'
-        and c.invalid_reason = 'D'
-),
-cte2 as (
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship a
-        inner join staging_vocabulary.concept b on a.concept_id_1 = b.concept_id
-        inner join staging_vocabulary.concept c on a.concept_id_2 = c.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and c.vocabulary_id = 'RxNorm'
-    where a.relationship_id = 'Tradename of'
-        and a.concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = b.concept_id -- update the standard concept id to the standard concept id we found
-from cte2
-    inner join staging_vocabulary.concept_relationship cr on cte2.concept_id_2 = cr.concept_id_1
-    inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-    and cr.relationship_id = 'Form of'
-    and b.vocabulary_id = 'RxNorm'
-    and b.standard_concept = 'S'
-    and b.invalid_reason is null
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert U or D status concepts to standard ingredient or clinical drug form
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.invalid_reason in ('U', 'D')
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
-------------------------------------------------------
--- convert the standard clinical drug form concepts (that we derived in all the previous logic) with only a single ingredient, to standard ingredient
--- note RxNorm multi-ingredient drugs have a "/" char separating the ingredients in the clinical drug form name
-with cte1 as (
-    -- this is the 'input' set of non standard concepts that we want to process
-    select distinct scdm.standard_concept_id
-    from standard_combined_drug_mapping scdm
-        INNER JOIN staging_vocabulary.concept c on scdm.standard_concept_id = c.concept_id
-        and scdm.concept_id is not null
-        and c.concept_class_id = 'Clinical Drug Form'
-        and c.concept_name not like '%/%'
-),
-cte2 as (
-    -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
-    select concept_id_1,
-        concept_id_2
-    from staging_vocabulary.concept_relationship cr
-        left outer join staging_vocabulary.concept a on cr.concept_id_1 = a.concept_id
-        and a.vocabulary_id = 'RxNorm'
-        inner join staging_vocabulary.concept b on cr.concept_id_2 = b.concept_id
-        and b.vocabulary_id = 'RxNorm'
-        and b.standard_concept = 'S'
-        and b.concept_class_id in ('Ingredient')
-        and concept_id_1 in (
-            select standard_concept_id
-            from cte1
-        )
-)
-update standard_combined_drug_mapping scdm
-set standard_concept_id = concept_id_2 -- update the standard concept id to the standard concept id we found
-from cte2
-where scdm.standard_concept_id = cte2.concept_id_1;
--------------------------------------------------------
--- these updates correct some edge cases around updated and deleted status concepts 
--- that are non-trivial to map directly using the concept_relationship table
--- potentially these cases could otherwise be handled via manual usagi mapping
--- map concept "Valproate sodium" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40239960;
--- map concept "Aricept" to "donepezil"
-update standard_combined_drug_mapping
-set standard_concept_id = 715997
-where standard_concept_id = 40011116;
--- map concept "Rabeprazole Sodium" to "rabeprazole"
-update standard_combined_drug_mapping
-set standard_concept_id = 911735
-where standard_concept_id = 40077081;
--- map concept "Naprosyn" to "Naproxen"
-update standard_combined_drug_mapping
-set standard_concept_id = 1115008
-where standard_concept_id = 40064300;
--- map concept "Tazocin" to "Piperacillin / tazobactam Injectable Solution"
-update standard_combined_drug_mapping
-set standard_concept_id = 40077118
-where standard_concept_id = 40091355;
--- map concept "Azulfidine EN-tabs" to "Sulfasalazine"
-update standard_combined_drug_mapping
-set standard_concept_id = 964339
-where standard_concept_id = 40013106;
--- map concept "Valproic Acid Syrup" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40086873;
--- map concept "Valproic Acid 500 MG" to "Valproate"
-update standard_combined_drug_mapping
-set standard_concept_id = 745466
-where standard_concept_id = 40086835;
--- map concept "Senna" to "standardized senna concentrate"
-update standard_combined_drug_mapping
-set standard_concept_id = 19086491
-where standard_concept_id = 40080434;
--- map concept "Vancocin HCl" to "Vancomycin"
-update standard_combined_drug_mapping
-set standard_concept_id = 1707687
-where standard_concept_id = 40086904;
--- map concept "Isopropyl Alcohol" updated to different standard concept "Isopropyl Alcohol"
-update standard_combined_drug_mapping
-set standard_concept_id = 19028106
-where standard_concept_id = 40126573;
--- map concept "Risedronate Sodium" to standard concept "Risedronate"
-update standard_combined_drug_mapping
-set standard_concept_id = 1516800
-where standard_concept_id = 40079926;
--- map concept "Allegra D" to standard concept "fexofenadine / Pseudoephedrine Extended Release Oral Tablet"
-update standard_combined_drug_mapping
-set standard_concept_id = 40129571
-where standard_concept_id = 40223264;
--------------------------------------------------------
--- create final table with just the standard ingredient and clinical drug form of the drugs
---drop table if exists standard_case_drug;
-create table if not exists standard_case_drug as
-select distinct a.primaryid,
-    a.isr,
-    a.drug_seq,
-    a.role_cod,
-    a.standard_concept_id
-from standard_combined_drug_mapping a
-    inner join staging_vocabulary.concept c on a.standard_concept_id = c.concept_id
-    and c.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-    and c.standard_concept = 'S';
--- map concept "Vancocin HCl" to "Vancomycin"
-update standard_combined_drug_mapping
-set standard_concept_id = 1707687
-where standard_concept_id = 40086904;
--- map concept "Isopropyl Alcohol" updated to different standard concept "Isopropyl Alcohol"
-update standard_combined_drug_mapping
-set standard_concept_id = 19028106
-where standard_concept_id = 40126573;
--- map concept "Risedronate Sodium" to standard concept "Risedronate"
-update standard_combined_drug_mapping
-set standard_concept_id = 1516800
-where standard_concept_id = 40079926;
--- map concept "Allegra D" to standard concept "fexofenadine / Pseudoephedrine Extended Release Oral Tablet"
-update standard_combined_drug_mapping
-set standard_concept_id = 40129571
-where standard_concept_id = 40223264;
--------------------------------------------------------
--- create final table with just the standard ingredient and clinical drug form of the drugs
---drop table if exists standard_case_drug;
-create table if not exists standard_case_drug as
-select distinct a.primaryid,
-    a.isr,
-    a.drug_seq,
-    a.role_cod,
-    a.standard_concept_id
-from standard_combined_drug_mapping a
-    inner join staging_vocabulary.concept c on a.standard_concept_id = c.concept_id
-    and c.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-    and c.standard_concept = 'S';
-update standard_combined_drug_mapping
-set standard_concept_id = 1707687
-where standard_concept_id = 40086904;
--- map concept "Isopropyl Alcohol" updated to different standard concept "Isopropyl Alcohol"
-update standard_combined_drug_mapping
-set standard_concept_id = 19028106
-where standard_concept_id = 40126573;
--- map concept "Risedronate Sodium" to standard concept "Risedronate"
-update standard_combined_drug_mapping
-set standard_concept_id = 1516800
-where standard_concept_id = 40079926;
--- map concept "Allegra D" to standard concept "fexofenadine / Pseudoephedrine Extended Release Oral Tablet"
-update standard_combined_drug_mapping
-set standard_concept_id = 40129571
-where standard_concept_id = 40223264;
--------------------------------------------------------
--- create final table with just the standard ingredient and clinical drug form of the drugs
---drop table if exists standard_case_drug;
-create table if not exists standard_case_drug as
-select distinct a.primaryid,
-    a.isr,
-    a.drug_seq,
-    a.role_cod,
-    a.standard_concept_id
-from standard_combined_drug_mapping a
-    inner join staging_vocabulary.concept c on a.standard_concept_id = c.concept_id
-    and c.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-    and c.standard_concept = 'S';
-set standard_concept_id = 1707687
-where standard_concept_id = 40086904;
--- map concept "Isopropyl Alcohol" updated to different standard concept "Isopropyl Alcohol"
-update standard_combined_drug_mapping
-set standard_concept_id = 19028106
-where standard_concept_id = 40126573;
--- map concept "Risedronate Sodium" to standard concept "Risedronate"
-update standard_combined_drug_mapping
-set standard_concept_id = 1516800
-where standard_concept_id = 40079926;
--- map concept "Allegra D" to standard concept "fexofenadine / Pseudoephedrine Extended Release Oral Tablet"
-update standard_combined_drug_mapping
-set standard_concept_id = 40129571
-where standard_concept_id = 40223264;
--------------------------------------------------------
--- create final table with just the standard ingredient and clinical drug form of the drugs
---drop table if exists standard_case_drug;
-create table if not exists standard_case_drug as
-select distinct a.primaryid,
-    a.isr,
-    a.drug_seq,
-    a.role_cod,
-    a.standard_concept_id
-from standard_combined_drug_mapping a
-    inner join staging_vocabulary.concept c on a.standard_concept_id = c.concept_id
-    and c.concept_class_id in ('Ingredient', 'Clinical Drug Form')
-    and c.standard_concept = 'S';</sql>
+      <sql>--NOTE THIS STEP THROWS ERRORS IF NOT "SQL from file"</sql>
       <useVariableSubstitution>T</useVariableSubstitution>
-      <sqlfromfile>F</sqlfromfile>
-      <sqlfilename/>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>/home/pentaho-secondary/projects-brb265/faers/faersdbstats/drug_mapping/standardize_combined_drug_mapping.sql</sqlfilename>
       <sendOneStatement>F</sendOneStatement>
       <connection>cem_sandbox</connection>
       <parallel>N</parallel>
@@ -2521,8 +1077,8 @@ from standard_combined_drug_mapping a
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>768</xloc>
-      <yloc>1168</yloc>
+      <xloc>624</xloc>
+      <yloc>1072</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -2536,14 +1092,13 @@ from standard_combined_drug_mapping a
 -- LTS Computing LLC
 --------------------------------------------
 set search_path = ${DATABASE_SCHEMA};
-
-select row_number() over () as source_code, 
-upper(drug_name_original) as source_code_description, 
-count(*) as frequency -- (case frequency)
-from combined_drug_mapping where concept_id is null
+select row_number() over () as source_code,
+    upper(drug_name_original) as source_code_description,
+    count(*) as frequency -- (case frequency)
+from combined_drug_mapping
+where concept_id is null
 group by upper(drug_name_original)
-order by count(*) desc
-;</sql>
+order by count(*) desc;</sql>
       <useVariableSubstitution>T</useVariableSubstitution>
       <sqlfromfile>F</sqlfromfile>
       <sqlfilename/>
@@ -2715,10 +1270,10 @@ CREATE INDEX IF NOT EXISTS "IDX_${DATABASE_LOG_NAME}_2" ON ${DATABASE_LOG_SCHEMA
 
 -- temporarily create an index on the cdmv5 schema concept table to improve performance of all the mapping lookups
 -- we will then drop it at the end of this script
-set search_path = vocabulary;
+set search_path = ${DATABASE_STAGING_SCHEMA};
 --drop index if exists vocab_concept_name_ix;
-create index if not exists vocab_concept_name_ix on vocabulary.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
-analyze verbose vocabulary.concept;
+create index if not exists vocab_concept_name_ix on staging_vocabulary.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
+analyze verbose staging_vocabulary.concept;
 
 set search_path = ${DATABASE_SCHEMA};
 
@@ -2779,7 +1334,7 @@ and drug_name_clean ~*  '\(*(\y\ *(HCL|HYDROCHLORIDE)\ *\y)\)*';
 -- find exact mapping for drug name after we have removed the above keywords
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove keywords' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2800,7 +1355,7 @@ AND a.concept_id is null;
 -- find exact mapping for active ingredient
 UPDATE drug_regex_mapping a
 SET update_method = 'regex EU drug name to active ingredient' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2816,7 +1371,7 @@ and a.drug_name_clean ~*  '.* \((.*)\)';
 -- find exact mapping for active ingredient
 UPDATE drug_regex_mapping a
 SET update_method = 'regex EU drug name in parentheses to active ingredient' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2824,7 +1379,7 @@ and a.concept_id is null;
 -- lookup RxNorm concept name using words from last set of parentheses in the drug name (typically this is the ingredient name(s) for a branded drug
 UPDATE drug_regex_mapping a
 SET update_method = 'regex ingredient name in parentheses' , concept_id = b.concept_id, drug_name_clean = upper(b.concept_name)
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = regexp_replace(a.drug_name_clean, '.* \((.*)\)', '\1', 'gi')
 AND a.concept_id is null
@@ -2833,7 +1388,7 @@ and drug_name_clean ~*  '.* \((.*)\)';
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex upper' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean;
 
@@ -2845,7 +1400,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex trailing space or period chars' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2858,7 +1413,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove multiple white space' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2871,7 +1426,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove trailing spaces' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2884,7 +1439,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove leading spaces' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2897,7 +1452,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove single quotes' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2910,7 +1465,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove ^*$? punctuation chars' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2923,7 +1478,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex change forward slash to back slash' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2936,7 +1491,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove spaces before closing parenthesis' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2950,7 +1505,7 @@ and drug_name_clean ~*  '.+\y(UNKNOWN|UNK)\y.+$';
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove (unknown)' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2963,7 +1518,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove blinded' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2982,7 +1537,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove /nnnnn/' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -2998,7 +1553,7 @@ and a.concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex vitamins' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -3030,7 +1585,7 @@ order by drug_name_original desc
 ) cc 
 where word NOT IN ('','SYRUP','HCL','HYDROCHLORIDE', 'ACETIC','SODIUM','CALCIUM','SULPHATE','MONOHYDRATE') 
 and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  vocabulary.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1);
 
@@ -3047,7 +1602,7 @@ from (
 			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
 			from (
 				select upper(concept_name) as concept_name, concept_id
-				from vocabulary.concept b
+				from staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id = 'Clinical Drug Form' 
 				and concept_name like '%\/%'
@@ -3057,7 +1612,7 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  vocabulary.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
@@ -3093,13 +1648,13 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  vocabulary.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word  in (	select * 
 			from (
 				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+')) as word
-				from  vocabulary.concept b
+				from  staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id in ('Clinical Drug Form')
 				and b.concept_name like '%\/%' 
@@ -3141,7 +1696,7 @@ from (
 			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
 			from (
 				select upper(concept_name) as concept_name, concept_id
-				from vocabulary.concept b
+				from staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id = 'Ingredient' 
 			) aa
@@ -3150,7 +1705,7 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  vocabulary.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
@@ -3186,13 +1741,13 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  vocabulary.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word  in (	select * 
 			from (
 				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+')) as word
-				from  vocabulary.concept b
+				from  staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id in ('Ingredient')
 			) aa 
@@ -3233,7 +1788,7 @@ from (
 			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
 			from (
 				select upper(concept_name) as concept_name, concept_id
-				from vocabulary.concept b
+				from staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id = 'Brand Name' 
 			) aa
@@ -3242,7 +1797,7 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  vocabulary.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
@@ -3277,13 +1832,13 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
-			from  vocabulary.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word  in (	select * 
 			from (
 				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+')) as word
-				from  vocabulary.concept b
+				from  staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id in ('Brand Name')
 			) aa 
@@ -3341,7 +1896,7 @@ create index if not exists prod_ai_ix on drug_ai_mapping(prod_ai);
 -- find exact mapping using the active ingredient provided in the drug table
 UPDATE drug_ai_mapping a
 SET update_method = 'drug active ingredients' , concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.prod_ai;
 
@@ -3378,7 +1933,7 @@ create index if not exists nda_num_ix on drug_nda_mapping(nda_num);
 -- compare nda ingredient name and trade name to improve specificity
 UPDATE drug_nda_mapping a
 SET update_method = 'drug nda_num ingredients' , nda_ingredient = nda_ingredient.ingredient, concept_id = b.concept_id
-FROM vocabulary.concept b
+FROM staging_vocabulary.concept b
 inner join nda_ingredient
 on upper(b.concept_name) = nda_ingredient.ingredient
 WHERE b.vocabulary_id = 'RxNorm'
@@ -4374,47 +2929,47 @@ WHERE z.ROW_NUM = 1;
         <field>
           <variable_name>CEM_DOWNLOAD_DATA_FOLDER</variable_name>
           <variable_value>${CEM_DOWNLOAD_DATA_FOLDER}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>AWS_S3_BUCKET_NAME</variable_name>
           <variable_value>${AWS_S3_BUCKET_NAME}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>AWS_S3_ACCESS_KEY</variable_name>
           <variable_value>${AWS_S3_ACCESS_KEY}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>AWS_S3_SECRET_KEY</variable_name>
           <variable_value>${AWS_S3_SECRET_KEY}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>DATABASE_HOST</variable_name>
           <variable_value>${DATABASE_HOST}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>DATABASE_NAME</variable_name>
           <variable_value>${DATABASE_NAME}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>DATABASE_SCHEMA</variable_name>
           <variable_value>${DATABASE_SCHEMA}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>DATABASE_USERNAME</variable_name>
           <variable_value>${DATABASE_USERNAME}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>DATABASE_PASSWORD</variable_name>
           <variable_value>${DATABASE_PASSWORD}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>DATABASE_LOG_SCHEMA</variable_name>
@@ -4424,22 +2979,22 @@ WHERE z.ROW_NUM = 1;
         <field>
           <variable_name>LOAD_NEW_DATA</variable_name>
           <variable_value>${LOAD_NEW_DATA}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>LOAD_NEW_QUARTER</variable_name>
           <variable_value>${LOAD_NEW_QUARTER}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>LOAD_NEW_YEAR</variable_name>
           <variable_value>${LOAD_NEW_YEAR}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>LOAD_ALL_TIME</variable_name>
           <variable_value>${LOAD_ALL_TIME}</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
+          <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>CEM_ORANGE_BOOK_DOWNLOAD_FILENAME</variable_name>
@@ -4474,6 +3029,65 @@ WHERE z.ROW_NUM = 1;
       <nr>0</nr>
       <xloc>48</xloc>
       <yloc>32</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>derive_standard_drug_outcome_statistics.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+--
+-- This SQL script creates a statistics table called standard_drug_outcome_stats (using the counts from the previously calculated 2x2 contingency table)
+-- with the following statistics for each drug/outcome pair:
+--
+-- 1) Case count
+-- 2) Proportional Reporting Ratio (PRR) along with the 95% CI upper and lower values
+-- 3) Reporting Odds Ratio (ROR) along with the 95% CI upper and lower values
+--
+-- PRR for pair:(drug P, outcome R) is calculated as (A / (A + B)) / (C / (C + D)
+--
+-- ROR for pair:(drug P, outcome R) is calculated as (A / C) / (B / D)
+--
+-- Where:
+--		A = case_count for the pair:(drug P, outcome R)
+--		B = sum(case_count) for all pairs:(drug P, all outcomes except outcome R)
+--		C = sum(case_count) for all pairs:(all drugs except drug P, outcome R)
+--		D = sum(case_count) for all pairs:(all drugs except drug P, all outcomes except outcome R)
+--
+-- Note if C is 0 then the resulting PRR and ROR values will be null. Potentially a relatively high constant value
+-- could be assigned instead, to indicate a potential PRR and ROR signal in these cases.
+--
+--
+-- Standard deviations are obtained from Douglas G Altman's Practical Statistics for Medical Research. 1999. Chapter 10.11. Page 267 
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists standard_drug_outcome_statistics;
+create table if not exists standard_drug_outcome_statistics as
+select drug_concept_id, outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id, 
+    count_a as case_count,
+    round((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)),5) as prr,
+    round(exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))+1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)-(1.0/(count_c+count_d)))),5) as prr_95_percent_upper_confidence_limit,
+    round(exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))-1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)-(1.0/(count_c+count_d)))),5) as prr_95_percent_lower_confidence_limit,
+    round(((count_a / count_c) / (count_b / count_d)),5) as ror,
+    round(exp((ln((count_a / count_c) / (count_b / count_d)))+1.96*sqrt((1.0/count_a)+(1.0/count_b)+(1.0/count_c)+(1.0/count_d))),5) as ror_95_percent_upper_confidence_limit,
+    round(exp((ln((count_a / count_c) / (count_b / count_d)))-1.96*sqrt((1.0/count_a)+(1.0/count_b)+(1.0/count_c)+(1.0/count_d))),5) as ror_95_percent_lower_confidence_limit
+from standard_drug_outcome_contingency_table;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>448</xloc>
+      <yloc>1568</yloc>
       <attributes_kjc/>
     </entry>
   </entries>
@@ -4767,7 +3381,16 @@ WHERE z.ROW_NUM = 1;
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>derive_standard_drug_outcome_drilldown.sql</from>
+      <from>derive_standard_drug_outcome_contingency_table.sql</from>
+      <to>derive_standard_drug_outcome_statistics.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>derive_standard_drug_outcome_statistics.sql</from>
       <to>map_meddra_to_snomed.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -4776,7 +3399,7 @@ WHERE z.ROW_NUM = 1;
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>derive_standard_drug_outcome_contingency_table.sql</from>
+      <from>map_meddra_to_snomed.sql</from>
       <to>derive_standard_drug_outcome_drilldown.sql</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -4926,8 +3549,8 @@ update s3 bucket location to faers and laers
     </notepad>
     <notepad>
       <note>&lt;&lt; standard and source schemas?</note>
-      <xloc>272</xloc>
-      <yloc>1776</yloc>
+      <xloc>416</xloc>
+      <yloc>1840</yloc>
       <width>233</width>
       <heigth>27</heigth>
       <fontname>Ubuntu</fontname>

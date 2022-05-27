@@ -8,7 +8,7 @@
 -- LTS COMPUTING LLC
 ------------------------------
 
-set search_path = faers;
+set search_path = ${DATABASE_SCHEMA};
 
 -- ====================== find active OMOP CDM vocabulary standard RxNorm codes ==============================
 
