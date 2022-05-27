@@ -415,21 +415,14 @@
 ...Parameters
 ...define BASE_FILE_DIR
 
-
-
-
-Note you will always have to manually set up a database connection to span multiple jobs/transforms
-
-Edit > Set Environment Variables
-
-set BASE_FILE_DIR  to the directory containing your faers.config file
+2nd run should produce error free log, since database password needs to be read in.
 
 https://help.hitachivantara.com/Documentation/Pentaho/5.2/0L0/0Y0/090/020/000/000
 </note>
       <xloc>32</xloc>
       <yloc>160</yloc>
-      <width>684</width>
-      <heigth>282</heigth>
+      <width>603</width>
+      <heigth>163</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
