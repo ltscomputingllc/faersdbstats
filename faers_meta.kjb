@@ -2653,7 +2653,7 @@ CREATE TABLE IF NOT EXISTS ther (
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>/home/brb265/faers/faersdbstats/load_data_files_from_website/domain_transform.ktr</filename>
+      <filename>${FAERSDBSTATS_REPO_LOCATION}/load_data_files_from_website/domain_transform.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -2785,7 +2785,7 @@ WHERE z.ROW_NUM = 1;
       <attributes/>
       <specification_method>filename</specification_method>
       <job_object_id/>
-      <filename>/home/brb265/faers/faersdbstats/reference_and_mapping_data/country_codes_job.kjb</filename>
+      <filename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/country_codes_job.kjb</filename>
       <jobname/>
       <directory/>
       <arg_from_previous>N</arg_from_previous>
