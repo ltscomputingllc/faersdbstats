@@ -159,27 +159,27 @@
     </field>
     <field>
       <id>EXECUTING_SERVER</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>EXECUTING_SERVER</name>
     </field>
     <field>
       <id>EXECUTING_USER</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>EXECUTING_USER</name>
     </field>
     <field>
       <id>START_JOB_ENTRY</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>START_JOB_ENTRY</name>
     </field>
     <field>
       <id>CLIENT</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>CLIENT</name>
     </field>
   </job-log-table>
   <jobentry-log-table>
-    <connection>cem_sandbox_log</connection>
+    <connection>cem_sandbox</connection>
     <schema>${DATABASE_LOG_SCHEMA}</schema>
     <table>${DATABASE_LOG_TABLE}</table>
     <timeout_days>3.0</timeout_days>
@@ -260,17 +260,17 @@
     </field>
     <field>
       <id>LOG_FIELD</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>LOG_FIELD</name>
     </field>
     <field>
       <id>COPY_NR</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>COPY_NR</name>
     </field>
   </jobentry-log-table>
   <channel-log-table>
-    <connection>cem_sandbox_log</connection>
+    <connection>cem_sandbox</connection>
     <schema>${DATABASE_LOG_SCHEMA}</schema>
     <table>${DATABASE_LOG_TABLE}</table>
     <timeout_days>3.0</timeout_days>
@@ -428,7 +428,7 @@
       <type>SET_VARIABLES</type>
       <attributes/>
       <replacevars>Y</replacevars>
-      <filename>${FAERSDBSTATS_REPO_LOCATION}/faers.config</filename>
+      <filename>${FAERSDBSTATS_REPO_LOCATION}/../faers.config</filename>
       <file_variable_type>JVM</file_variable_type>
       <fields>
         <field>
@@ -525,9 +525,9 @@ create table if not exists eu_drug_name_active_ingredient
       <type>SQL</type>
       <attributes/>
       <sql/>
-      <useVariableSubstitution>F</useVariableSubstitution>
+      <useVariableSubstitution>T</useVariableSubstitution>
       <sqlfromfile>T</sqlfromfile>
-      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/create_eu_drug_name_active_ingredient_part_2.sql</sqlfilename>
+      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/create_eu_drug_name_active_ingredient_table_part_2.sql</sqlfilename>
       <sendOneStatement>F</sendOneStatement>
       <connection>cem_sandbox</connection>
       <parallel>N</parallel>
@@ -662,7 +662,7 @@ aws s3 cp ${BASE_FILE_DIR}/data_setup/EU_registered_drugs_by_active_ingredient_u
       <to>Create table (create_eu_drug_name_active_ingredient.sql) 2</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>

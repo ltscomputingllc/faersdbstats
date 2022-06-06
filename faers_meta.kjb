@@ -159,22 +159,22 @@
     </field>
     <field>
       <id>EXECUTING_SERVER</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>EXECUTING_SERVER</name>
     </field>
     <field>
       <id>EXECUTING_USER</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>EXECUTING_USER</name>
     </field>
     <field>
       <id>START_JOB_ENTRY</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>START_JOB_ENTRY</name>
     </field>
     <field>
       <id>CLIENT</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>CLIENT</name>
     </field>
   </job-log-table>
@@ -260,12 +260,12 @@
     </field>
     <field>
       <id>LOG_FIELD</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>LOG_FIELD</name>
     </field>
     <field>
       <id>COPY_NR</id>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <name>COPY_NR</name>
     </field>
   </jobentry-log-table>
@@ -2779,43 +2779,6 @@ WHERE z.ROW_NUM = 1;
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>eu_drug_name_active_ingredient_job</name>
-      <description/>
-      <type>JOB</type>
-      <attributes/>
-      <specification_method>filename</specification_method>
-      <job_object_id/>
-      <filename>/home/brb265/faers/faersdbstats/reference_and_mapping_data/eu_drug_name_active_ingredient_job.kjb</filename>
-      <jobname/>
-      <directory/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>Y</set_logfile>
-      <logfile>${FAERSDBSTATS_REPO_LOCATION}/../logs/eu_drug_job</logfile>
-      <logext>txt</logext>
-      <add_date>Y</add_date>
-      <add_time>N</add_time>
-      <loglevel>Rowlevel</loglevel>
-      <slave_server_name/>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <expand_remote_job>N</expand_remote_job>
-      <create_parent_folder>Y</create_parent_folder>
-      <pass_export>N</pass_export>
-      <run_configuration>Pentaho local</run_configuration>
-      <parameters>
-        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>
-      <set_append_logfile>Y</set_append_logfile>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>304</xloc>
-      <yloc>480</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
       <name>country_codes_job</name>
       <description/>
       <type>JOB</type>
@@ -2860,7 +2823,7 @@ WHERE z.ROW_NUM = 1;
       <sql/>
       <useVariableSubstitution>T</useVariableSubstitution>
       <sqlfromfile>T</sqlfromfile>
-      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/../logging/pentaho_log_table_creation.sql</sqlfilename>
+      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/pentaho_log_table_creation.sql</sqlfilename>
       <sendOneStatement>F</sendOneStatement>
       <connection>cem_sandbox</connection>
       <parallel>N</parallel>
@@ -3090,6 +3053,43 @@ from standard_drug_outcome_contingency_table;
       <yloc>1568</yloc>
       <attributes_kjc/>
     </entry>
+    <entry>
+      <name>eu_drug_name_active_ingredient_job</name>
+      <description/>
+      <type>JOB</type>
+      <attributes/>
+      <specification_method>filename</specification_method>
+      <job_object_id/>
+      <filename>${Internal.Entry.Current.Directory}/reference_and_mapping_data/eu_drug_name_active_ingredient_job.kjb</filename>
+      <jobname/>
+      <directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>Y</set_logfile>
+      <logfile>${FAERSDBSTATS_REPO_LOCATION}/../logs/eu_drug_job</logfile>
+      <logext>txt</logext>
+      <add_date>Y</add_date>
+      <add_time>Y</add_time>
+      <loglevel>Rowlevel</loglevel>
+      <slave_server_name/>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <expand_remote_job>N</expand_remote_job>
+      <create_parent_folder>N</create_parent_folder>
+      <pass_export>N</pass_export>
+      <run_configuration>Pentaho local</run_configuration>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <set_append_logfile>Y</set_append_logfile>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>480</yloc>
+      <attributes_kjc/>
+    </entry>
   </entries>
   <hops>
     <hop>
@@ -3106,15 +3106,6 @@ from standard_drug_outcome_contingency_table;
       <to>Set AWS Credentials</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>nda</from>
-      <to>eu_drug_name_active_ingredient_job</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
@@ -3124,7 +3115,7 @@ from standard_drug_outcome_contingency_table;
       <to>Create pdi_logging table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3215,8 +3206,8 @@ from standard_drug_outcome_contingency_table;
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
     </hop>
     <hop>
       <from>SUCCESS IF LOAD_ALL_TIME=1</from>
@@ -3255,20 +3246,11 @@ from standard_drug_outcome_contingency_table;
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>eu_drug_name_active_ingredient_job</from>
-      <to>create_meddra_snomed_mapping.sql</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>Create pdi_logging table</from>
       <to>Update LOG SQL</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3367,7 +3349,7 @@ from standard_drug_outcome_contingency_table;
       <to>Wait for 3s</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
@@ -3407,6 +3389,24 @@ from standard_drug_outcome_contingency_table;
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
+    <hop>
+      <from>nda</from>
+      <to>eu_drug_name_active_ingredient_job</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>eu_drug_name_active_ingredient_job</from>
+      <to>create_meddra_snomed_mapping.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
   </hops>
   <notepads>
     <notepad>
@@ -3415,7 +3415,7 @@ from standard_drug_outcome_contingency_table;
 - Postgres
 - a database connection established within Pentaho (edit > show used environment variables... define host, db, user, pw)
 - a properly configured faers.config file
-- omop data loaded into vocabulary schema
+- omop data loaded into vocabulary schema (or proper license to obtain the data)
 -data's in staging_vocabulary for create_meddra_snomed_mapping.sql
 
 ABOUT EACH STEP
@@ -3553,6 +3553,29 @@ update s3 bucket location to faers and laers
       <yloc>1840</yloc>
       <width>233</width>
       <heigth>27</heigth>
+      <fontname>Ubuntu</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>Current Issues:
+fails in domain transform
+map_all_drugname_to_rx</note>
+      <xloc>524</xloc>
+      <yloc>654</yloc>
+      <width>181</width>
+      <heigth>61</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>

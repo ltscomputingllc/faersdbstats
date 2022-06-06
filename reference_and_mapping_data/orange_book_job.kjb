@@ -596,7 +596,7 @@ aws s3 cp ${BASE_FILE_DIR}/${CEM_DOWNLOAD_DATA_FOLDER}_setup/orange-book-data-fi
       <type>SET_VARIABLES</type>
       <attributes/>
       <replacevars>Y</replacevars>
-      <filename>${Internal.Entry.Current.Directory}/../faers.config</filename>
+      <filename>${Internal.Entry.Current.Directory}/../../faers.config</filename>
       <file_variable_type>JVM</file_variable_type>
       <fields>
         <field>

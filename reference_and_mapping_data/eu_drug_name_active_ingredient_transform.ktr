@@ -12,9 +12,9 @@
     </parameters>
     <log>
       <trans-log-table>
-        <connection>cem_sandbox_conn</connection>
-        <schema>public</schema>
-        <table>pdi_logging</table>
+        <connection>cem_sandbox</connection>
+        <schema>${DATABASE_LOG_SCHEMA}</schema>
+        <table>${DATABASE_LOG_TABLE}</table>
         <size_limit_lines>5000</size_limit_lines>
         <interval>1s</interval>
         <timeout_days>3.0</timeout_days>
@@ -111,24 +111,24 @@
         </field>
         <field>
           <id>EXECUTING_SERVER</id>
-          <enabled>N</enabled>
+          <enabled>Y</enabled>
           <name>EXECUTING_SERVER</name>
         </field>
         <field>
           <id>EXECUTING_USER</id>
-          <enabled>N</enabled>
+          <enabled>Y</enabled>
           <name>EXECUTING_USER</name>
         </field>
         <field>
           <id>CLIENT</id>
-          <enabled>N</enabled>
+          <enabled>Y</enabled>
           <name>CLIENT</name>
         </field>
       </trans-log-table>
       <perf-log-table>
-        <connection>cem_sandbox_conn</connection>
-        <schema>public</schema>
-        <table>pdi_logging</table>
+        <connection>cem_sandbox</connection>
+        <schema>${DATABASE_LOG_SCHEMA}</schema>
+        <table>${DATABASE_LOG_TABLE}</table>
         <interval>1s</interval>
         <timeout_days>3.0</timeout_days>
         <field>
@@ -208,9 +208,9 @@
         </field>
       </perf-log-table>
       <channel-log-table>
-        <connection>cem_sandbox_conn</connection>
-        <schema>public</schema>
-        <table>pdi_logging</table>
+        <connection>cem_sandbox</connection>
+        <schema>${DATABASE_LOG_SCHEMA}</schema>
+        <table>${DATABASE_LOG_TABLE}</table>
         <timeout_days>3.0</timeout_days>
         <field>
           <id>ID_BATCH</id>
@@ -274,9 +274,9 @@
         </field>
       </channel-log-table>
       <step-log-table>
-        <connection>cem_sandbox_conn</connection>
-        <schema>public</schema>
-        <table>pdi_logging</table>
+        <connection>cem_sandbox</connection>
+        <schema>${DATABASE_LOG_SCHEMA}</schema>
+        <table>${DATABASE_LOG_TABLE}</table>
         <timeout_days>3.0</timeout_days>
         <field>
           <id>ID_BATCH</id>
@@ -345,14 +345,14 @@
         </field>
         <field>
           <id>LOG_FIELD</id>
-          <enabled>N</enabled>
+          <enabled>Y</enabled>
           <name>LOG_FIELD</name>
         </field>
       </step-log-table>
       <metrics-log-table>
-        <connection>cem_sandbox_conn</connection>
-        <schema>public</schema>
-        <table>pdi_logging</table>
+        <connection>cem_sandbox</connection>
+        <schema>${DATABASE_LOG_SCHEMA}</schema>
+        <table>${DATABASE_LOG_TABLE}</table>
         <timeout_days>3.0</timeout_days>
         <field>
           <id>ID_BATCH</id>
@@ -416,7 +416,7 @@
     <feedback_size>50000</feedback_size>
     <using_thread_priorities>Y</using_thread_priorities>
     <shared_objects_file/>
-    <capture_step_performance>N</capture_step_performance>
+    <capture_step_performance>Y</capture_step_performance>
     <step_performance_capturing_delay>1000</step_performance_capturing_delay>
     <step_performance_capturing_size_limit>100</step_performance_capturing_size_limit>
     <dependencies>

@@ -5,7 +5,7 @@
 -- 
 -- LTS Computing LLC
 -----------------------------------------------------------------------------------------------
--- set search_path = faers;
+set search_path = ${DATABASE_SCHEMA};
 
 -- drop table if exists eu_drug_name_active_ingredient;
 -- create table eu_drug_name_active_ingredient 
@@ -26,8 +26,8 @@
 -- COPY eu_drug_name_active_ingredient FROM 'EU_registered_drugs_by_active_ingredient_utf8.csv' WITH DELIMITER E'\t' CSV HEADER QUOTE E'"';
 
 -- create the mapping table with the distinct EU drug names and active ingredient(s)
-drop table if exists eu_drug_name_active_ingredient_mapping;
-create table eu_drug_name_active_ingredient_mapping as
+--drop table if exists eu_drug_name_active_ingredient_mapping;
+create table if not exists eu_drug_name_active_ingredient_mapping as
 select distinct upper(active_substance) as active_substance, upper(brand_name) as brand_name
 from eu_drug_name_active_ingredient
 -- where human_or_veterinary = 'Human' and upper(active_substance) <> 'NOT APPLICABLE' and brand_name is not null

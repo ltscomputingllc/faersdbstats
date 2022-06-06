@@ -54,8 +54,14 @@ CREATE TABLE IF NOT EXISTS pdi_logging (
 	step_copy int4 NULL,
 	executing_server varchar(255) NULL,
 	executing_user varchar(255) NULL,
-	client varchar(255) NULL
+	client varchar(255) NULL,
+	START_JOB_ENTRY VARCHAR(255),
+	COPY_NR INTEGER
 );
+--ALTER TABLE "public".pdi_logging ADD COLUMN COPY_NR INTEGER
+--;
+--ALTER TABLE "public".pdi_logging ADD COLUMN START_JOB_ENTRY VARCHAR(255)
+--;
 CREATE INDEX IF NOT EXISTS IDX_NULL_2 ON public.pdi_logging USING btree (transname, log_date);
 CREATE INDEX IF NOT EXISTS idx_pdi_logging_1 ON public.pdi_logging USING btree (id_job);
 CREATE INDEX IF NOT EXISTS idx_pdi_logging_2 ON public.pdi_logging USING btree (errors, status, jobname);
