@@ -23,7 +23,7 @@ drop index if exists vocab_concept_name_ix;
 create index vocab_concept_name_ix on staging_vocabulary.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
 analyze verbose staging_vocabulary.concept;
 
-set search_path = faers;
+set search_path = ${DATABASE_SCHEMA};
 
 -- build a mapping table to generate a cleaned up version of the drugname for exact match joins to the concept table concept_name column 
 -- for RxNorm concepts only 

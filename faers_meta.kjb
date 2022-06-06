@@ -2018,8 +2018,8 @@ and update_method is null;
 
 </sql>
       <useVariableSubstitution>T</useVariableSubstitution>
-      <sqlfromfile>F</sqlfromfile>
-      <sqlfilename/>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/drug_mapping/map_all_drugname_to_rxnorm.sql</sqlfilename>
       <sendOneStatement>F</sendOneStatement>
       <connection>cem_sandbox</connection>
       <parallel>N</parallel>
@@ -2785,7 +2785,7 @@ WHERE z.ROW_NUM = 1;
       <attributes/>
       <specification_method>filename</specification_method>
       <job_object_id/>
-      <filename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/country_codes_job.kjb</filename>
+      <filename>/home/brb265/faers/faersdbstats/reference_and_mapping_data/country_codes_job.kjb</filename>
       <jobname/>
       <directory/>
       <arg_from_previous>N</arg_from_previous>
@@ -3570,12 +3570,11 @@ update s3 bucket location to faers and laers
     </notepad>
     <notepad>
       <note>Current Issues:
-fails in domain transform
-map_all_drugname_to_rx</note>
+none known</note>
       <xloc>524</xloc>
       <yloc>654</yloc>
-      <width>181</width>
-      <heigth>61</heigth>
+      <width>109</width>
+      <heigth>44</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>
