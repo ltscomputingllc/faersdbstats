@@ -2660,15 +2660,15 @@ CREATE TABLE IF NOT EXISTS ther (
       <exec_per_row>N</exec_per_row>
       <clear_rows>N</clear_rows>
       <clear_files>N</clear_files>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Basic</loglevel>
+      <set_logfile>Y</set_logfile>
+      <logfile>${BASE_FILE_DIR}/../logs/domain_transforms</logfile>
+      <logext>txt</logext>
+      <add_date>Y</add_date>
+      <add_time>Y</add_time>
+      <loglevel>Error</loglevel>
       <cluster>N</cluster>
       <slave_server_name/>
-      <set_append_logfile>N</set_append_logfile>
+      <set_append_logfile>Y</set_append_logfile>
       <wait_until_finished>Y</wait_until_finished>
       <follow_abort_remote>N</follow_abort_remote>
       <create_parent_folder>N</create_parent_folder>
@@ -3441,11 +3441,17 @@ SUCCESS IF LOAD_ALL_TIME=1		**USE CASE LOGIC***
 
 To-do: reestablish database connection so that faers_meta works without having to run orange_book_job first.
 update s3 bucket location to faers and laers
+
+Troubleshooting:
+if "Logging" tab stops producing output restart spoon
+if Java Null Pointer Error (and/or job 'job") restart spoon then rebuild failing step as if new
+
+
 </note>
       <xloc>464</xloc>
       <yloc>16</yloc>
       <width>1343</width>
-      <heigth>554</heigth>
+      <heigth>656</heigth>
       <fontname>Ubuntu</fontname>
       <fontsize>11</fontsize>
       <fontbold>N</fontbold>

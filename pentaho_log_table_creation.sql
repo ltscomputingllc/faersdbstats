@@ -37,7 +37,8 @@ CREATE TABLE IF NOT EXISTS pdi_logging (
 	root_channel_id varchar(255) NULL,
 	transname varchar(255) NULL,
 	stepname varchar(255) NULL,
-	RESULT bool NULL,
+	RESULT varchar(5) NULL,
+	"RESULT" varchar(5) NULL,
 	nr_result_rows int8 NULL,
 	nr_result_files int8 NULL,
 	metrics_date timestamp NULL,
@@ -50,7 +51,7 @@ CREATE TABLE IF NOT EXISTS pdi_logging (
 	step_copy int4 NULL,
 	input_buffer_rows int8 NULL,
 	output_buffer_rows int8 NULL,
-	RESULT varchar(5) NULL,
+
 	step_copy int4 NULL,
 	executing_server varchar(255) NULL,
 	executing_user varchar(255) NULL,
