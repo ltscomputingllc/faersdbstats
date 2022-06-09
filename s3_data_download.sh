@@ -1,9 +1,8 @@
 #!/bin/bash
 #shell options #-s enable (set) each optname #globstar enables ** recursive dir search
 
-source ../faers.config
+#source ../faers.config
 
-#source ./faersdbstats/faers.config
  #export AWS_PROFILE=user1
 
 export "AWS_ACCESS_KEY_ID=${AWS_S3_ACCESS_KEY}"
