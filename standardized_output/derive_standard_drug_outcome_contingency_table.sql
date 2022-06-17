@@ -25,7 +25,7 @@ with cte as (
 select sum(drug_outcome_pair_count) as count_d1 from standard_drug_outcome_count 
 )  
 select drug_concept_id, outcome_concept_id, count_d1
-from standard_drug_outcome_count a,  cte -- we need the same total for all rows so do cross join!
+from standard_drug_outcome_count a,  cte; -- we need the same total for all rows so do cross join!
 
 --============= On a 4+ CPU postgresql server, run the following 3 queries in 3 different postgresql sessions so they run concurrently!
 

@@ -1,4 +1,4 @@
-------------------------------
+﻿------------------------------
 --
 -- This SQL script creates a statistics table called standard_drug_outcome_stats (using the counts from the previously calculated 2x2 contingency table)
 -- with the following statistics for each drug/outcome pair:

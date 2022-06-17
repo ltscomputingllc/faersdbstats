@@ -1,0 +1,3612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job>
+  <name>faers_meta</name>
+  <description/>
+  <extended_description/>
+  <job_version/>
+  <job_status>0</job_status>
+  <directory>/</directory>
+  <created_user>-</created_user>
+  <created_date>2022/02/14 11:07:21.196</created_date>
+  <modified_user>-</modified_user>
+  <modified_date>2022/02/14 11:07:21.196</modified_date>
+  <parameters>
+    </parameters>
+  <connection>
+    <name>cem_sandbox</name>
+    <server>${DATABASE_HOST}</server>
+    <type>POSTGRESQL</type>
+    <access>Native</access>
+    <database>${DATABASE_NAME}</database>
+    <port>5432</port>
+    <username>${DATABASE_USERNAME}</username>
+    <password>${DATABASE_PASSWORD}</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>PORT_NUMBER</code>
+        <attribute>5432</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
+      </attribute>
+    </attributes>
+  </connection>
+  <slaveservers>
+    </slaveservers>
+  <job-log-table>
+    <connection>cem_sandbox</connection>
+    <schema>${DATABASE_LOG_SCHEMA}</schema>
+    <table>${DATABASE_LOG_NAME}</table>
+    <size_limit_lines>5000</size_limit_lines>
+    <interval>1s</interval>
+    <timeout_days>3.0</timeout_days>
+    <field>
+      <id>ID_JOB</id>
+      <enabled>Y</enabled>
+      <name>ID_JOB</name>
+    </field>
+    <field>
+      <id>CHANNEL_ID</id>
+      <enabled>Y</enabled>
+      <name>CHANNEL_ID</name>
+    </field>
+    <field>
+      <id>JOBNAME</id>
+      <enabled>Y</enabled>
+      <name>JOBNAME</name>
+    </field>
+    <field>
+      <id>STATUS</id>
+      <enabled>Y</enabled>
+      <name>STATUS</name>
+    </field>
+    <field>
+      <id>LINES_READ</id>
+      <enabled>Y</enabled>
+      <name>LINES_READ</name>
+    </field>
+    <field>
+      <id>LINES_WRITTEN</id>
+      <enabled>Y</enabled>
+      <name>LINES_WRITTEN</name>
+    </field>
+    <field>
+      <id>LINES_UPDATED</id>
+      <enabled>Y</enabled>
+      <name>LINES_UPDATED</name>
+    </field>
+    <field>
+      <id>LINES_INPUT</id>
+      <enabled>Y</enabled>
+      <name>LINES_INPUT</name>
+    </field>
+    <field>
+      <id>LINES_OUTPUT</id>
+      <enabled>Y</enabled>
+      <name>LINES_OUTPUT</name>
+    </field>
+    <field>
+      <id>LINES_REJECTED</id>
+      <enabled>Y</enabled>
+      <name>LINES_REJECTED</name>
+    </field>
+    <field>
+      <id>ERRORS</id>
+      <enabled>Y</enabled>
+      <name>ERRORS</name>
+    </field>
+    <field>
+      <id>STARTDATE</id>
+      <enabled>Y</enabled>
+      <name>STARTDATE</name>
+    </field>
+    <field>
+      <id>ENDDATE</id>
+      <enabled>Y</enabled>
+      <name>ENDDATE</name>
+    </field>
+    <field>
+      <id>LOGDATE</id>
+      <enabled>Y</enabled>
+      <name>LOGDATE</name>
+    </field>
+    <field>
+      <id>DEPDATE</id>
+      <enabled>Y</enabled>
+      <name>DEPDATE</name>
+    </field>
+    <field>
+      <id>REPLAYDATE</id>
+      <enabled>Y</enabled>
+      <name>REPLAYDATE</name>
+    </field>
+    <field>
+      <id>LOG_FIELD</id>
+      <enabled>Y</enabled>
+      <name>LOG_FIELD</name>
+    </field>
+    <field>
+      <id>EXECUTING_SERVER</id>
+      <enabled>Y</enabled>
+      <name>EXECUTING_SERVER</name>
+    </field>
+    <field>
+      <id>EXECUTING_USER</id>
+      <enabled>Y</enabled>
+      <name>EXECUTING_USER</name>
+    </field>
+    <field>
+      <id>START_JOB_ENTRY</id>
+      <enabled>Y</enabled>
+      <name>START_JOB_ENTRY</name>
+    </field>
+    <field>
+      <id>CLIENT</id>
+      <enabled>Y</enabled>
+      <name>CLIENT</name>
+    </field>
+  </job-log-table>
+  <jobentry-log-table>
+    <connection>cem_sandbox</connection>
+    <schema>${DATABASE_LOG_SCHEMA}</schema>
+    <table>${DATABASE_LOG_NAME}</table>
+    <timeout_days>3.0</timeout_days>
+    <field>
+      <id>ID_BATCH</id>
+      <enabled>Y</enabled>
+      <name>ID_BATCH</name>
+    </field>
+    <field>
+      <id>CHANNEL_ID</id>
+      <enabled>Y</enabled>
+      <name>CHANNEL_ID</name>
+    </field>
+    <field>
+      <id>LOG_DATE</id>
+      <enabled>Y</enabled>
+      <name>LOG_DATE</name>
+    </field>
+    <field>
+      <id>JOBNAME</id>
+      <enabled>Y</enabled>
+      <name>TRANSNAME</name>
+    </field>
+    <field>
+      <id>JOBENTRYNAME</id>
+      <enabled>Y</enabled>
+      <name>STEPNAME</name>
+    </field>
+    <field>
+      <id>LINES_READ</id>
+      <enabled>Y</enabled>
+      <name>LINES_READ</name>
+    </field>
+    <field>
+      <id>LINES_WRITTEN</id>
+      <enabled>Y</enabled>
+      <name>LINES_WRITTEN</name>
+    </field>
+    <field>
+      <id>LINES_UPDATED</id>
+      <enabled>Y</enabled>
+      <name>LINES_UPDATED</name>
+    </field>
+    <field>
+      <id>LINES_INPUT</id>
+      <enabled>Y</enabled>
+      <name>LINES_INPUT</name>
+    </field>
+    <field>
+      <id>LINES_OUTPUT</id>
+      <enabled>Y</enabled>
+      <name>LINES_OUTPUT</name>
+    </field>
+    <field>
+      <id>LINES_REJECTED</id>
+      <enabled>Y</enabled>
+      <name>LINES_REJECTED</name>
+    </field>
+    <field>
+      <id>ERRORS</id>
+      <enabled>Y</enabled>
+      <name>ERRORS</name>
+    </field>
+    <field>
+      <id>RESULT</id>
+      <enabled>Y</enabled>
+      <name>RESULT</name>
+    </field>
+    <field>
+      <id>NR_RESULT_ROWS</id>
+      <enabled>Y</enabled>
+      <name>NR_RESULT_ROWS</name>
+    </field>
+    <field>
+      <id>NR_RESULT_FILES</id>
+      <enabled>Y</enabled>
+      <name>NR_RESULT_FILES</name>
+    </field>
+    <field>
+      <id>LOG_FIELD</id>
+      <enabled>Y</enabled>
+      <name>LOG_FIELD</name>
+    </field>
+    <field>
+      <id>COPY_NR</id>
+      <enabled>Y</enabled>
+      <name>COPY_NR</name>
+    </field>
+  </jobentry-log-table>
+  <channel-log-table>
+    <connection>cem_sandbox</connection>
+    <schema>${DATABASE_LOG_SCHEMA}</schema>
+    <table>${DATABASE_LOG_NAME}</table>
+    <timeout_days>3.0</timeout_days>
+    <field>
+      <id>ID_BATCH</id>
+      <enabled>Y</enabled>
+      <name>ID_BATCH</name>
+    </field>
+    <field>
+      <id>CHANNEL_ID</id>
+      <enabled>Y</enabled>
+      <name>CHANNEL_ID</name>
+    </field>
+    <field>
+      <id>LOG_DATE</id>
+      <enabled>Y</enabled>
+      <name>LOG_DATE</name>
+    </field>
+    <field>
+      <id>LOGGING_OBJECT_TYPE</id>
+      <enabled>Y</enabled>
+      <name>LOGGING_OBJECT_TYPE</name>
+    </field>
+    <field>
+      <id>OBJECT_NAME</id>
+      <enabled>Y</enabled>
+      <name>OBJECT_NAME</name>
+    </field>
+    <field>
+      <id>OBJECT_COPY</id>
+      <enabled>Y</enabled>
+      <name>OBJECT_COPY</name>
+    </field>
+    <field>
+      <id>REPOSITORY_DIRECTORY</id>
+      <enabled>Y</enabled>
+      <name>REPOSITORY_DIRECTORY</name>
+    </field>
+    <field>
+      <id>FILENAME</id>
+      <enabled>Y</enabled>
+      <name>FILENAME</name>
+    </field>
+    <field>
+      <id>OBJECT_ID</id>
+      <enabled>Y</enabled>
+      <name>OBJECT_ID</name>
+    </field>
+    <field>
+      <id>OBJECT_REVISION</id>
+      <enabled>Y</enabled>
+      <name>OBJECT_REVISION</name>
+    </field>
+    <field>
+      <id>PARENT_CHANNEL_ID</id>
+      <enabled>Y</enabled>
+      <name>PARENT_CHANNEL_ID</name>
+    </field>
+    <field>
+      <id>ROOT_CHANNEL_ID</id>
+      <enabled>Y</enabled>
+      <name>ROOT_CHANNEL_ID</name>
+    </field>
+  </channel-log-table>
+  <pass_batchid>N</pass_batchid>
+  <shared_objects_file/>
+  <entries>
+    <entry>
+      <name>Set AWS Credentials</name>
+      <description/>
+      <type>SHELL</type>
+      <attributes/>
+      <filename/>
+      <work_directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <set_append_logfile>N</set_append_logfile>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <insertScript>Y</insertScript>
+      <script>#!/bin/bash
+export "AWS_ACCESS_KEY_ID=${AWS_S3_ACCESS_KEY}"
+#echo "AWS_S3_ACCESS_KEY = ${AWS_S3_ACCESS_KEY}"
+
+export "AWS_SECRET_ACCESS_KEY=${AWS_S3_SECRET_KEY}"
+#echo "AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}"
+
+export "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}"
+
+aws configure list</script>
+      <loglevel>Basic</loglevel>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>320</xloc>
+      <yloc>32</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>consider aws credential check about here</name>
+      <description/>
+      <type>SHELL</type>
+      <attributes/>
+      <filename/>
+      <work_directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <set_append_logfile>N</set_append_logfile>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <insertScript>N</insertScript>
+      <script/>
+      <loglevel>Basic</loglevel>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>128</xloc>
+      <yloc>672</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>nda</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql/>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/load_nda_table.sql</sqlfilename>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>352</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Drop all tables</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>DROP SCHEMA ${DATABASE_SCHEMA} CASCADE;
+CREATE SCHEMA ${DATABASE_SCHEMA};
+
+GRANT ALL ON SCHEMA ${DATABASE_SCHEMA} TO ${DATABASE_USERNAME};
+--GRANT ALL ON SCHEMA ${DATABASE_SCHEMA} TO public; --not sure if needed</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>80</xloc>
+      <yloc>352</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>SUCCESS IF LOAD_ALL_TIME=1</name>
+      <description/>
+      <type>SIMPLE_EVAL</type>
+      <attributes/>
+      <valuetype>variable</valuetype>
+      <fieldname/>
+      <variablename>${LOAD_ALL_TIME}</variablename>
+      <fieldtype>string</fieldtype>
+      <mask/>
+      <comparevalue>1</comparevalue>
+      <minvalue/>
+      <maxvalue/>
+      <successcondition>equal</successcondition>
+      <successnumbercondition>equal</successnumbercondition>
+      <successbooleancondition>false</successbooleancondition>
+      <successwhenvarset>N</successwhenvarset>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>96</xloc>
+      <yloc>240</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>copy_tables_to_other_schemas.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+--
+-- This SQL script copies the standard output tables and the source data tables to the "standard" and "source" schemas
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+--set search_path = standard;
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists standard_case_indication;
+create table if not exists standard_case_indication as select * from standard_case_indication;
+
+--drop table if exists standard_case_drug;
+create table if not exists standard_case_drug as select * from standard_case_drug;
+
+--drop table if exists standard_case_outcome;
+create table if not exists standard_case_outcome as select * from standard_case_outcome;
+
+--drop table if exists standard_case_outcome_category;
+create table if not exists standard_case_outcome_category as select * from standard_case_outcome_category;
+
+--drop table if exists standard_drug_outcome_count;
+create table if not exists standard_drug_outcome_count as select * from standard_drug_outcome_count;
+
+--drop table if exists standard_drug_outcome_contingency_table;
+create table if not exists standard_drug_outcome_contingency_table as select * from standard_drug_outcome_contingency_table;
+
+--drop table if exists standard_drug_outcome_statistics;
+create table if not exists standard_drug_outcome_statistics as select * from standard_drug_outcome_statistics;
+
+--drop table if exists standard_unique_all_case;
+create table if not exists standard_unique_all_case as select * from unique_all_case;
+
+--drop table if exists standard_drug_outcome_drilldown;
+create table if not exists standard_drug_outcome_drilldown as select * from standard_drug_outcome_drilldown;
+
+-----------------------------------------
+--set search_path = source;
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists demo;
+--create table demo as select * from demo;
+
+--drop table if exists demo_legacy;
+--create table demo_legacy as select * from demo_legacy;
+
+--drop table if exists drug;
+--create table drug as select * from drug;
+
+--drop table if exists drug_legacy;
+--create table drug_legacy as select * from drug_legacy;
+
+--drop table if exists indi;
+--create table indi as select * from indi;
+
+--drop table if exists indi_legacy;
+--create table indi_legacy as select * from indi_legacy;
+
+--drop table if exists outc;
+--create table outc as select * from outc;
+
+--drop table if exists outc_legacy;
+--create table outc_legacy as select * from outc_legacy;
+
+--drop table if exists reac;
+--create table reac as select * from reac;
+
+--drop table if exists reac_legacy;
+--create table reac_legacy as select * from reac_legacy;
+
+--drop table if exists rpsr;
+--create table rpsr as select * from rpsr;
+
+--drop table if exists rpsr_legacy;
+--create table rpsr_legacy as select * from rpsr_legacy;
+
+--drop table if exists ther;
+--create table ther as select * from ther;
+
+--drop table if exists ther_legacy;
+--create table ther_legacy as select * from ther_legacy;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>128</xloc>
+      <yloc>1776</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>derive_standard_drug_outcome_drilldown.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+--
+-- Create standard_drug_outcome_drilldown table for use in joins to get all cases for a drug/outcome pair count
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+-- create indexes to speed up this SQL
+
+--drop index if exists standard_case_drug_ix_1;
+create index if not exists standard_case_drug_ix_1 on standard_case_drug(primaryid);
+--drop index if exists standard_case_drug_ix_2;
+create index if not exists standard_case_drug_ix_2 on standard_case_drug(isr);
+--drop index if exists standard_case_drug_ix_3;
+create index if not exists standard_case_drug_ix_3 on standard_case_drug(standard_concept_id);
+
+--drop index if exists standard_case_outcome_ix_1;
+create index if not exists standard_case_outcome_ix_1 on standard_case_outcome(primaryid);
+--drop index if exists standard_case_outcome_ix_2;
+create index if not exists standard_case_outcome_ix_2 on standard_case_outcome(isr);
+--drop index if exists standard_case_outcome_ix_3;
+create index if not exists standard_case_outcome_ix_3 on standard_case_outcome(outcome_concept_id);
+
+--drop index if exists standard_drug_outcome_count_ix_1;
+create index if not exists standard_drug_outcome_count_ix_1 on standard_drug_outcome_count(drug_concept_id);
+--drop index if exists standard_drug_outcome_count_ix_2;
+create index if not exists standard_drug_outcome_count_ix_2 on standard_drug_outcome_count(outcome_concept_id);
+
+--drop table if exists standard_drug_outcome_drilldown;
+create table if not exists standard_drug_outcome_drilldown as
+	select 
+		a.drug_concept_id, 
+		a.outcome_concept_id, 
+		a.snomed_outcome_concept_id, 
+		b.primaryid, null as isr, null as caseid
+	from standard_drug_outcome_count a
+		inner join standard_case_drug b
+			on a.drug_concept_id = b.standard_concept_id
+		inner join standard_case_outcome c
+			on a.outcome_concept_id = c.outcome_concept_id
+			and b.primaryid = c.primaryid
+	union
+	select
+		a.drug_concept_id,  
+		a.outcome_concept_id, 
+		a.snomed_outcome_concept_id,  
+		null as primary_id, b.isr, null as caseid
+	from standard_drug_outcome_count a
+		inner join standard_case_drug b
+			on a.drug_concept_id = b.standard_concept_id
+		inner join standard_case_outcome c
+			on a.outcome_concept_id = c.outcome_concept_id
+			and b.isr = c.isr;
+
+-- populate the caseids that have a primaryid
+update standard_drug_outcome_drilldown a
+	set caseid = b.caseid
+	from unique_all_case b
+	where a.primaryid = b.primaryid;
+
+-- populate the caseids that have an isr
+update standard_drug_outcome_drilldown a
+	set caseid = b.caseid
+		from unique_all_case b
+	where a.isr = b.isr
+		and a.caseid is null;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>176</xloc>
+      <yloc>1632</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>map_meddra_to_snomed.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+-- map drug indications and adverse event outcomes (FAERS reactions) and associated drug/outcome pair counts from MedDRA preferred terms to SNOMED-CT concepts
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+-- populate standard_case_indication SNOMED-CT concepts
+update standard_case_indication a
+		set snomed_indication_concept_id = snomed_concept_id
+	from meddra_snomed_mapping b
+		where a.indication_concept_id = b.meddra_concept_id;
+
+-- populate standard_case_outcome SNOMED-CT concepts
+update standard_case_outcome a
+	set snomed_outcome_concept_id = snomed_concept_id
+from meddra_snomed_mapping b
+	where a.outcome_concept_id = b.meddra_concept_id;
+
+-- populate standard_drug_outcome_count SNOMED-CT concepts
+update standard_drug_outcome_count a
+	set snomed_outcome_concept_id = snomed_concept_id
+		from meddra_snomed_mapping b
+	where a.outcome_concept_id = b.meddra_concept_id;
+
+-- populate standard_drug_outcome_statistics SNOMED-CT concepts
+update standard_drug_outcome_statistics a
+	set snomed_outcome_concept_id = snomed_concept_id
+from meddra_snomed_mapping b
+	where a.outcome_concept_id = b.meddra_concept_id;</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>720</xloc>
+      <yloc>1600</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>derive_standard_drug_outcome_contingency_table.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+--
+-- This SQL script computes the 2x2 contingency table for all unique legacy and current case drug/outcome pairs in a table called standard_drug_current_outcome_contingency_table
+--
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+--drop index if exists standard_drug_outcome_count_ix;
+create index if not exists standard_drug_outcome_count_ix on standard_drug_outcome_count(drug_concept_id, outcome_concept_id);
+
+--drop index if exists standard_drug_outcome_count_2_ix;
+create index if not exists standard_drug_outcome_count_2_ix on standard_drug_outcome_count(drug_concept_id);
+--drop index if exists standard_drug_outcome_count_3_ix;
+create index if not exists standard_drug_outcome_count_3_ix on standard_drug_outcome_count(outcome_concept_id);
+--drop index if exists standard_drug_outcome_count_4_ix;
+create index if not exists standard_drug_outcome_count_4_ix on standard_drug_outcome_count(drug_outcome_pair_count);
+analyze verbose standard_drug_outcome_count;
+
+-- get count_d1 
+--drop table if exists standard_drug_outcome_count_d1;
+create table if not exists standard_drug_outcome_count_d1 as
+	with cte as (
+		select sum(drug_outcome_pair_count) as count_d1 from standard_drug_outcome_count 
+		)  
+	select drug_concept_id, outcome_concept_id, count_d1
+		from standard_drug_outcome_count a,  cte; -- we need the same total for all rows so do cross join!
+
+--============= On a 4+ CPU postgresql server, run the following 3 queries in 3 different postgresql sessions so they run concurrently!
+
+-- get count_a and count_b 
+set search_path = ${DATABASE_SCHEMA};
+--drop table if exists standard_drug_outcome_count_a_count_b;
+create table if not exists standard_drug_outcome_count_a_count_b as
+	select drug_concept_id, outcome_concept_id, 
+		drug_outcome_pair_count as count_a, -- count of drug P and outcome R
+			(
+				select sum(drug_outcome_pair_count)
+				from standard_drug_outcome_count b
+				where b.drug_concept_id = a.drug_concept_id and b.outcome_concept_id &lt;&gt; a.outcome_concept_id 
+			) as count_b -- count of drug P and not(outcome R)
+	from standard_drug_outcome_count a;
+
+-- get count_c 
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists standard_drug_outcome_count_c;
+create table if not exists standard_drug_outcome_count_c as
+	select drug_concept_id, outcome_concept_id, 
+		(
+			select sum(drug_outcome_pair_count) 
+			from standard_drug_outcome_count c
+			where c.drug_concept_id &lt;&gt; a.drug_concept_id and c.outcome_concept_id = a.outcome_concept_id 
+		) as count_c -- count of not(drug P) and outcome R
+	from standard_drug_outcome_count a; 
+
+-- get count d2 
+set search_path = ${DATABASE_SCHEMA};
+--drop table if exists standard_drug_outcome_count_d2;
+create table if not exists standard_drug_outcome_count_d2 as
+	select drug_concept_id, outcome_concept_id, 
+	(
+		select sum(drug_outcome_pair_count)
+		from standard_drug_outcome_count d2
+		where (d2.drug_concept_id = a.drug_concept_id) or (d2.outcome_concept_id = a.outcome_concept_id)
+	) as count_d2 -- count of all cases where drug P or outcome R 
+	from standard_drug_outcome_count a;
+
+--=============
+
+-- Only run the below query when ALL OF THE ABOVE 3 QUERIES HAVE COMPLETED!
+-- combine all the counts into a single contingency table
+--drop table if exists standard_drug_outcome_contingency_table;
+create table if not exists standard_drug_outcome_contingency_table as		-- 1 second
+
+select ab.drug_concept_id, ab.outcome_concept_id, count_a, count_b, count_c, (count_d1 - count_d2) as count_d
+		from standard_drug_outcome_count_a_count_b ab
+	inner join standard_drug_outcome_count_c c
+		on ab.drug_concept_id = c.drug_concept_id and ab.outcome_concept_id = c.outcome_concept_id
+	inner join standard_drug_outcome_count_d1 d1
+		on ab.drug_concept_id = d1.drug_concept_id and ab.outcome_concept_id = d1.outcome_concept_id
+	inner join standard_drug_outcome_count_d2 d2
+		on ab.drug_concept_id = d2.drug_concept_id and ab.outcome_concept_id = d2.outcome_concept_id;
+
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>176</xloc>
+      <yloc>1536</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>derive_standard_drug_outcome_count.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+--
+-- This SQL script creates drug/outcome combination case counts (counts for pairs of drug RxNorm concept_id, outcome (reaction) Meddra concept_id) 
+-- and stores the combination case counts in a new table called standard_drug_outcome_count
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists standard_drug_outcome_count;
+create table if not exists standard_drug_outcome_count as
+select drug_concept_id, outcome_concept_id, count(*) as drug_outcome_pair_count, cast(null as integer) as snomed_outcome_concept_id
+from (
+	select 'PRIMARYID' || a.primaryid as case_key, a.standard_concept_id as drug_concept_id, b.outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id
+	from standard_case_drug a
+	inner join standard_case_outcome b
+	on a.primaryid = b.primaryid and a.isr is null and b.isr is null
+	union 
+	select 'ISR' || a.isr as case_key, a.standard_concept_id as drug_concept_id, b.outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id
+	from standard_case_drug a
+	inner join standard_case_outcome b
+	on a.isr = b.isr and a.isr is not null and b.isr is not null
+) aa
+group by drug_concept_id, outcome_concept_id;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>704</xloc>
+      <yloc>1408</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>derive_standard_case_outcome.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+--
+-- This SQL script converts the unique legacy LAERS and current FAERS case reactions (adverse event outcomes) MedDRA preferred terms 
+-- into MedDRA concept ids in a new table called standard_case_outcome 
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+-- create indexes on reac table for improved performance in this SQL
+--drop index if exists ix_reac_1;
+--drop index if exists ix_reac_2;
+create index if not exists ix_reac_1 on reac (upper(pt));
+create index if not exists ix_reac_2 on reac (primaryid);
+analyze verbose reac;
+
+-- create indexes on reac_legacy table for improved performance in this SQL
+--drop index if exists ix_reac_legacy_1;
+--drop index if exists ix_reac_legacy_2;
+create index if not exists ix_reac_legacy_1 on reac_legacy (upper(pt));
+create index if not exists ix_reac_legacy_2 on reac_legacy (isr);
+analyze verbose reac_legacy;
+
+--drop table if exists standard_case_outcome;
+create table if not exists standard_case_outcome as
+select distinct a.primaryid, a.isr, b.pt, c.concept_id as outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id
+	from unique_all_case a
+	inner join reac b
+		on a.primaryid = b.primaryid
+	inner join staging_vocabulary.concept c
+		on upper(b.pt) = upper(c.concept_name)
+		and c.vocabulary_id = 'MedDRA'
+		where a.isr is null
+union
+select distinct a.primaryid, a.isr, b.pt, c.concept_id as outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id
+	from unique_all_case a
+inner join reac_legacy b
+		on a.isr = b.isr
+	inner join staging_vocabulary.concept c
+		on upper(b.pt) = upper(c.concept_name)
+		and c.vocabulary_id = 'MedDRA'
+		where a.isr is not null;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>384</xloc>
+      <yloc>1408</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>derive_standard_case_indication.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+--
+-- This SQL script converts the indication MedDRA preferred terms into MedDRA concept ids for all unique legacy and current cases
+-- in a new table called standard_case_indication 
+-- Note. We use a regex to remove leading white space in the indication preferred term field
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists standard_case_indication; 
+create table if not exists standard_case_indication as
+select distinct a.primaryid, a.isr, indi_drug_seq, b.indi_pt, c.concept_id as indication_concept_id, cast(null as integer) as snomed_indication_concept_id
+	from unique_all_case a
+	inner join indi b
+		on a.primaryid = b.primaryid
+	inner join staging_vocabulary.concept c
+		on upper(regexp_replace(b.indi_pt,'^ +','','gi')) = upper(c.concept_name) 
+		and c.vocabulary_id = 'MedDRA'
+		where a.isr is null
+union
+select distinct a.primaryid, a.isr, drug_seq, b.indi_pt, c.concept_id as indication_concept_id, cast(null as integer) as snomed_indication_concept_id
+	from unique_all_case a
+	inner join indi_legacy b
+		on a.isr = b.isr
+	inner join staging_vocabulary.concept c
+		on upper(regexp_replace(b.indi_pt,'^ +','','gi')) = upper(c.concept_name) 
+		and c.vocabulary_id = 'MedDRA'
+		where a.isr is not null;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>112</xloc>
+      <yloc>1408</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>derive_standard_case_outcome_category.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+--
+-- This SQL script derives the SNOMED-CT concept codes for the legacy LARES and current FAERS outcome (categories) in a new table called standard_case_outcome_category
+-- limited to just the unique cases.
+--
+-- Map the outcome categories to the following SNOMED codes:
+--
+-- CA "Congenital Anomaly" = SNOMED concept code: 107656002, SNOMED concept: "Congenital anomaly", OHDSI concept_id = 4029540
+-- DE "Death" = SNOMED concept code: 419620001, SNOMED concept: "Death" , OHDSI concept_id = 4306655
+-- DS "Disability" = SNOMED concept code: 21134002, SNOMED concept: "Disability", OHDSI concept_id = 4052648
+-- HO "Hospitalization - Initial or Prolonged" = SNOMED concept code: 32485007, SNOMED concept: "Hospital admission", OHDSI concept_id = 8715
+-- LT "Life-Threatening" = SNOMED concept code: 442452003, SNOMED concept: "Life threatening severity" OHDSI, concept_id = 40483553
+-- OT "Other" = SNOMED concept code: 10003008, SNOMED concept: "Non-specific", OHDSI concept_id = 4001594
+-- RI "Required Intervention to Prevent Permanent Impairment/Damage" = SNOMED concept code: 3890004, SNOMED concept: "Treatment required for", OHDSI concept_id = 4191370
+--
+-- NOTE. Around 25% of the cases in the FAERS demo table and 6% of LAERS do not have an outcome in the outc table
+-- so in this sql we use a left outer join and some of the outc_codes will be null.
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists standard_case_outcome_category;
+create table if not exists standard_case_outcome_category as
+(
+	with cte1 as (
+	select distinct a.primaryid, a.isr, b.outc_code
+	from unique_all_case a
+	left outer join outc b
+	on a.primaryid = b.primaryid
+	where a.isr is null
+	union
+	select distinct a.primaryid, a.isr, b.outc_cod
+	from unique_all_case a
+	left outer join outc_legacy b
+	on a.isr = b.isr
+	where a.isr is not null
+	
+	),
+	cte2 as (
+	select distinct primaryid, isr, outc_code, 
+	case 
+		when (outc_code = 'CA') then 4029540 	-- SNOMED concept: "Congenital anomaly", OHDSI concept_id = 4029540
+		when (outc_code = 'DE') then 4306655 	-- SNOMED concept: "Death" , OHDSI concept_id = 4306655
+		when (outc_code = 'DS') then 4052648  	-- SNOMED concept: "Disability", OHDSI concept_id = 4052648
+		when (outc_code = 'HO') then 8715		-- SNOMED concept: "Hospital admission", OHDSI concept_id = 8715
+		when (outc_code = 'LT') then 40483553	-- SNOMED concept: "Life threatening severity" OHDSI, concept_id = 40483553
+		when (outc_code = 'OT') then 4001594	-- SNOMED concept: "Non-specific", OHDSI concept_id = 4001594
+		when (outc_code = 'RI') then 4191370	-- SNOMED concept: "Treatment required for", OHDSI concept_id = 4191370
+	end as snomed_concept_id
+	from cte1
+	)
+select * from cte2
+);
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>704</xloc>
+      <yloc>1280</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>standardize_combined_drug_mapping.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>--NOTE THIS STEP THROWS ERRORS IF NOT "SQL from file"</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>/home/pentaho-secondary/projects-brb265/faers/faersdbstats/drug_mapping/standardize_combined_drug_mapping.sql</sqlfilename>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>400</xloc>
+      <yloc>1280</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>usagi_data</name>
+      <description/>
+      <type>TRANS</type>
+      <attributes/>
+      <specification_method>filename</specification_method>
+      <trans_object_id/>
+      <filename/>
+      <transname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name/>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <run_configuration/>
+      <suppress_result_data>N</suppress_result_data>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>624</xloc>
+      <yloc>1072</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>generate_drug_export_for_usagi.sql </name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>-- This SQL generates the set of unmatched drug names with a dummy source_id and a source frequency based on frequency of cases
+-- In postgres SQL client save the results to a csv file and then import that csv file to usagi for manual code curation
+--
+-- LTS Computing LLC
+--------------------------------------------
+set search_path = ${DATABASE_SCHEMA};
+select row_number() over () as source_code,
+    upper(drug_name_original) as source_code_description,
+    count(*) as frequency -- (case frequency)
+from combined_drug_mapping
+where concept_id is null
+group by upper(drug_name_original)
+order by count(*) desc;</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>416</xloc>
+      <yloc>1072</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>create_usagi_import_table.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>-- Create staging table to import USAGI manually mapped drug names
+--
+-- LTS Computing LLC
+-----------------------------------------------------------------------------------------------
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists usagi_import;
+CREATE TABLE IF NOT EXISTS usagi_import
+(
+  source_code character varying,
+  source_concept_id character varying,
+  source_vocabulary_id character varying,
+  source_code_description character varying,
+  target_concept_id character varying,
+  target_vocabulary_id character varying,
+  valid_start_date character varying,
+  valid_end_date character varying,
+  invalid_reason character varying
+);</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>672</xloc>
+      <yloc>880</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>load_drug_usagi_mapping.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+-- Load results of USAGI manual mapping into drug_usagi_mapping table via the usagi_import table
+--
+-- First manually import the usagi mapping results into the usagi_import table using
+-- the pgadmin SQL client table import functionality and then run the below insert query
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+select row_number() over () as source_code, 
+upper(drug_name_original) as source_code_description, 
+count(*) as frequency -- (case frequency)
+from combined_drug_mapping where concept_id is null
+group by upper(drug_name_original)
+order by count(*) desc
+;
+
+insert into drug_usagi_mapping
+select a.source_code_description as drug_name_original , 
+b.concept_name, b.concept_class_id, cast(a.target_concept_id as integer) as concept_id, cast ('usagi' as text) as update_method
+from usagi_import a
+inner join staging_vocabulary.concept b
+on cast(a.target_concept_id as integer) = b.concept_id
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>112</xloc>
+      <yloc>1280</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>create drug_usagi_mapping table</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists drug_usagi_mapping;
+CREATE TABLE if not exists drug_usagi_mapping
+(
+  drug_name_original text,
+  concept_name character varying(1000),
+  concept_class_id character varying(500),
+  concept_id integer,
+  update_method text
+);</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>400</xloc>
+      <yloc>880</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Update LOG SQL</name>
+      <description>this is needed when using w/ pentaho 9
+</description>
+      <type>SQL</type>
+      <attributes/>
+      <sql>ALTER TABLE ${DATABASE_LOG_SCHEMA}.pdi_logging ADD COLUMN "RESULT_KTL" VARCHAR(5);
+UPDATE ${DATABASE_LOG_SCHEMA}.pdi_logging SET "RESULT_KTL"="RESULT";
+ALTER TABLE ${DATABASE_LOG_SCHEMA}.pdi_logging DROP COLUMN "RESULT";
+ALTER TABLE ${DATABASE_LOG_SCHEMA}.pdi_logging RENAME "RESULT_KTL" TO "RESULT";
+
+;
+
+CREATE INDEX IF NOT EXISTS "IDX_${DATABASE_LOG_NAME}_1" ON ${DATABASE_LOG_SCHEMA}.pdi_logging(ID_BATCH);
+CREATE INDEX IF NOT EXISTS "IDX_${DATABASE_LOG_NAME}_2" ON ${DATABASE_LOG_SCHEMA}.pdi_logging(TRANSNAME, LOG_DATE);</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>144</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>map_all_drugname_to_rxnorm</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+-- map all unique case drug drugnames to rxnorm Vocabulary concept_ids
+--
+-- we will include non-standard and standard codes so we pick up brand names as well as ingredients etc
+-- and roll-up to standard codes when we produce the statistics in a later process.
+--
+-- we map using the following precedence order.
+--
+-- regex drug name mapping
+-- active ingredient drug name mapping (only current FAERS data has active ingredient)
+-- nda drug_name mapping
+-- manual usagi drug name mapping
+--
+-- Note. We map all drug roles including concomitant drugs
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+-- temporarily create an index on the cdmv5 schema concept table to improve performance of all the mapping lookups
+-- we will then drop it at the end of this script
+set search_path = ${DATABASE_STAGING_SCHEMA};
+--drop index if exists vocab_concept_name_ix;
+create index if not exists vocab_concept_name_ix on staging_vocabulary.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
+analyze verbose staging_vocabulary.concept;
+
+set search_path = ${DATABASE_SCHEMA};
+
+-- build a mapping table to generate a cleaned up version of the drugname for exact match joins to the concept table concept_name column 
+-- for RxNorm concepts only 
+-- NOTE we join to unique_all_case because we only need to map drugs for unique cases 
+-- ie. where there are multiple versions of cases we only process the case with the latest (max) caseversion)
+
+drop table if exists drug_regex_mapping;
+create table drug_regex_mapping as
+select distinct drug_name_original, drug_name_clean, concept_id, update_method
+from (
+	select distinct drugname as drug_name_original, upper(drugname) as drug_name_clean, cast(null as integer) as concept_id, null as update_method
+	from drug a
+	inner join unique_all_case b on a.primaryid = b.primaryid
+	where b.isr is null
+	union
+	select distinct drugname as drug_name_original, upper(drugname) as drug_name_clean, cast(null as integer) as concept_id, null as update_method
+	from drug_legacy a
+	inner join unique_all_case b on a.isr = b.isr
+	where b.isr is not null
+) aa;
+
+-- create an index on the mapping table to improve performance
+--drop index if exists drug_name_clean_ix;
+create index if not exists drug_name_clean_ix on drug_regex_mapping(drug_name_clean);
+
+-- remove the word tablet or "(tablet)" or the plural forms from drug name
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '(.*)(\W|^)\(TABLETS?\)|TABLETS?(\W|$)', '\1\2', 'gi') 
+where concept_id is null
+and drug_name_clean ~*  '.*TABLET.*';
+
+-- remove the word capsule or (capsule) or the plural forms from drug name
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '(.*)(\W|^)\(CAPSULES?\)|CAPSULES?(\W|$)', '\1\2', 'gi')
+where concept_id is null
+and drug_name_clean ~*  '.*CAPSULE.*';
+
+-- remove the drug strength in MG or MG/MG or MG\MG or MG / MG and their plural forms
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '\(*(\y\d*\.*\d*\ *MG\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|ML)*\ *\,*\+*\ *\y)\)*', '\3', 'gi')
+where concept_id is null
+and drug_name_clean ~*  '\(*(\y\d*\.*\d*\ *MG\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|ML)*\ *\,*\+*\ *\y)\)*';
+
+-- remove the drug strength in MILLIGRAMS or MILLIGRAMS/MILLILITERS or MILLIGRAMS\MILLIGRAM and their plural forms
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '\(*(\y\d*\.*\d*\ *MILLIGRAMS?\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|MILLILITERS?)*\ *\,*\+*\ *\y)\)*', '\3', 'gi')
+where concept_id is null
+and drug_name_clean ~*  '\(*(\y\d*\.*\d*\ *MILLIGRAMS?\,*\ *\/*\\*\ *\d*\.*\d*\ *(M2|MILLILITERS?)*\ *\,*\+*\ *\y)\)*';
+
+-- remove HYDROCHLORIDE and HCL
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '(\y\ *(HCL|HYDROCHLORIDE)\y)', '\3', 'gi') 
+where concept_id is null
+and drug_name_clean ~*  '\(*(\y\ *(HCL|HYDROCHLORIDE)\ *\y)\)*';
+
+-- find exact mapping for drug name after we have removed the above keywords
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove keywords' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove FORMULATION, GENERIC, NOS
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '\(\y(FORMULATION|GENERIC|NOS)\y\)|\y(FORMULATION|GENERIC|NOS)\y', '\3', 'gi')  
+where concept_id is null
+and drug_name_clean ~*  '\y(FORMULATION|GENERIC|NOS)\y';
+
+-- lookup active ingredient from EU drug name
+UPDATE drug_regex_mapping a
+SET update_method = 'regex EU drug name to active ingredient', drug_name_clean = upper(b.active_substance)
+FROM eu_drug_name_active_ingredient_mapping b
+WHERE upper(a.drug_name_clean) = upper(b.brand_name)
+AND a.concept_id is null;
+
+-- find exact mapping for active ingredient
+UPDATE drug_regex_mapping a
+SET update_method = 'regex EU drug name to active ingredient' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- lookup active ingredient from EU drug name in parentheses
+update drug_regex_mapping a
+set update_method = 'regex EU drug name in parentheses to active ingredient', drug_name_clean = upper(b.active_substance) 
+from eu_drug_name_active_ingredient_mapping b
+where upper(regexp_replace(a.drug_name_clean, '.* \((.*)\)', '\1', 'gi')) = upper(b.brand_name)
+and a.concept_id is null
+and a.drug_name_clean ~*  '.* \((.*)\)';
+
+-- find exact mapping for active ingredient
+UPDATE drug_regex_mapping a
+SET update_method = 'regex EU drug name in parentheses to active ingredient' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- lookup RxNorm concept name using words from last set of parentheses in the drug name (typically this is the ingredient name(s) for a branded drug
+UPDATE drug_regex_mapping a
+SET update_method = 'regex ingredient name in parentheses' , concept_id = b.concept_id, drug_name_clean = upper(b.concept_name)
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = regexp_replace(a.drug_name_clean, '.* \((.*)\)', '\1', 'gi')
+AND a.concept_id is null
+and drug_name_clean ~*  '.* \((.*)\)';
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex upper' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean;
+
+-- remove trailing spaces or period or , characters
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '[ \.\,]$', '', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex trailing space or period chars' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove multiple occurrences of white space '
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '(\S) +', '\1 ', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove multiple white space' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove trailing spaces
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, ' +$', '', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove trailing spaces' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove leading spaces
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '^ +', '', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove leading spaces' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove single quotes and double quotes'
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '[''""]', '', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove single quotes' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove '^*$?' chars
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '[\*\^\$\?]', '', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove ^*$? punctuation chars' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- change \ to / char
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '\\', '/', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex change forward slash to back slash' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove spaces before closing parenthesis char
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, ' +\)', ')', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove spaces before closing parenthesis' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove UNKNOWN or UNK except at start of drug name
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, '\((\ \yUNKNOWN|UNK\y)\)|\(\y(UNKNOWN|UNK)\y\)|\y(UNKNOWN|UNK)\y', '', 'gi')  
+where concept_id is null
+and drug_name_clean ~*  '.+\y(UNKNOWN|UNK)\y.+$';
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove (unknown)' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove BLINDED
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, ' *blinded *', '', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove blinded' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- remove \nnnnn\
+update drug_regex_mapping a
+SET drug_name_clean = regexp_replace(drug_name_clean, '\/\d+\/\ *', '', 'gi') 
+where concept_id is null and 
+drug_name_original ~* '.*\/\d+\/.*';
+
+-- remove trailing spaces
+update drug_regex_mapping
+set drug_name_clean = regexp_replace(drug_name_clean, ' +$', '', 'gi')
+where concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex remove /nnnnn/' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- map vitamins where only brand name or generic description is provided in drug name field
+update drug_regex_mapping a
+set drug_name_clean = 'MULTIVITAMIN PREPARATION'
+where drug_name_clean like '%VITAMIN%' and drug_name_clean not like '%VITAMIN A%' and drug_name_clean not like '%VITAMIN B%'
+and drug_name_clean not like '%VITAMIN C%' and drug_name_clean not like '%VITAMIN K%' and drug_name_clean not like '%VITAMIN D%' 
+and drug_name_clean not like '%VITAMIN E%'
+and a.concept_id is null;
+
+-- find exact mapping
+UPDATE drug_regex_mapping a
+SET update_method = 'regex vitamins' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.drug_name_clean
+and a.concept_id is null;
+
+-- in this section of mapping logic we derive RxNorm concepts for multi ingredient drugs (in any order of occurrence in the drug name) and for single ingredient clinical names and brand name drugs from within complex drug name strings
+
+-- create a table that will hold the combined mapping of single and multiple ingredients and brand names based on separating and combining lists of words that occur within (single or multiple) ingredients or brands
+
+--drop table if exists drug_regex_mapping_words;
+create table if not exists drug_regex_mapping_words as
+select distinct *
+from (
+select drug_name_original, concept_name, concept_id, update_method, unnest(word_list::text[]) as word
+from (
+select drug_name_original, concept_name, concept_id, update_method, regexp_split_to_array(upper(drug_name_original), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
+from (
+	select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
+	from drug a
+	inner join unique_all_case b on a.primaryid = b.primaryid
+	where b.isr is null
+	union
+	select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
+	from drug_legacy a
+	inner join unique_all_case b on a.isr = b.isr
+	where b.isr is not null
+) aa
+order by drug_name_original desc
+) bb
+) cc 
+where word NOT IN ('','SYRUP','HCL','HYDROCHLORIDE', 'ACETIC','SODIUM','CALCIUM','SULPHATE','MONOHYDRATE') 
+and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
+			from  staging_vocabulary.concept b
+			where b.vocabulary_id = 'RxNorm'
+			and b.concept_class_id = 'Dose Form' order by 1);
+
+------=====
+
+-- create a target mapping table of multi ingredient drug names from the RxNorm Vocabulary with each ingredient word concatenated alphabetically into a space separated string 
+--drop table if exists rxnorm_mapping_multi_ingredient_list;
+create table if not exists rxnorm_mapping_multi_ingredient_list as
+select ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
+from (
+	select concept_id, concept_name, string_agg(word, ' ' order by word) as ingredient_list  from (
+		select concept_id,  concept_name, unnest(word_list::text[]) as word
+		from (
+			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
+			from (
+				select upper(concept_name) as concept_name, concept_id
+				from staging_vocabulary.concept b
+				where b.vocabulary_id = 'RxNorm'
+				and b.concept_class_id = 'Clinical Drug Form' 
+				and concept_name like '%\/%'
+			) aa
+			order by concept_name desc
+		) bb
+	) cc
+	where word not in ('')
+	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
+			from  staging_vocabulary.concept b
+			where b.vocabulary_id = 'RxNorm'
+			and b.concept_class_id = 'Dose Form' order by 1)
+	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
+			'G3','G4','H','I','IN','JELLY','LEAF','O','OF','OR','P','S','T','V','WITH','X','Y','Z') 
+	and word !~ '^\d+$|\y\d+\-\d+\y|\y\d+\.\d+\y' 
+	group by concept_id, concept_name
+) dd
+group by ingredient_list;
+
+
+-- create a source multi-ingredient drug mapping table by extracting the multi-ingredient drug names with each ingredient word concatenated alphabetically into a space separated string
+--drop table if exists drug_mapping_multi_ingredient_list;
+create table if not exists drug_mapping_multi_ingredient_list as
+select drug_name_original, ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
+from (
+	select concept_id, drug_name_original, concept_name, string_agg(word, ' ' order by word) as ingredient_list  from (
+		select distinct concept_id,  drug_name_original, concept_name, unnest(word_list::text[]) as word
+		from (
+			select concept_id, drug_name_original, concept_name, regexp_split_to_array(upper(drug_name_original), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
+			from (
+				select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
+				from drug a
+				inner join unique_all_case b on a.primaryid = b.primaryid
+				where b.isr is null
+				union
+				select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
+				from drug_legacy a
+				inner join unique_all_case b on a.isr = b.isr
+				where b.isr is not null
+			) aa
+			order by concept_name desc
+		) bb
+	) cc
+	where word not in ('')
+	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
+			from  staging_vocabulary.concept b
+			where b.vocabulary_id = 'RxNorm'
+			and b.concept_class_id = 'Dose Form' order by 1)
+	and word  in (	select * 
+			from (
+				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+')) as word
+				from  staging_vocabulary.concept b
+				where b.vocabulary_id = 'RxNorm'
+				and b.concept_class_id in ('Clinical Drug Form')
+				and b.concept_name like '%\/%' 
+			) aa 
+			where word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
+			'G3','G4','H','I','IN','JELLY','LEAF','O','OF','OR','P','S','T','V','WITH','X','Y','Z') 
+			and word !~ '^\d+$|\y\d+\-\d+\y|\y\d+\.\d+\y' 
+			order by 1
+			)
+	group by concept_id, drug_name_original, concept_name
+) dd
+group by drug_name_original, ingredient_list;
+
+
+-- map drug names containing multiple ingredient names to clinical drug form
+update drug_regex_mapping_words c
+SET update_method = 'multiple ingredient match' , concept_name = b.concept_name, concept_id = b.concept_id 
+from (
+select distinct a.drug_name_original, max(upper(b1.concept_name)) as concept_name, max(b1.concept_id) as concept_id 
+from drug_mapping_multi_ingredient_list a
+inner join rxnorm_mapping_multi_ingredient_list b1
+on a.ingredient_list = b1.ingredient_list
+group by a.drug_name_original
+) b
+where c.drug_name_original = b.drug_name_original
+and c.concept_id is null;
+
+
+--*************
+
+-- create a target mapping table of single ingredient drug names from RxNorm Vocabulary with each ingredient word concatenated alphabetically into a space separated string 
+--drop table if exists rxnorm_mapping_single_ingredient_list;
+create table if not exists rxnorm_mapping_single_ingredient_list as
+select ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
+from (
+	select concept_id, concept_name, string_agg(word, ' ' order by word) as ingredient_list  from (
+		select concept_id,  concept_name, unnest(word_list::text[]) as word
+		from (
+			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
+			from (
+				select upper(concept_name) as concept_name, concept_id
+				from staging_vocabulary.concept b
+				where b.vocabulary_id = 'RxNorm'
+				and b.concept_class_id = 'Ingredient' 
+			) aa
+			order by concept_name desc
+		) bb
+	) cc
+	where word not in ('')
+	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
+			from  staging_vocabulary.concept b
+			where b.vocabulary_id = 'RxNorm'
+			and b.concept_class_id = 'Dose Form' order by 1)
+	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
+			'G3','G4','H','I','IN','JELLY','LEAF','O','OF','OR','P','S','T','V','WITH','X','Y','Z') 
+	and word !~ '^\d+$|\y\d+\-\d+\y|\y\d+\.\d+\y' 
+	group by concept_id, concept_name
+) dd
+group by ingredient_list;
+
+
+-- create a source single-ingredient drug mapping table by extracting the single-ingredient drug names with each single ingredient word concatenated alphabetically into a space separated string
+--drop table if exists drug_mapping_single_ingredient_list;
+create table if not exists drug_mapping_single_ingredient_list as
+select drug_name_original, ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
+from (
+	select concept_id, drug_name_original, concept_name, string_agg(word, ' ' order by word) as ingredient_list  from (
+		select distinct concept_id,  drug_name_original, concept_name, unnest(word_list::text[]) as word
+		from (
+			select concept_id, drug_name_original, concept_name, regexp_split_to_array(upper(drug_name_original), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
+			from (
+				select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
+				from drug a
+				inner join unique_all_case b on a.primaryid = b.primaryid
+				where b.isr is null and drugname not like '%/%' and drugname not like '% AND %' and drugname not like '% WITH %' and drugname not like '%+%'
+				union
+				select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
+				from drug_legacy a
+				inner join unique_all_case b on a.isr = b.isr
+				where b.isr is not null and drugname not like '%/%' and drugname not like '% AND %' and drugname not like '% WITH %' and drugname not like '%+%'
+			) aa
+			order by concept_name desc
+		) bb
+	) cc
+	where word not in ('')
+	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
+			from  staging_vocabulary.concept b
+			where b.vocabulary_id = 'RxNorm'
+			and b.concept_class_id = 'Dose Form' order by 1)
+	and word  in (	select * 
+			from (
+				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+')) as word
+				from  staging_vocabulary.concept b
+				where b.vocabulary_id = 'RxNorm'
+				and b.concept_class_id in ('Ingredient')
+			) aa 
+			where word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
+			'G3','G4','H','I','IN','JELLY','LEAF','O','OF','OR','P','S','T','V','WITH','X','Y','Z') 
+			and word !~ '^\d+$|\y\d+\-\d+\y|\y\d+\.\d+\y' 
+			order by 1
+			)
+	group by concept_id, drug_name_original, concept_name
+) dd
+group by drug_name_original, ingredient_list;
+
+
+-- map drug names containing single ingredient names to ingredient concepts
+update drug_regex_mapping_words c
+SET update_method = 'single ingredient match' , concept_name = b.concept_name, concept_id = b.concept_id 
+from (
+select distinct a.drug_name_original, max(upper(b1.concept_name)) as concept_name, max(b1.concept_id) as concept_id 
+from drug_mapping_single_ingredient_list a
+inner join rxnorm_mapping_single_ingredient_list b1
+on a.ingredient_list = b1.ingredient_list
+group by a.drug_name_original
+) b
+where c.drug_name_original = b.drug_name_original
+and c.update_method is null and b.concept_name not in ('VITAMIN A','SODIUM','HYDROCHLORIDE','HCL','CALCIUM','COLD CREAM','VITAMIN B 12','MALEATE','TARTRATE','MESYLATE','MONOHYDRATE','SUCCINATE','CORN SYRUP','FACTOR X','PROTEIN S')
+and c.update_method is null;
+
+--*************
+
+-- create a target mapping table of brand names in RxNorm Vocabulary with each brand name word concatenated alphabetically into a space separated string 
+--drop table if exists rxnorm_mapping_brand_name_list;
+create table if not exists rxnorm_mapping_brand_name_list as
+select ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
+from (
+	select concept_id, concept_name, string_agg(word, ' ' order by word) as ingredient_list  from (
+		select concept_id,  concept_name, unnest(word_list::text[]) as word
+		from (
+			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
+			from (
+				select upper(concept_name) as concept_name, concept_id
+				from staging_vocabulary.concept b
+				where b.vocabulary_id = 'RxNorm'
+				and b.concept_class_id = 'Brand Name' 
+			) aa
+			order by concept_name desc
+		) bb
+	) cc
+	where word not in ('')
+	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
+			from  staging_vocabulary.concept b
+			where b.vocabulary_id = 'RxNorm'
+			and b.concept_class_id = 'Dose Form' order by 1)
+	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
+			'G3','G4','H','I','IN','JELLY','LEAF','O','OF','OR','P','S','T','V','WITH','X','Y','Z') 
+	and word !~ '^\d+$|\y\d+\-\d+\y|\y\d+\.\d+\y' 
+	group by concept_id, concept_name
+) dd
+group by ingredient_list;
+
+-- create a source brand name drug mapping table by extracting the brand names with each single brand name word concatenated alphabetically into a space separated string
+--drop table if exists drug_mapping_brand_name_list;
+create table if not exists drug_mapping_brand_name_list as
+select drug_name_original, ingredient_list, max(concept_id) as concept_id, max(concept_name) as concept_name
+from (
+	select concept_id, drug_name_original, concept_name, string_agg(word, ' ' order by word) as ingredient_list  from (
+		select distinct concept_id,  drug_name_original, concept_name, unnest(word_list::text[]) as word
+		from (
+			select concept_id, drug_name_original, concept_name, regexp_split_to_array(upper(drug_name_original), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+') as word_list
+			from (
+				select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
+				from drug a
+				inner join unique_all_case b on a.primaryid = b.primaryid
+				where b.isr is null and drugname not like '%/%' and drugname not like '% AND %' and drugname not like '% WITH %' and drugname not like '%+%'
+				union
+				select distinct drugname as drug_name_original, cast(null as varchar) as concept_name, cast(null as integer) as concept_id, null as update_method
+				from drug_legacy a
+				inner join unique_all_case b on a.isr = b.isr
+				where b.isr is not null and drugname not like '%/%' and drugname not like '% AND %' and drugname not like '% WITH %' and drugname not like '%+%'
+			) aa
+			order by concept_name desc
+		) bb
+	) cc
+	where word not in ('')
+	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+'))
+			from  staging_vocabulary.concept b
+			where b.vocabulary_id = 'RxNorm'
+			and b.concept_class_id = 'Dose Form' order by 1)
+	and word  in (	select * 
+			from (
+				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\&lt;\>\&amp;\^\!\*\_\+\=]+')) as word
+				from  staging_vocabulary.concept b
+				where b.vocabulary_id = 'RxNorm'
+				and b.concept_class_id in ('Brand Name')
+			) aa 
+			where word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
+			'G3','G4','H','I','IN','JELLY','LEAF','O','OF','OR','P','S','T','V','WITH','X','Y','Z') 
+			and word !~ '^\d+$|\y\d+\-\d+\y|\y\d+\.\d+\y' 
+			order by 1
+			)
+	group by concept_id, drug_name_original, concept_name
+) dd
+group by drug_name_original, ingredient_list;
+
+-- map drug names containing brand names to brand name concepts
+update drug_regex_mapping_words c
+SET update_method = 'brand name match' , concept_name = b.concept_name, concept_id = b.concept_id 
+from (
+select distinct a.drug_name_original, max(upper(b1.concept_name)) as concept_name, max(b1.concept_id) as concept_id 
+from drug_mapping_brand_name_list a
+inner join rxnorm_mapping_brand_name_list b1
+on a.ingredient_list = b1.ingredient_list
+group by a.drug_name_original
+) b
+where c.drug_name_original = b.drug_name_original
+and c.update_method is null and b.concept_name not in ('G.B.H. SHAMPOO', 'A.P.L.', 'C.P.M.',  'ALLERGY CREAM', 'MG 217', 'ACID JELLY', 'C/T/S',  'M.A.H.', 'I.D.A.', 'N.T.A.', 'FORMULA 21', 'PRO OTIC', 'E.S.P.', 'PREPARATION H CREAM', 'H 9600 SR',
+	'12 HOUR COLD', 'GLYCERYL T', 'G BID', 'AT 10', 'COMPOUND 347', 'MS/S', 'HYDRO 40', 'HP 502', 'LIQUID PRED', 'ORAL PEROXIDE', 'BABY GAS', 'BC POWDER 742/38/222', 'COMFORT GEL', 'MAG 64', 'K EFFERVESCENT', 'NASAL LA', 'THERAPEUTIC SHAMPOO', 
+	'CHEWABLE CALCIUM', 'PAIN RELIEF (EFFERVESCENT)', 'STRESS LIQUID', 'IRON 300', 'FS SHAMPOO', 'T/GEL CONDITIONER', 'EX DEC', 'DR.S CREAM', 'JOINT GEL',  'CP ORAL', 'OTIC CARE', 'DR.S CREAM', 
+	'NASAL RELIEF', 'MEDICATED BLUE', 'FE 50', 'BIOTENE TOOTHPASTE', 'VITAMIN A','SODIUM','HYDROCHLORIDE','HCL','CALCIUM', 'LONG LASTING NASAL', 'TRIPLE PASTE', 'K + POTASSIUM', 'NASAL DECONGESTANT SYRUP',
+	'COLD CREAM','VITAMIN B 12','MALEATE','TARTRATE','MESYLATE','MONOHYDRATE','SUCCINATE','CORN SYRUP','FACTOR X','PROTEIN S');
+
+--*************
+
+-- update the original drug regex mapping table with the brand names, multiple and single ingredient drug names 
+update drug_regex_mapping c
+SET update_method = b.update_method , drug_name_clean = b.concept_name, concept_id = b.concept_id 
+from (
+select distinct drug_name_original, concept_name, concept_id, update_method from drug_regex_mapping_words where concept_id is not null
+) b
+where c.drug_name_original = b.drug_name_original
+and c.update_method is null;
+
+
+--------------------------------------------------
+
+-- create active ingredient mapping table -- note only FAERS current data has active ingredient 
+
+--drop table if exists drug_ai_mapping;
+create table if not exists drug_ai_mapping as
+select distinct drugname as drug_name_original, prod_ai, cast(null as integer) as concept_id, null as update_method
+from drug a
+inner join unique_all_case b on a.primaryid = b.primaryid where b.isr is null;
+
+--drop index if exists prod_ai_ix;
+create index if not exists prod_ai_ix on drug_ai_mapping(prod_ai);
+
+-- find exact mapping using the active ingredient provided in the drug table
+UPDATE drug_ai_mapping a
+SET update_method = 'drug active ingredients' , concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+WHERE b.vocabulary_id = 'RxNorm'
+AND upper(b.concept_name) = a.prod_ai;
+
+-----------------------------------------------
+
+-- create NDA (new drug application) number mapping table
+-- (NDA num maps to ingredient(s) in the FDA orange book reference dataset)
+
+-- note the following table should be created one time when the FDA orange book (NDA ingredient lookup) table is loaded
+--drop table if exists nda_ingredient;
+create table if not exists nda_ingredient as
+select distinct appl_no, ingredient, trade_name
+from nda; 
+
+--drop table if exists drug_nda_mapping;
+create table if not exists drug_nda_mapping as
+select distinct drug_name_original, nda_num, nda_ingredient, concept_id, update_method
+from (
+	select distinct drugname as drug_name_original, nda_num, null as nda_ingredient, cast(null as integer) as concept_id, null as update_method
+	from drug a
+	inner join unique_all_case b on a.primaryid = b.primaryid
+	where b.isr is null and nda_num is not null
+	union
+	select distinct drugname as drug_name_original, nda_num, null as nda_ingredient, cast(null as integer) as concept_id, null as update_method
+	from drug_legacy a
+	inner join unique_all_case b on a.isr = b.isr
+	where b.isr is not null and nda_num is not null
+) aa;
+
+--drop index if exists nda_num_ix;
+create index if not exists nda_num_ix on drug_nda_mapping(nda_num);
+
+-- find exact mapping using the drug table nda_num, NDA to ingredient lookup
+-- compare nda ingredient name and trade name to improve specificity
+UPDATE drug_nda_mapping a
+SET update_method = 'drug nda_num ingredients' , nda_ingredient = nda_ingredient.ingredient, concept_id = b.concept_id
+FROM staging_vocabulary.concept b
+inner join nda_ingredient
+on upper(b.concept_name) = nda_ingredient.ingredient
+WHERE b.vocabulary_id = 'RxNorm'
+AND nda_ingredient.appl_no = a.nda_num
+and (
+	(upper(a.drug_name_original) like '%' || upper(nda_ingredient.ingredient) || '%') or
+	(upper(a.drug_name_original) like '%' || upper(nda_ingredient.trade_name) || '%')
+);
+
+-----------------------------------------------
+
+-- combine all the different types of mapping into a single combined drug mapping table across legacy LAERS data and current FAERS data
+
+--drop table if exists combined_drug_mapping;
+create table if not exists combined_drug_mapping as
+select distinct primaryid, isr, drug_seq, role_cod, drug_name_original, lookup_value, concept_id, update_method
+from (
+	select distinct b.primaryid, b.isr, drug_seq, role_cod, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
+	from drug a
+	inner join unique_all_case b on a.primaryid = b.primaryid
+	where b.isr is null
+	union
+	select distinct b.primaryid, b.isr, drug_seq, role_cod, drugname as drug_name_original, cast(null as varchar) as lookup_value, cast(null as integer) as concept_id, cast(null as varchar) as update_method
+	from drug_legacy a
+	inner join unique_all_case b on a.isr = b.isr
+	where b.isr is not null
+) aa ;
+
+--drop index if exists combined_drug_mapping_ix;
+create index if not exists combined_drug_mapping_ix on combined_drug_mapping(upper(drug_name_original));
+
+-- update using drug_regex_mapping 
+UPDATE combined_drug_mapping a
+SET  update_method = b.update_method , lookup_value = drug_name_clean, concept_id = b.concept_id
+FROM drug_regex_mapping b
+WHERE upper(a.drug_name_original) = upper(b.drug_name_original)
+and a.concept_id is null
+and b.concept_id is not null;
+
+-- update using drug_ai_mapping
+UPDATE combined_drug_mapping a
+SET  update_method = b.update_method , lookup_value = prod_ai, concept_id = b.concept_id
+FROM drug_ai_mapping b
+WHERE upper(a.drug_name_original) = upper(b.drug_name_original)
+and a.concept_id is null
+and b.concept_id is not null;
+
+-- update using drug_nda_mapping
+UPDATE combined_drug_mapping a
+SET  update_method = b.update_method , lookup_value = nda_ingredient, concept_id = b.concept_id
+FROM drug_nda_mapping b
+WHERE upper(a.drug_name_original) = upper(b.drug_name_original)
+and a.concept_id is null
+and b.concept_id is not null;
+
+-- update using drug_usagi_mapping
+-- manually curated drug mappings
+UPDATE combined_drug_mapping a
+SET  update_method = b.update_method , lookup_value = b.concept_name, concept_id = b.concept_id
+FROM drug_usagi_mapping b
+WHERE upper(a.drug_name_original) = upper(b.drug_name_original)
+and a.concept_id is null
+and b.concept_id is not null;
+
+-- update unknown drugs where drug name starts with UNKNOWN
+update combined_drug_mapping 
+set update_method = 'unknown drug'
+where upper(drug_name_original) ~* '^UNKNOWN.*' 
+and update_method is null;
+
+-- update unknown drugs where drug name starts with OTHER
+update combined_drug_mapping 
+set update_method = 'unknown drug'
+where upper(drug_name_original) ~* '^OTHER.*' 
+and update_method is null;
+
+-- update unknown drugs where drug name starts with UNSPECIFIED
+update combined_drug_mapping 
+set update_method = 'unknown drug'
+where upper(drug_name_original) ~* '^UNSPECIFIED.*' 
+and update_method is null;
+
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/drug_mapping/map_all_drugname_to_rxnorm.sql</sqlfilename>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>128</xloc>
+      <yloc>1072</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Create Legacy Database Structures</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>--brian buck changes
+--commented out drop's and truncates
+--added "if not exists" to creates
+--index and binary tree commented out
+
+set search_path = ${DATABASE_SCHEMA};
+--demo
+
+--drop table if exists demo_legacy;
+CREATE TABLE IF NOT EXISTS demo_legacy (
+	isr varchar NULL,
+	"CASE" varchar NULL,
+	i_f_cod varchar NULL,
+	foll_seq varchar NULL,
+	image varchar NULL,
+	event_dt varchar NULL,
+	mfr_dt varchar NULL,
+	fda_dt varchar NULL,
+	rept_cod varchar NULL,
+	mfr_num varchar NULL,
+	mfr_sndr varchar NULL,
+	age varchar NULL,
+	age_cod varchar NULL,
+	gndr_cod varchar NULL,
+	e_sub varchar NULL,
+	wt varchar NULL,
+	wt_cod varchar NULL,
+	rept_dt varchar NULL,
+	occp_cod varchar NULL,
+	death_dt varchar NULL,
+	to_mfr varchar NULL,
+	confid varchar NULL,
+	reporter_country varchar NULL,
+	filename varchar NULL
+);
+--truncate demo_legacy;
+
+
+--drug
+--drop table if exists drug_legacy;
+create table IF NOT EXISTS drug_legacy
+(
+ISR varchar,
+DRUG_SEQ varchar,
+ROLE_COD varchar,
+DRUGNAME varchar,
+VAL_VBM varchar,
+ROUTE varchar,
+DOSE_VBM varchar,
+DECHAL varchar,
+RECHAL varchar,
+LOT_NUM varchar,
+EXP_DT varchar,
+NDA_NUM varchar,
+FILENAME varchar
+);
+--truncate drug_legacy;
+
+--indi
+
+--drop table if exists indi_legacy;
+CREATE TABLE IF NOT EXISTS indi_legacy (
+	isr varchar NULL,
+	drug_seq varchar NULL,
+	indi_pt varchar NULL,
+	filename varchar NULL
+);
+--truncate indi_legacy;
+
+
+--outc
+--drop table if exists outc_legacy;
+CREATE TABLE IF NOT EXISTS outc_legacy (
+	isr varchar NULL,
+	outc_cod varchar NULL,
+	filename varchar NULL
+);
+--truncate outc_legacy;
+
+
+--reac
+--drop table if exists reac_legacy;
+CREATE TABLE IF NOT EXISTS reac_legacy (
+	isr varchar NULL,
+	pt varchar NULL,
+	filename varchar NULL
+);
+
+--truncate reac_legacy;
+
+--CREATE INDEX ix_reac_legacy_1 ON reac_legacy USING btree (upper((pt)::text));
+--CREATE INDEX ix_reac_legacy_2 ON reac_legacy USING btree (isr);
+
+
+--reac_pt_legacy
+--drop table if exists reac_pt_legacy_list ;
+CREATE TABLE IF NOT EXISTS reac_pt_legacy_list (
+	isr varchar NULL,
+	reac_pt_list text NULL
+);
+--truncate reac_pt_legacy_list;
+
+
+--rpsr_legacy
+--drop table if exists rpsr_legacy;
+CREATE TABLE IF NOT EXISTS rpsr_legacy (
+	isr varchar NULL,
+	rpsr_cod varchar NULL,
+	filename varchar NULL
+);
+--truncate rpsr_legacy;
+
+
+--ther_legacy
+--drop table if exists ther_legacy ;
+CREATE TABLE IF NOT EXISTS ther_legacy (
+	isr varchar NULL,
+	drug_seq varchar NULL,
+	start_dt varchar NULL,
+	end_dt varchar NULL,
+	dur varchar NULL,
+	dur_cod varchar NULL,
+	filename varchar NULL
+);
+--truncate ther_legacy ;
+
+
+--all_casedemo
+--drop table if exists all_casedemo;
+CREATE TABLE IF NOT EXISTS all_casedemo (
+	"database" text NULL,
+	caseid varchar NULL,
+	isr varchar NULL,
+	caseversion varchar NULL,
+	i_f_code varchar NULL,
+	event_dt varchar NULL,
+	age varchar NULL,
+	sex varchar NULL,
+	reporter_country varchar NULL,
+	primaryid varchar NULL,
+	drugname_list text NULL,
+	reac_pt_list text NULL,
+	fda_dt varchar NULL,
+	imputed_field_name text NULL
+);
+--truncate all_casedemo;</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>400</xloc>
+      <yloc>736</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>derive_unique_all_case.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>-- Transform the LAERS legacy demo data into the same format as the FAERS current data so we can combine demographic data across both databases and run logic to remove duplicate cases across them both
+-- There is no real LAERS case version so we default to '0' to ensure that LAERS data will sort before FAERS data case version (FAERS case version is always populated and never less than '1')
+-- There is no real LAERS primaryid but we generate it from CASE and case version
+-- We translate LAERS country names to FAERS 2 char country codes with a join to the country_code table
+--
+-- We perform single imputation of missing 'key' demographic fields for multiple reports within the same case producing a new table demo_with_imputed_keys.
+--
+-- We followed the single imputation process in the book "Data Mining Applications in Engineering and Medicine" 
+--		by Elisabetta Poluzzi1, Emanuel Raschi1, Carlo Piccinni1 and Fabrizio De Ponti1
+--		ISBN 978-953-51-0720-0: 
+--		See Chapter 12: Data Mining Techniques in Pharmacovigilance: Analysis of the Publicly Accessible FDA Adverse Event Reporting System (AERS)  
+-- 		we use the same demographic key fields:  age, event_dt, sex, reporter_country.
+-- 
+-- The 'key' demographic fields are required in later processing to remove duplicate cases.
+-- 
+-- We will only impute single missing case demo key values for a case where there is at least one case record with a fully populated set of demo keys 
+-- and we populate (impute) the value of a missing demo key field using the max value of the demo key field for the same case.
+--
+-- LTS Computing LLC
+-------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+-- generate a table to lookup concatenated string of current drugnames by primaryid
+drop table if exists drugname_list;
+create table drugname_list as
+select primaryid, upper(string_agg(drugname, '|' order by drugname)) as drugname_list
+from drug
+group by primaryid;
+
+-- generate a table to lookup concatenated string of reaction preferred terms by primaryid
+drop table if exists reac_pt_list;
+create table reac_pt_list as
+select primaryid, upper(string_agg(pt, '|' order by pt)) as reac_pt_list
+from reac
+group by primaryid;
+
+-- generate a table of current data demographics by caseid
+drop table if exists casedemo;
+create table casedemo as
+select caseid, caseversion, i_f_code, event_dt, age, sex, reporter_country, d.primaryid, drugname_list, reac_pt_list, fda_dt
+from demo d
+left outer join drugname_list dl
+on d.primaryid = dl.primaryid 
+left outer join reac_pt_list rpl
+on d.primaryid = rpl.primaryid;
+
+----------------------
+
+-- generate a table to lookup concatenated string of legacy drugnames by isr
+drop table if exists drugname_legacy_list;
+create table drugname_legacy_list as
+select isr, upper(string_agg(drugname, '|' order by drugname)) as drugname_list 
+from drug_legacy
+group by isr;
+
+-- generate a table to lookup concatenated string of legacy reaction preferred terms by isr
+drop table if exists reac_pt_legacy_list;
+create table reac_pt_legacy_list as
+select isr, upper(string_agg(pt, '|' order by pt)) as reac_pt_list
+from reac_legacy
+group by isr;
+
+-- generate a table of legacy case demographics by case id
+drop table if exists casedemo_legacy;
+create table casedemo_legacy as
+select "CASE", i_f_cod, event_dt, age, gndr_cod, reporter_country, d.isr, drugname_list, reac_pt_list, fda_dt
+from demo_legacy d
+left outer join drugname_legacy_list dl
+on d.isr = dl.isr 
+left outer join reac_pt_legacy_list rpl
+on d.isr = rpl.isr;
+
+------------------------------
+
+-- create a combined set of all case demographics with drug list and reaction (outcome) lists across all the LAERS legacy data and FAERS current data
+drop table if exists all_casedemo;
+create table all_casedemo as 
+select 'FAERS' as database, caseid, cast(null as varchar) as isr, caseversion, i_f_code, event_dt, age, sex, reporter_country, primaryid, 
+drugname_list, reac_pt_list, fda_dt, null as imputed_field_name 
+from casedemo 
+union
+select 'LAERS' as database, "CASE" as caseid, isr, cast ('0' as varchar) as caseversion, i_f_cod as i_f_code, event_dt, age, gndr_cod as sex, e.country_code as reporter_country, cast("CASE" || '0' as varchar) as primaryid, 
+drugname_list, reac_pt_list, fda_dt, null as imputed_field_name 
+from casedemo_legacy a 
+left outer join country_code e
+on upper(a.reporter_country) = upper(e.country_name);
+
+------------------------------
+
+-- perform single imputation of missing 'key' demographic fields for multiple reports within the same case across all the legacy and current data
+
+-- create table of default demo event_dt key value for each case where all the key fields are populated on at least one report for that case
+drop table if exists default_all_casedemo_event_dt_keys; 
+create table default_all_casedemo_event_dt_keys as 
+select caseid, age, sex, reporter_country, max(event_dt) as default_event_dt
+from all_casedemo 
+where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null
+group by caseid, age, sex, reporter_country;
+
+-- single imputation of missing event_dt 
+update all_casedemo a
+set event_dt = default_event_dt, imputed_field_name = 'event_dt' 
+from default_all_casedemo_event_dt_keys d
+where a.caseid = d.caseid and a.age = d.age and a.sex = d.sex and a.reporter_country = d.reporter_country
+and a.caseid is not null and a.event_dt is null and a.age is not null and a.sex is not null and a.reporter_country is not null;
+
+-- create table of default demo age key value for each case where all the key fields are populated on at least one report for that case
+drop table if exists default_all_casedemo_age_keys; 
+create table default_all_casedemo_age_keys as 
+select caseid, event_dt, sex, reporter_country, max(age) as default_age
+from all_casedemo 
+where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null
+group by caseid, event_dt, sex, reporter_country;
+
+-- single imputation of missing age 
+update all_casedemo a 
+set age = default_age, imputed_field_name = 'age'  
+from default_all_casedemo_age_keys d
+where a.caseid = d.caseid and a.event_dt = d.event_dt and a.sex = d.sex and a.reporter_country = d.reporter_country
+and a.caseid is not null and a.event_dt is not null and a.age is null and a.sex is not null and a.reporter_country is not null;
+
+-- create table of default demo gender key value for each case where all the key fields are populated on at least one report for that case
+drop table if exists default_all_casedemo_sex_keys; 
+create table default_all_casedemo_sex_keys as 
+select caseid, event_dt, age, reporter_country, max(sex) as default_sex
+from all_casedemo 
+where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null
+group by caseid, event_dt, age, reporter_country;
+
+-- single imputation of missing gender
+update all_casedemo a 
+set sex = default_sex, imputed_field_name = 'sex' 
+from default_all_casedemo_sex_keys d
+where a.caseid = d.caseid and a.event_dt = d.event_dt and a.age = d.age and a.reporter_country = d.reporter_country
+and a.caseid is not null and a.event_dt is not null and a.age is not null and a.sex is null and a.reporter_country is not null;
+
+-- create table of default demo reporter_country key value for each case where all the key fields are populated on at least one report for that case
+drop table if exists default_all_casedemo_reporter_country_keys; 
+create table default_all_casedemo_reporter_country_keys as 
+select caseid, event_dt, age, sex, max(reporter_country) as default_reporter_country
+from all_casedemo 
+where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null
+group by caseid, event_dt, age, sex;
+
+-- single imputation of missing reporter_country
+update all_casedemo a
+set reporter_country = default_reporter_country, imputed_field_name = 'reporter_country'  
+from default_all_casedemo_reporter_country_keys d
+where a.caseid = d.caseid and a.event_dt = d.event_dt and a.age = d.age and a.sex = d.sex
+and a.caseid is not null and a.event_dt is not null and a.age is not null and a.sex is not null and a.reporter_country is null;
+
+------------------------------
+
+-- get the latest case row for each case across both the legacy LAERS and current FAERS data based on CASE ID
+drop table if exists unique_all_casedemo;
+create table unique_all_casedemo as
+select database, caseid, isr, caseversion, i_f_code, event_dt, age, sex, reporter_country, primaryid, drugname_list, reac_pt_list, fda_dt
+from (
+select *, 
+row_number() over(partition by caseid order by primaryid desc, database desc, fda_dt desc, i_f_code, isr desc) as row_num 
+from all_casedemo 
+) a where a.row_num = 1;
+
+-- remove any duplicates based on fully populated matching demographic key fields and exact match on list of drugs and list of outcomes (FAERS reactions)
+-- NOTE. when using this table for subsequent joins in the ETL process, join to FAERS data using primaryid and join to LAERS data using isr
+drop table if exists unique_all_case;   
+create table unique_all_case as
+select caseid, case when isr is not null then null else primaryid end as primaryid, isr 
+from (
+	select caseid, primaryid,isr, 
+	row_number() over(partition by event_dt, age, sex, reporter_country, drugname_list, reac_pt_list order by primaryid desc, database desc, fda_dt desc, i_f_code, isr desc) as row_num 
+	from unique_all_casedemo 
+	where caseid is not null and event_dt is not null and age is not null and sex is not null and reporter_country is not null and drugname_list is not null and reac_pt_list is not null
+) a where a.row_num = 1
+union 
+select caseid, case when isr is not null then null else primaryid end as primaryid, isr 
+from unique_all_casedemo 
+where caseid is null or event_dt is null or age is null or sex is null or reporter_country is null or drugname_list is null or reac_pt_list is null;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>80</xloc>
+      <yloc>880</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Set job variables 2</name>
+      <description/>
+      <type>SET_VARIABLES</type>
+      <attributes/>
+      <replacevars>Y</replacevars>
+      <filename>${Internal.Entry.Current.Directory}/faers.config</filename>
+      <file_variable_type>JVM</file_variable_type>
+      <fields>
+        <field>
+          <variable_name>FILE_DIR</variable_name>
+          <variable_value>${BASE_FILE_DIR}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>FAERSDBSTATS_REPO_LOCATION</variable_name>
+          <variable_value>${FAERSDBSTATS_REPO_LOCATION}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>CEM_DOWNLOAD_DATA_FOLDER</variable_name>
+          <variable_value>${CEM_DOWNLOAD_DATA_FOLDER}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>AWS_S3_BUCKET_NAME</variable_name>
+          <variable_value>${AWS_S3_BUCKET_NAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>AWS_S3_ACCESS_KEY</variable_name>
+          <variable_value>${AWS_S3_ACCESS_KEY}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>AWS_S3_SECRET_KEY</variable_name>
+          <variable_value>${AWS_S3_SECRET_KEY}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_HOST</variable_name>
+          <variable_value>${DATABASE_HOST}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_NAME</variable_name>
+          <variable_value>${DATABASE_NAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_SCHEMA</variable_name>
+          <variable_value>${DATABASE_SCHEMA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_USERNAME</variable_name>
+          <variable_value>${DATABASE_USERNAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_PASSWORD</variable_name>
+          <variable_value>${DATABASE_PASSWORD}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_LOG_SCHEMA</variable_name>
+          <variable_value>${DATABASE_LOG_SCHEMA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_NEW_DATA</variable_name>
+          <variable_value>${LOAD_NEW_DATA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_NEW_QUARTER</variable_name>
+          <variable_value>${LOAD_NEW_QUARTER}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_NEW_YEAR</variable_name>
+          <variable_value>${LOAD_NEW_YEAR}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_ALL_TIME=1</variable_name>
+          <variable_value>${LOAD_ALL_TIME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>784</xloc>
+      <yloc>528</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>create domain tables</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>--if LOAD_ALL_TIME drops &amp; creates domain tables
+--truncates are not needed if LOAD_ALL_TIME because dropped then created; and not needed if just adding new quarter of data
+
+set search_path = ${DATABASE_SCHEMA};
+
+--demo
+
+--drop table if exists demo;
+CREATE TABLE IF NOT EXISTS demo (
+	primaryid varchar NULL,
+	caseid varchar NULL,
+	caseversion varchar NULL,
+	i_f_code varchar NULL,
+	event_dt varchar NULL,
+	mfr_dt varchar NULL,
+	init_fda_dt varchar NULL,
+	fda_dt varchar NULL,
+	rept_cod varchar NULL,
+	auth_num varchar NULL,
+	mfr_num varchar NULL,
+	mfr_sndr varchar NULL,
+	lit_ref varchar NULL,
+	age varchar NULL,
+	age_cod varchar NULL,
+	age_grp varchar NULL,
+	sex varchar NULL,
+	e_sub varchar NULL,
+	wt varchar NULL,
+	wt_cod varchar NULL,
+	rept_dt varchar NULL,
+	to_mfr varchar NULL,
+	occp_cod varchar NULL,
+	reporter_country varchar NULL,
+	occr_country varchar NULL,
+	filename varchar NULL
+);
+--truncate demo;
+
+
+--drug
+
+--drop table if exists drug;
+CREATE TABLE IF NOT EXISTS drug (
+	primaryid varchar NULL,
+	caseid varchar NULL,
+	drug_seq varchar NULL,
+	role_cod varchar NULL,
+	drugname varchar NULL,
+	prod_ai varchar NULL,
+	val_vbm varchar NULL,
+	route varchar NULL,
+	dose_vbm varchar NULL,
+	cum_dose_chr varchar NULL,
+	cum_dose_unit varchar NULL,
+	dechal varchar NULL,
+	rechal varchar NULL,
+	lot_num varchar NULL,
+	exp_dt varchar NULL,
+	nda_num varchar NULL,
+	dose_amt varchar NULL,
+	dose_unit varchar NULL,
+	dose_form varchar NULL,
+	dose_freq varchar NULL,
+	filename varchar NULL
+);
+--truncate drug;
+
+
+--indi
+
+--drop table if exists indi ;
+create table IF NOT EXISTS indi
+(
+primaryid varchar,
+caseid varchar,
+indi_drug_seq varchar,
+indi_pt varchar,
+filename varchar
+);
+--truncate indi;
+--CREATE INDEX IF NOT EXISTS indi_caseid_idx ON frs.indi USING btree (caseid); --NOTE FRS does not exist
+CREATE INDEX IF NOT EXISTS indi_filename_idx ON indi USING btree (filename);
+
+
+
+--outc
+--drop table if exists outc ;
+CREATE TABLE IF NOT EXISTS outc (
+	primaryid varchar NULL,
+	caseid varchar NULL,
+	outc_code varchar NULL,
+	filename varchar NULL
+);
+--truncate outc;
+CREATE INDEX IF NOT EXISTS outc_caseid_idx ON outc USING btree (caseid);
+CREATE INDEX IF NOT EXISTS outc_filename_idx ON outc USING btree (filename);
+
+
+--reac
+
+--drop table if exists reac ;
+CREATE TABLE IF NOT EXISTS reac (
+	primaryid varchar NULL,
+	caseid varchar NULL,
+	pt varchar NULL,
+	drug_rec_act varchar NULL,
+	filename varchar NULL
+);
+--truncate reac ;
+CREATE INDEX IF NOT EXISTS ix_reac_1 ON reac USING btree (upper((pt)::text));
+CREATE INDEX IF NOT EXISTS ix_reac_2 ON reac USING btree (primaryid);
+CREATE INDEX IF NOT EXISTS reac_caseid_idx ON reac USING btree (caseid);
+CREATE INDEX IF NOT EXISTS reac_filename_idx ON reac USING btree (filename);
+
+
+--rpsr
+
+--drop table if exists rpsr;
+CREATE TABLE IF NOT EXISTS rpsr (
+	primaryid varchar NULL,
+	caseid varchar NULL,
+	rpsr_cod varchar NULL,
+	filename varchar NULL
+);
+--truncate rpsr;
+CREATE INDEX IF NOT EXISTS rpsr_caseid_idx ON rpsr USING btree (caseid, primaryid);
+CREATE INDEX IF NOT EXISTS rpsr_filename_idx ON rpsr USING btree (filename);
+
+--ther
+
+--drop table if exists ther ;
+CREATE TABLE IF NOT EXISTS ther (
+	primaryid varchar NULL,
+	caseid varchar NULL,
+	dsg_drug_seq varchar NULL,
+	start_dt varchar NULL,
+	end_dt varchar NULL,
+	dur varchar NULL,
+	dur_cod varchar NULL,
+	filename varchar NULL
+);
+--truncate ther;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>400</xloc>
+      <yloc>608</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>domain_transform</name>
+      <description/>
+      <type>TRANS</type>
+      <attributes/>
+      <specification_method>filename</specification_method>
+      <trans_object_id/>
+      <filename>${FAERSDBSTATS_REPO_LOCATION}/load_data_files_from_website/domain_transform.ktr</filename>
+      <transname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <set_logfile>Y</set_logfile>
+      <logfile>${BASE_FILE_DIR}/../logs/domain_transforms</logfile>
+      <logext>txt</logext>
+      <add_date>Y</add_date>
+      <add_time>Y</add_time>
+      <loglevel>Error</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name/>
+      <set_append_logfile>Y</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <run_configuration>Pentaho local</run_configuration>
+      <suppress_result_data>N</suppress_result_data>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>688</xloc>
+      <yloc>736</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>s3_data_download</name>
+      <description/>
+      <type>JOB</type>
+      <attributes/>
+      <specification_method>filename</specification_method>
+      <job_object_id/>
+      <filename>${Internal.Entry.Current.Directory}/s3_data_download.kjb</filename>
+      <jobname/>
+      <directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Nothing</loglevel>
+      <slave_server_name/>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <expand_remote_job>N</expand_remote_job>
+      <create_parent_folder>N</create_parent_folder>
+      <pass_export>N</pass_export>
+      <run_configuration>Pentaho local</run_configuration>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <set_append_logfile>N</set_append_logfile>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>96</xloc>
+      <yloc>736</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>create_meddra_snomed_mapping.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>-- Create a mapping table from MedDRA to SNOMED-CT. 
+-- We will use this table to map indications and reactions from MedDRA preferred term concepts to SNOMED-CT concepts/
+--
+-- LTS Computing LLC
+-----------------------------------------------------------------------------------------------
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists meddra_snomed_mapping;
+create table if not exists meddra_snomed_mapping as
+SELECT z.SNOMED_CONCEPT_ID, z.SNOMED_CONCEPT_NAME, z.SNOMED_CONCEPT_CODE, z.MEDDRA_CONCEPT_ID, z.MEDDRA_CONCEPT_NAME, z.MEDDRA_CONCEPT_CODE, z.MEDDRA_CLASS_ID
+FROM (
+      SELECT ca.max_levels_of_separation, ca.min_levels_of_separation, c.concept_id AS MEDDRA_CONCEPT_ID,
+	     c.concept_code AS MEDDRA_CONCEPT_CODE, c.concept_name AS MEDDRA_CONCEPT_NAME, c.concept_class_id AS MEDDRA_CLASS_ID,
+	     c2.concept_id AS SNOMED_CONCEPT_ID, c2.concept_name AS SNOMED_CONCEPT_NAME, c2.concept_code AS SNOMED_CONCEPT_CODE,
+	     ROW_NUMBER() OVER(PARTITION BY c.CONCEPT_ID ORDER BY c.CONCEPT_ID, ca.min_levels_of_separation, ca.max_levels_of_separation, c.CONCEPT_ID, c2.CONCEPT_ID) AS ROW_NUM
+      FROM staging_vocabulary.CONCEPT c JOIN staging_vocabulary.concept_ancestor ca ON ca.ancestor_concept_id = c.concept_id
+      JOIN staging_vocabulary.CONCEPT c2 ON c2.concept_id = ca.descendant_concept_id
+	     AND c2.vocabulary_id = 'SNOMED'
+	     AND c2.CONCEPT_CLASS_ID = 'Clinical Finding'
+	     AND c2.INVALID_REASON IS NULL
+      WHERE c.vocabulary_id = 'MedDRA'
+      AND c.INVALID_REASON IS NULL
+) z
+WHERE z.ROW_NUM = 1;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>128</xloc>
+      <yloc>608</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Wait for 3s</name>
+      <description/>
+      <type>DELAY</type>
+      <attributes/>
+      <maximumTimeout>3</maximumTimeout>
+      <scaletime>0</scaletime>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>32</xloc>
+      <yloc>96</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>country_codes_job</name>
+      <description/>
+      <type>JOB</type>
+      <attributes/>
+      <specification_method>filename</specification_method>
+      <job_object_id/>
+      <filename>/home/brb265/faers/faersdbstats/reference_and_mapping_data/country_codes_job.kjb</filename>
+      <jobname/>
+      <directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>Y</set_logfile>
+      <logfile>${Internal.Entry.Current.Directory}/../logs/country_code</logfile>
+      <logext>txt</logext>
+      <add_date>Y</add_date>
+      <add_time>Y</add_time>
+      <loglevel>Rowlevel</loglevel>
+      <slave_server_name/>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <expand_remote_job>N</expand_remote_job>
+      <create_parent_folder>Y</create_parent_folder>
+      <pass_export>N</pass_export>
+      <run_configuration>Pentaho local</run_configuration>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <set_append_logfile>Y</set_append_logfile>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>80</xloc>
+      <yloc>480</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Create pdi_logging table</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql/>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>${FAERSDBSTATS_REPO_LOCATION}/pentaho_log_table_creation.sql</sqlfilename>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>96</xloc>
+      <yloc>144</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>orange_book_job</name>
+      <description/>
+      <type>JOB</type>
+      <attributes/>
+      <specification_method>filename</specification_method>
+      <job_object_id/>
+      <filename>${FAERSDBSTATS_REPO_LOCATION}/reference_and_mapping_data/orange_book_job.kjb</filename>
+      <jobname/>
+      <directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>Y</set_logfile>
+      <logfile>${FAERSDBSTATS_REPO_LOCATION}/../logging/orange_book_job</logfile>
+      <logext>txt</logext>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Rowlevel</loglevel>
+      <slave_server_name/>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <expand_remote_job>N</expand_remote_job>
+      <create_parent_folder>Y</create_parent_folder>
+      <pass_export>N</pass_export>
+      <run_configuration>Pentaho local</run_configuration>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <set_append_logfile>Y</set_append_logfile>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>224</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Set job variables</name>
+      <description/>
+      <type>SET_VARIABLES</type>
+      <attributes/>
+      <replacevars>Y</replacevars>
+      <filename>${BASE_FILE_DIR}/faers.config</filename>
+      <file_variable_type>JVM</file_variable_type>
+      <fields>
+        <field>
+          <variable_name>FILE_DIR</variable_name>
+          <variable_value>${BASE_FILE_DIR}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>FAERSDBSTATS_REPO_LOCATION</variable_name>
+          <variable_value>${FAERSDBSTATS_REPO_LOCATION}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>CEM_DOWNLOAD_DATA_FOLDER</variable_name>
+          <variable_value>${CEM_DOWNLOAD_DATA_FOLDER}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>AWS_S3_BUCKET_NAME</variable_name>
+          <variable_value>${AWS_S3_BUCKET_NAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>AWS_S3_ACCESS_KEY</variable_name>
+          <variable_value>${AWS_S3_ACCESS_KEY}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>AWS_S3_SECRET_KEY</variable_name>
+          <variable_value>${AWS_S3_SECRET_KEY}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_HOST</variable_name>
+          <variable_value>${DATABASE_HOST}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_NAME</variable_name>
+          <variable_value>${DATABASE_NAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_SCHEMA</variable_name>
+          <variable_value>${DATABASE_SCHEMA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_USERNAME</variable_name>
+          <variable_value>${DATABASE_USERNAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_PASSWORD</variable_name>
+          <variable_value>${DATABASE_PASSWORD}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>DATABASE_LOG_SCHEMA</variable_name>
+          <variable_value>${DATABASE_LOG_SCHEMA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_NEW_DATA</variable_name>
+          <variable_value>${LOAD_NEW_DATA}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_NEW_QUARTER</variable_name>
+          <variable_value>${LOAD_NEW_QUARTER}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_NEW_YEAR</variable_name>
+          <variable_value>${LOAD_NEW_YEAR}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>LOAD_ALL_TIME</variable_name>
+          <variable_value>${LOAD_ALL_TIME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+        <field>
+          <variable_name>CEM_ORANGE_BOOK_DOWNLOAD_FILENAME</variable_name>
+          <variable_value>${CEM_ORANGE_BOOK_DOWNLOAD_FILENAME}</variable_value>
+          <variable_type>JVM</variable_type>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>176</xloc>
+      <yloc>32</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Start</name>
+      <description/>
+      <type>SPECIAL</type>
+      <attributes/>
+      <start>Y</start>
+      <dummy>N</dummy>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <hour>12</hour>
+      <minutes>0</minutes>
+      <weekDay>1</weekDay>
+      <DayOfMonth>1</DayOfMonth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>48</xloc>
+      <yloc>32</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>derive_standard_drug_outcome_statistics.sql</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>------------------------------
+--
+-- This SQL script creates a statistics table called standard_drug_outcome_stats (using the counts from the previously calculated 2x2 contingency table)
+-- with the following statistics for each drug/outcome pair:
+--
+-- 1) Case count
+-- 2) Proportional Reporting Ratio (PRR) along with the 95% CI upper and lower values
+-- 3) Reporting Odds Ratio (ROR) along with the 95% CI upper and lower values
+--
+-- PRR for pair:(drug P, outcome R) is calculated as (A / (A + B)) / (C / (C + D)
+--
+-- ROR for pair:(drug P, outcome R) is calculated as (A / C) / (B / D)
+--
+-- Where:
+--		A = case_count for the pair:(drug P, outcome R)
+--		B = sum(case_count) for all pairs:(drug P, all outcomes except outcome R)
+--		C = sum(case_count) for all pairs:(all drugs except drug P, outcome R)
+--		D = sum(case_count) for all pairs:(all drugs except drug P, all outcomes except outcome R)
+--
+-- Note if C is 0 then the resulting PRR and ROR values will be null. Potentially a relatively high constant value
+-- could be assigned instead, to indicate a potential PRR and ROR signal in these cases.
+--
+--
+-- Standard deviations are obtained from Douglas G Altman's Practical Statistics for Medical Research. 1999. Chapter 10.11. Page 267 
+--
+-- LTS COMPUTING LLC
+------------------------------
+
+set search_path = ${DATABASE_SCHEMA};
+
+--drop table if exists standard_drug_outcome_statistics;
+create table if not exists standard_drug_outcome_statistics as
+select drug_concept_id, outcome_concept_id, cast(null as integer) as snomed_outcome_concept_id, 
+    count_a as case_count,
+    round((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)),5) as prr,
+    round(exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))+1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)-(1.0/(count_c+count_d)))),5) as prr_95_percent_upper_confidence_limit,
+    round(exp(ln((count_a / (count_a + count_b)) / (count_c / (count_c + count_d)))-1.96*sqrt((1.0/count_a)-(1.0/(count_a+count_b))+(1.0/count_c)-(1.0/(count_c+count_d)))),5) as prr_95_percent_lower_confidence_limit,
+    round(((count_a / count_c) / (count_b / count_d)),5) as ror,
+    round(exp((ln((count_a / count_c) / (count_b / count_d)))+1.96*sqrt((1.0/count_a)+(1.0/count_b)+(1.0/count_c)+(1.0/count_d))),5) as ror_95_percent_upper_confidence_limit,
+    round(exp((ln((count_a / count_c) / (count_b / count_d)))-1.96*sqrt((1.0/count_a)+(1.0/count_b)+(1.0/count_c)+(1.0/count_d))),5) as ror_95_percent_lower_confidence_limit
+from standard_drug_outcome_contingency_table;
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>cem_sandbox</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>448</xloc>
+      <yloc>1568</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>eu_drug_name_active_ingredient_job</name>
+      <description/>
+      <type>JOB</type>
+      <attributes/>
+      <specification_method>filename</specification_method>
+      <job_object_id/>
+      <filename>${Internal.Entry.Current.Directory}/reference_and_mapping_data/eu_drug_name_active_ingredient_job.kjb</filename>
+      <jobname/>
+      <directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>Y</set_logfile>
+      <logfile>${FAERSDBSTATS_REPO_LOCATION}/../logs/eu_drug_job</logfile>
+      <logext>txt</logext>
+      <add_date>Y</add_date>
+      <add_time>Y</add_time>
+      <loglevel>Rowlevel</loglevel>
+      <slave_server_name/>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <expand_remote_job>N</expand_remote_job>
+      <create_parent_folder>N</create_parent_folder>
+      <pass_export>N</pass_export>
+      <run_configuration>Pentaho local</run_configuration>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <set_append_logfile>Y</set_append_logfile>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>480</yloc>
+      <attributes_kjc/>
+    </entry>
+  </entries>
+  <hops>
+    <hop>
+      <from>Start</from>
+      <to>Set job variables</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>Set job variables</from>
+      <to>Set AWS Credentials</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Wait for 3s</from>
+      <to>Create pdi_logging table</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>orange_book_job</from>
+      <to>nda</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>create_meddra_snomed_mapping.sql</from>
+      <to>create domain tables</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>s3_data_download</from>
+      <to>Create Legacy Database Structures</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>create domain tables</from>
+      <to>s3_data_download</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>country_codes_job</from>
+      <to>orange_book_job</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Set job variables 2</from>
+      <to>create domain tables</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Drop all tables</from>
+      <to>country_codes_job</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>create_meddra_snomed_mapping.sql</from>
+      <to>Set job variables 2</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>SUCCESS IF LOAD_ALL_TIME=1</from>
+      <to>Drop all tables</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>domain_transform</from>
+      <to>derive_unique_all_case.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>SUCCESS IF LOAD_ALL_TIME=1</from>
+      <to>orange_book_job</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Create Legacy Database Structures</from>
+      <to>domain_transform</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Update LOG SQL</from>
+      <to>SUCCESS IF LOAD_ALL_TIME=1</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Create Legacy Database Structures</from>
+      <to>derive_unique_all_case.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Create pdi_logging table</from>
+      <to>Update LOG SQL</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>derive_unique_all_case.sql</from>
+      <to>create drug_usagi_mapping table</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>create drug_usagi_mapping table</from>
+      <to>create_usagi_import_table.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>map_all_drugname_to_rxnorm</from>
+      <to>generate_drug_export_for_usagi.sql </to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>derive_standard_drug_outcome_count.sql</from>
+      <to>derive_standard_drug_outcome_contingency_table.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>create_usagi_import_table.sql</from>
+      <to>map_all_drugname_to_rxnorm</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>derive_standard_case_outcome.sql</from>
+      <to>derive_standard_drug_outcome_count.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>derive_standard_case_indication.sql</from>
+      <to>derive_standard_case_outcome.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>derive_standard_case_outcome_category.sql</from>
+      <to>derive_standard_case_indication.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>load_drug_usagi_mapping.sql</from>
+      <to>standardize_combined_drug_mapping.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>standardize_combined_drug_mapping.sql</from>
+      <to>derive_standard_case_outcome_category.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Set AWS Credentials</from>
+      <to>Wait for 3s</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>generate_drug_export_for_usagi.sql </from>
+      <to>load_drug_usagi_mapping.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>derive_standard_drug_outcome_contingency_table.sql</from>
+      <to>derive_standard_drug_outcome_statistics.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>derive_standard_drug_outcome_statistics.sql</from>
+      <to>map_meddra_to_snomed.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>map_meddra_to_snomed.sql</from>
+      <to>derive_standard_drug_outcome_drilldown.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>nda</from>
+      <to>eu_drug_name_active_ingredient_job</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>eu_drug_name_active_ingredient_job</from>
+      <to>create_meddra_snomed_mapping.sql</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+  </hops>
+  <notepads>
+    <notepad>
+      <note>Preq's
+- AWS S3
+- Postgres
+- a database connection established within Pentaho (edit > show used environment variables... define host, db, user, pw)
+- a properly configured faers.config file
+- omop data loaded into vocabulary schema (or proper license to obtain the data)
+-data's in staging_vocabulary for create_meddra_snomed_mapping.sql
+
+ABOUT EACH STEP
+-set job variables						-brings in environment variables
+-Create pdi_logging table			-creates the pentaho logging database tables
+-update LOG SQL						-updates pdi_logging for pentaho 9
+SUCCESS IF LOAD_ALL_TIME=1		**USE CASE LOGIC***
+-orange_book_job					-downloads s3 data and uploads it to s3 then inputs it into the databse w/ orange_book_transform
+-nda													-create table and index if not exists
+-country_codes_job					-creates country codes table, uploads to s3, and inputs data w/ country_code_transform
+-eu_active_job						-was eu_registered_drugs_by_active_ingredent_job, creates table, uploads to s3, and inputs data w/ eu transform
+-omop								-most excellently creates omop data
+-create meddra snomed mapping
+-set job variables 2					-exact same as before (brings in env vars)
+-drop create domain tables		-only if LOAD_ALL_TIME (=1) then drop and create fresh tables else do nothing
+-s3 data download						-mkdir ${BASE_FILE_DIR}/data_from_s3/ then if LOAD_ALL_TIME then download all data from to ${BASE_FILE_DIR}/data_from_s3/ else specific year quarter info
+-domain transform						-put the downloaded domains' data from data_from_s3 folder into the database
+-Create Legacy Database Structures (no drop; create; no truncate)				-truncates commented out
+-derive_unique_all_case.sql			-makes LAERS data like FAERS data and removes duplicates created in process
+
+
+
+
+To-do: reestablish database connection so that faers_meta works without having to run orange_book_job first.
+update s3 bucket location to faers and laers
+
+Troubleshooting:
+if "Logging" tab stops producing output restart spoon
+if Java Null Pointer Error (and/or job 'job") restart spoon then rebuild failing step as if new
+
+
+</note>
+      <xloc>464</xloc>
+      <yloc>16</yloc>
+      <width>1343</width>
+      <heigth>656</heigth>
+      <fontname>Ubuntu</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>&lt;&lt;&lt; used "CREATE TABLE IF NOT EXISTS" no drops and no truncates</note>
+      <xloc>576</xloc>
+      <yloc>592</yloc>
+      <width>454</width>
+      <heigth>27</heigth>
+      <fontname>Ubuntu</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>&lt;- stopped changing drop... create...'s to --drop (commented out) create table if not exist here
+</note>
+      <xloc>336</xloc>
+      <yloc>1664</yloc>
+      <width>635</width>
+      <heigth>44</heigth>
+      <fontname>Ubuntu</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>&lt;&lt;&lt; DUPLICATE (decent starting point for only running 2nd half of meta)</note>
+      <xloc>880</xloc>
+      <yloc>512</yloc>
+      <width>487</width>
+      <heigth>27</heigth>
+      <fontname>Ubuntu</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>&lt;&lt;&lt; laers in derive
+</note>
+      <xloc>880</xloc>
+      <yloc>864</yloc>
+      <width>130</width>
+      <heigth>44</heigth>
+      <fontname>Ubuntu</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>&lt;&lt; standard and source schemas?</note>
+      <xloc>416</xloc>
+      <yloc>1840</yloc>
+      <width>233</width>
+      <heigth>27</heigth>
+      <fontname>Ubuntu</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>Current Issues:
+none known</note>
+      <xloc>524</xloc>
+      <yloc>654</yloc>
+      <width>109</width>
+      <heigth>44</heigth>
+      <fontname>Ubuntu</fontname>
+      <fontsize>11</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+  </notepads>
+  <attributes>
+    <group>
+      <name>METASTORE.pentaho</name>
+      <attribute>
+        <key>Default Run Configuration</key>
+        <value>{"namespace":"pentaho","id":"Default Run Configuration","name":"Default Run Configuration","description":"Defines a default run configuration","metaStoreName":null}</value>
+      </attribute>
+    </group>
+    <group>
+      <name>{"_":"Embedded MetaStore Elements","namespace":"pentaho","type":"Default Run Configuration"}</name>
+    </group>
+  </attributes>
+</job>

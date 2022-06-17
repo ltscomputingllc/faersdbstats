@@ -8,7 +8,7 @@
 -- LTS COMPUTING LLC
 ------------------------------
 
-set search_path = faers;
+set search_path = ${DATABASE_SCHEMA};
 
 -- ====================== find active OMOP CDM vocabulary standard RxNorm codes ==============================
 
@@ -25,19 +25,19 @@ select a.*, cast (concept_id as integer) as standard_concept_id from combined_dr
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
-inner join cdmv5.concept c 
+inner join staging_vocabulary.concept c 
 on scdm.standard_concept_id = c.concept_id
 and scdm.concept_id is not null 
 and c.standard_concept is null 
 ),
 cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
 select concept_id_1, concept_id_2 
-from cdmv5.concept_relationship  cr
-inner join cdmv5.concept a
+from staging_vocabulary.concept_relationship  cr
+inner join staging_vocabulary.concept a
 on cr.concept_id_1 = a.concept_id
 and cr.invalid_reason is null
 and a.vocabulary_id = 'RxNorm'
-inner join cdmv5.concept b
+inner join staging_vocabulary.concept b
 on cr.concept_id_2 = b.concept_id
 and b.vocabulary_id = 'RxNorm'
 and b.standard_concept = 'S'
@@ -55,19 +55,19 @@ where scdm.standard_concept_id = cte2.concept_id_1;
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
-INNER JOIN cdmv5.concept c 
+INNER JOIN staging_vocabulary.concept c 
 on scdm.standard_concept_id = c.concept_id 
 and scdm.concept_id is not null 
 and c.concept_class_id  = 'Branded Drug Form' 
 ),
 cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
 select concept_id_1, concept_id_2
-from cdmv5.concept_relationship  cr
-inner join cdmv5.concept a
+from staging_vocabulary.concept_relationship  cr
+inner join staging_vocabulary.concept a
 on cr.concept_id_1 = a.concept_id
 and cr.invalid_reason is null
 and a.vocabulary_id = 'RxNorm'
-inner join cdmv5.concept b
+inner join staging_vocabulary.concept b
 on cr.concept_id_2 = b.concept_id
 and b.vocabulary_id = 'RxNorm'
 and b.standard_concept = 'S'
@@ -85,15 +85,15 @@ where scdm.standard_concept_id = cte2.concept_id_1;
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
-INNER JOIN cdmv5.concept c
+INNER JOIN staging_vocabulary.concept c
 on scdm.standard_concept_id = c.concept_id
 and scdm.concept_id is not null
 and c.concept_class_id  = 'Precise Ingredient'
 ),
 cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
 select c1.concept_id as concept_id_1, c2.concept_id as concept_id_2
-from cdmv5.concept c1
-inner join cdmv5.concept c2
+from staging_vocabulary.concept c1
+inner join staging_vocabulary.concept c2
 on c2.concept_name = regexp_replace(c1.concept_name, ' decanoate$| hemihydrate$| aluminum$| tetrahydrate$| hexahydrate$| oxilate$| pivalate$| sulphonate$| anhydrous$| valerate$| dihydrate$| saccharate$| diacetate$| monosodium$| palmitate$| monophosphate$| stearate$| disodium$| propionate$| bitartrate$| pamoate$| dimesylate$| methylsulfate$| hydrobromide$| malate$| monohydrate$| silicate$| calcium$| magnesium$| tannate$| carbonate$| mesylate$| succinate$| potassium$| maleate$| benzoate$| nitrate$| citrate$| hydrate$| tartrate$| acetate$| phosphate$| dihydrochloride$| hydrochloride$| HCL$| chloride$| trihydrate$| besylate$| fumarate$| lactate$| gluconate$| bromide$| sulfate$| sodium$', '', 'i') 
 where c1.vocabulary_id = 'RxNorm'
 and c1.concept_class_id = 'Precise Ingredient'
@@ -113,7 +113,7 @@ where scdm.standard_concept_id = cte2.concept_id_1;
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
-INNER JOIN cdmv5.concept c 
+INNER JOIN staging_vocabulary.concept c 
 on scdm.standard_concept_id = c.concept_id 
 and scdm.concept_id is not null 
 and c.concept_class_id  = 'Brand Name' 
@@ -121,11 +121,11 @@ and c.invalid_reason is null
 ),
 cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
 select concept_id_1, concept_id_2
-from cdmv5.concept_relationship  cr
-left outer join cdmv5.concept a
+from staging_vocabulary.concept_relationship  cr
+left outer join staging_vocabulary.concept a
 on cr.concept_id_1 = a.concept_id
 and a.vocabulary_id = 'RxNorm'
-inner join cdmv5.concept b
+inner join staging_vocabulary.concept b
 on cr.concept_id_2 = b.concept_id
 and b.vocabulary_id = 'RxNorm'
 and b.standard_concept = 'S'
@@ -144,17 +144,17 @@ where scdm.standard_concept_id = cte2.concept_id_1;
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
-INNER JOIN cdmv5.concept c 
+INNER JOIN staging_vocabulary.concept c 
 on scdm.standard_concept_id = c.concept_id 
 and scdm.concept_id is not null 
 and c.concept_class_id  = 'Brand Name' 
 and c.invalid_reason = 'U'
 ),
 cte2 as
-(select concept_id_1, concept_id_2 from cdmv5.concept_relationship a
-inner join cdmv5.concept b
+(select concept_id_1, concept_id_2 from staging_vocabulary.concept_relationship a
+inner join staging_vocabulary.concept b
 on a.concept_id_1 = b.concept_id
-inner join cdmv5.concept c
+inner join staging_vocabulary.concept c
 on a.concept_id_2 = c.concept_id
 and b.vocabulary_id = 'RxNorm'
 and c.vocabulary_id = 'RxNorm'
@@ -164,9 +164,9 @@ and a.concept_id_1 in (select standard_concept_id from cte1)
 cte3 as 
 (select cr.concept_id_1 -- this cte eliminates brands with multi-ingredient drugs
 from cte2
-inner join cdmv5.concept_relationship cr
+inner join staging_vocabulary.concept_relationship cr
 on cte2.concept_id_2 = cr.concept_id_1   
-inner join cdmv5.concept b
+inner join staging_vocabulary.concept b
 on cr.concept_id_2 = b.concept_id
 and cr.relationship_id = 'Tradename of' 
 and b.vocabulary_id = 'RxNorm'
@@ -179,9 +179,9 @@ set standard_concept_id = b.concept_id -- update the standard concept id to the 
 from cte3
 inner join cte2
 on cte2.concept_id_2 = cte3.concept_id_1
-inner join cdmv5.concept_relationship cr
+inner join staging_vocabulary.concept_relationship cr
 on cte2.concept_id_2 = cr.concept_id_1   
-inner join cdmv5.concept b
+inner join staging_vocabulary.concept b
 on cr.concept_id_2 = b.concept_id
 and cr.relationship_id = 'Tradename of' 
 and b.vocabulary_id = 'RxNorm'
@@ -194,7 +194,7 @@ where scdm.standard_concept_id = cte2.concept_id_1;
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
-INNER JOIN cdmv5.concept c 
+INNER JOIN staging_vocabulary.concept c 
 on scdm.standard_concept_id = c.concept_id 
 and scdm.concept_id is not null 
 and c.concept_class_id  = 'Brand Name' 
@@ -202,10 +202,10 @@ and c.invalid_reason = 'D'
 ),
 cte2 as
 (select concept_id_1, concept_id_2 
-from cdmv5.concept_relationship a
-inner join cdmv5.concept b
+from staging_vocabulary.concept_relationship a
+inner join staging_vocabulary.concept b
 on a.concept_id_1 = b.concept_id
-inner join cdmv5.concept c
+inner join staging_vocabulary.concept c
 on a.concept_id_2 = c.concept_id
 and b.vocabulary_id = 'RxNorm'
 and c.vocabulary_id = 'RxNorm'
@@ -215,9 +215,9 @@ and a.concept_id_1 in (select standard_concept_id from cte1)
 update standard_combined_drug_mapping scdm 
 set standard_concept_id = b.concept_id -- update the standard concept id to the standard concept id we found
 from cte2
-inner join cdmv5.concept_relationship cr
+inner join staging_vocabulary.concept_relationship cr
 on cte2.concept_id_2 = cr.concept_id_1   
-inner join cdmv5.concept b
+inner join staging_vocabulary.concept b
 on cr.concept_id_2 = b.concept_id
 and cr.relationship_id = 'Form of' 
 and b.vocabulary_id = 'RxNorm'
@@ -229,18 +229,18 @@ where scdm.standard_concept_id = cte2.concept_id_1;
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
-INNER JOIN cdmv5.concept c 
+INNER JOIN staging_vocabulary.concept c 
 on scdm.standard_concept_id = c.concept_id 
 and scdm.concept_id is not null 
 and c.invalid_reason in ('U','D')
 ),
 cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
 select concept_id_1, concept_id_2
-from cdmv5.concept_relationship  cr
-left outer join cdmv5.concept a
+from staging_vocabulary.concept_relationship  cr
+left outer join staging_vocabulary.concept a
 on cr.concept_id_1 = a.concept_id
 and a.vocabulary_id = 'RxNorm'
-inner join cdmv5.concept b
+inner join staging_vocabulary.concept b
 on cr.concept_id_2 = b.concept_id
 and b.vocabulary_id = 'RxNorm'
 and b.standard_concept = 'S'
@@ -259,7 +259,7 @@ where scdm.standard_concept_id = cte2.concept_id_1;
 with cte1 as ( -- this is the 'input' set of non standard concepts that we want to process
 select distinct scdm.standard_concept_id
 from standard_combined_drug_mapping scdm
-INNER JOIN cdmv5.concept c 
+INNER JOIN staging_vocabulary.concept c 
 on scdm.standard_concept_id = c.concept_id 
 and scdm.concept_id is not null 
 and c.concept_class_id  = 'Clinical Drug Form' 
@@ -267,11 +267,11 @@ and c.concept_name not like '%/%'
 ),
 cte2 as ( -- this is the 'output' set of standard concepts that we have found for the 'input' set of concepts
 select concept_id_1, concept_id_2
-from cdmv5.concept_relationship  cr
-left outer join cdmv5.concept a
+from staging_vocabulary.concept_relationship  cr
+left outer join staging_vocabulary.concept a
 on cr.concept_id_1 = a.concept_id
 and a.vocabulary_id = 'RxNorm'
-inner join cdmv5.concept b
+inner join staging_vocabulary.concept b
 on cr.concept_id_2 = b.concept_id
 and b.vocabulary_id = 'RxNorm'
 and b.standard_concept = 'S'
@@ -322,7 +322,7 @@ drop table if exists standard_case_drug;
 create table standard_case_drug as
 select distinct a.primaryid, a.isr, a.drug_seq, a.role_cod, a.standard_concept_id
 from standard_combined_drug_mapping a
-inner join cdmv5.concept c
+inner join staging_vocabulary.concept c
 on a.standard_concept_id = c.concept_id
 and c.concept_class_id in ('Ingredient','Clinical Drug Form')
 and c.standard_concept = 'S';

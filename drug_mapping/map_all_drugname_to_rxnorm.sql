@@ -18,12 +18,12 @@
 
 -- temporarily create an index on the cdmv5 schema concept table to improve performance of all the mapping lookups
 -- we will then drop it at the end of this script
-set search_path = cdmv5;
+set search_path = staging_vocabulary;
 drop index if exists vocab_concept_name_ix;
-create index vocab_concept_name_ix on cdmv5.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
-analyze verbose cdmv5.concept;
+create index vocab_concept_name_ix on staging_vocabulary.concept(vocabulary_id, standard_concept, upper(concept_name), concept_id);
+analyze verbose staging_vocabulary.concept;
 
-set search_path = faers;
+set search_path = ${DATABASE_SCHEMA};
 
 -- build a mapping table to generate a cleaned up version of the drugname for exact match joins to the concept table concept_name column 
 -- for RxNorm concepts only 
@@ -82,7 +82,7 @@ and drug_name_clean ~*  '\(*(\y\ *(HCL|HYDROCHLORIDE)\ *\y)\)*';
 -- find exact mapping for drug name after we have removed the above keywords
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove keywords' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -103,7 +103,7 @@ AND a.concept_id is null;
 -- find exact mapping for active ingredient
 UPDATE drug_regex_mapping a
 SET update_method = 'regex EU drug name to active ingredient' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -119,7 +119,7 @@ and a.drug_name_clean ~*  '.* \((.*)\)';
 -- find exact mapping for active ingredient
 UPDATE drug_regex_mapping a
 SET update_method = 'regex EU drug name in parentheses to active ingredient' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -127,7 +127,7 @@ and a.concept_id is null;
 -- lookup RxNorm concept name using words from last set of parentheses in the drug name (typically this is the ingredient name(s) for a branded drug
 UPDATE drug_regex_mapping a
 SET update_method = 'regex ingredient name in parentheses' , concept_id = b.concept_id, drug_name_clean = upper(b.concept_name)
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = regexp_replace(a.drug_name_clean, '.* \((.*)\)', '\1', 'gi')
 AND a.concept_id is null
@@ -136,7 +136,7 @@ and drug_name_clean ~*  '.* \((.*)\)';
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex upper' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean;
 
@@ -148,7 +148,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex trailing space or period chars' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -161,7 +161,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove multiple white space' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -174,7 +174,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove trailing spaces' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -187,7 +187,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove leading spaces' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -200,7 +200,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove single quotes' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -213,7 +213,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove ^*$? punctuation chars' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -226,7 +226,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex change forward slash to back slash' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -239,7 +239,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove spaces before closing parenthesis' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -253,7 +253,7 @@ and drug_name_clean ~*  '.+\y(UNKNOWN|UNK)\y.+$';
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove (unknown)' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -266,7 +266,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove blinded' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -285,7 +285,7 @@ where concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex remove /nnnnn/' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -301,7 +301,7 @@ and a.concept_id is null;
 -- find exact mapping
 UPDATE drug_regex_mapping a
 SET update_method = 'regex vitamins' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.drug_name_clean
 and a.concept_id is null;
@@ -333,7 +333,7 @@ order by drug_name_original desc
 ) cc 
 where word NOT IN ('','SYRUP','HCL','HYDROCHLORIDE', 'ACETIC','SODIUM','CALCIUM','SULPHATE','MONOHYDRATE') 
 and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+'))
-			from  cdmv5.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1);
 
@@ -350,7 +350,7 @@ from (
 			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+') as word_list
 			from (
 				select upper(concept_name) as concept_name, concept_id
-				from cdmv5.concept b
+				from staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id = 'Clinical Drug Form' 
 				and concept_name like '%\/%'
@@ -360,7 +360,7 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+'))
-			from  cdmv5.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
@@ -396,13 +396,13 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+'))
-			from  cdmv5.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word  in (	select * 
 			from (
 				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+')) as word
-				from  cdmv5.concept b
+				from  staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id in ('Clinical Drug Form')
 				and b.concept_name like '%\/%' 
@@ -444,7 +444,7 @@ from (
 			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+') as word_list
 			from (
 				select upper(concept_name) as concept_name, concept_id
-				from cdmv5.concept b
+				from staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id = 'Ingredient' 
 			) aa
@@ -453,7 +453,7 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+'))
-			from  cdmv5.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
@@ -489,13 +489,13 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+'))
-			from  cdmv5.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word  in (	select * 
 			from (
 				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+')) as word
-				from  cdmv5.concept b
+				from  staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id in ('Ingredient')
 			) aa 
@@ -536,7 +536,7 @@ from (
 			select concept_id, concept_name, regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+') as word_list
 			from (
 				select upper(concept_name) as concept_name, concept_id
-				from cdmv5.concept b
+				from staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id = 'Brand Name' 
 			) aa
@@ -545,7 +545,7 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+'))
-			from  cdmv5.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word not in ('','-', ' ', 'A', 'AND', 'EX', '10A','11A','12F','18C','19F','99M','G','G1','G2',
@@ -580,13 +580,13 @@ from (
 	) cc
 	where word not in ('')
 	and word not in (select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\.\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+'))
-			from  cdmv5.concept b
+			from  staging_vocabulary.concept b
 			where b.vocabulary_id = 'RxNorm'
 			and b.concept_class_id = 'Dose Form' order by 1)
 	and word  in (	select * 
 			from (
 				select distinct unnest(regexp_split_to_array(upper(concept_name), E'[\ \,\(\)\{\}\\\\/\^\%\~\`\@\#\$\;\:\"\'\?\<\>\&\^\!\*\_\+\=]+')) as word
-				from  cdmv5.concept b
+				from  staging_vocabulary.concept b
 				where b.vocabulary_id = 'RxNorm'
 				and b.concept_class_id in ('Brand Name')
 			) aa 
@@ -644,7 +644,7 @@ create index prod_ai_ix on drug_ai_mapping(prod_ai);
 -- find exact mapping using the active ingredient provided in the drug table
 UPDATE drug_ai_mapping a
 SET update_method = 'drug active ingredients' , concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 WHERE b.vocabulary_id = 'RxNorm'
 AND upper(b.concept_name) = a.prod_ai;
 
@@ -681,7 +681,7 @@ create index nda_num_ix on drug_nda_mapping(nda_num);
 -- compare nda ingredient name and trade name to improve specificity
 UPDATE drug_nda_mapping a
 SET update_method = 'drug nda_num ingredients' , nda_ingredient = nda_ingredient.ingredient, concept_id = b.concept_id
-FROM cdmv5.concept b
+FROM staging_vocabulary.concept b
 inner join nda_ingredient
 on upper(b.concept_name) = nda_ingredient.ingredient
 WHERE b.vocabulary_id = 'RxNorm'

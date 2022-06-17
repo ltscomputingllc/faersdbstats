@@ -20,6 +20,6 @@ FILENAME varchar
 );
 truncate ther_legacy;
 
-COPY ther_legacy FROM '/home/lee/data/inbound/faers/legacy/ascii/all_ther_legacy_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
+\COPY ther_legacy FROM '/home/faersdbstats/load_data_files_from_website/ascii/all_ther_legacy_data_with_filename.txt' WITH DELIMITER E'$' CSV HEADER QUOTE E'\b' ;
 select distinct filename from ther_legacy order by 1 ;
 
